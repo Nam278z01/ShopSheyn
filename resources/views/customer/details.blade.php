@@ -1,0 +1,163 @@
+<div class="pb-[85px]" ng-controller="ProductDetailsController">
+    <div class="m-auto w-[1280px]">
+        <div class="px-[40px]">
+
+            <!-- Bread crumb -->
+            <div class="text-xs whitespace-nowrap">
+                <div class="py-4">
+                    <div class="inline-block">
+                        <a href="#" class="text-[#999] hover:underline hover:text-black">Trang chủ</a>
+                    </div>
+                    <div class="inline-block before:content-['/'] before:px-2 before:text-[#999]">
+                        <a href="#" class="text-[#999] hover:underline hover:text-black">Quần áo nữ</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Product details -->
+            <div class="flex">
+                <!-- Image -->
+                <div class="pl-[60px] relative">
+                    <!-- Thumbs -->
+                    <div class="absolute w-[60px] left-0 top-0 pr-[3px]">
+                        <div
+                            class="relative w-[50px] h-[66px] mb-[6px] cursor-pointer before:block before:absolute before:w-full before:h-full before:top-0 before:left-0 before:border before:border-[#222] before:shadow-[inset_0_0_0_2px_#fff]">
+                            <img src="../image/@{{ product.picked.color.product_image1 }}" alt="@{{ p.product_name }}"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div ng-if="product.picked.color.product_image2"
+                            class="w-[50px] h-[66px] mb-[6px] cursor-pointer">
+                            <img src="../image/@{{ product.picked.color.product_image2 }}" alt="@{{ p.product_name }}"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div ng-if="product.picked.color.product_image3"
+                            class="w-[50px] h-[66px] mb-[6px] cursor-pointer">
+                            <img src="../image/@{{ product.picked.color.product_image3 }}" alt="@{{ p.product_name }}"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div ng-if="product.picked.color.product_image4"
+                            class="w-[50px] h-[66px] mb-[6px] cursor-pointer">
+                            <img src="../image/@{{ product.picked.color.product_image4 }}" alt="@{{ p.product_name }}"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div ng-if="product.picked.color.product_image5"
+                            class="w-[50px] h-[66px] mb-[6px] cursor-pointer">
+                            <img src="../image/@{{ product.picked.color.product_image5 }}" alt="@{{ p.product_name }}"
+                                class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Slide -->
+                    <div class="w-[670px] relative group">
+                        <div>
+                            <div class="pb-[132%] h-0 relative overflow-hidden">
+                                <img src="../image/@{{ product.picked.color.product_image1 }}" alt="@{{ p.product_name }}"
+                                    class="w-full">
+                            </div>
+                        </div>
+                        <button
+                            class="absolute left-[15px] top-2/4 -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center hidden group-hover:flex hover:bg-white">
+                            <i class='bx bx-chevron-left'></i>
+                        </button>
+                        <button
+                            class="absolute right-[15px] top-2/4 -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center hidden group-hover:flex hover:bg-white">
+                            <i class='bx bx-chevron-right'></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Info -->
+                <div class="ml-[50px] w-[420px]">
+
+                    <!-- Name/Price -->
+                    <div class="mb-[25px]">
+                        <h1 class="text-sm mb-[5px]">@{{ product.product_name }}</h1>
+                        <div class="flex items-center">
+                            <!-- Normal -->
+                            <span ng-if="product.product_discount == 0" class="font-bold text-2xl text-black">
+                                @{{product.picked.color.product_price | number:0}}₫
+                            </span>
+
+                            <!-- Discount -->
+                            <span ng-if="product.product_discount != 0"
+                                class="text-[#fa6338] text-2xl block font-bold mr-2">
+                                @{{product.picked.color.product_price - product.picked.color.product_price *
+                                product.product_discount / 100 | number:0}}₫
+                            </span>
+                            <del ng-if="product.product_discount != 0" class="text-[#999] text-sm">
+                                @{{product.picked.color.product_price | number:0}}₫
+                            </del>
+                            <div ng-if="product.product_discount != 0"
+                                class="w-[50px] text-center text-xs leading-[20px] bg-[#222] text-white ml-3">-45%</div>
+                        </div>
+                    </div>
+
+                    <!-- Color -->
+                    <div ng-if="product.colors.length > 0" class="pt-[10px] border-t border-dashed border-[#e5e5e5]">
+                        <div class="mt-[15px]">
+                            <div class="text-base font-normal">
+                                Màu sắc:
+                                <span class="pl-[8px] font-bold  text-[#222] text-sm">@{{product.picked.color.color_name}}</span>
+                            </div>
+                            <div class="pt-[15px] flex flex-wrap -mx-1">
+                                <div ng-repeat="cl in product.colors"
+                                    ng-class="{'before:block before:absolute before:w-full before:h-full before:top-0 before:left-0 before:border before:border-[#222] before:shadow-[inset_0_0_0_2px_#fff]' : product.picked.color.color_id == cl.color_id}"
+                                    ng-click="changeColor(product, cl)" title="@{{ cl.color_name }}"
+                                    class="relative w-[50px] h-[66px] mx-1 cursor-pointer">
+                                    <img src="../image/@{{ cl.product_image1 }}" alt="Image"
+                                        class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Size -->
+                    <div>
+                        <div class="mt-[15px]">
+                            <div class="text-base font-normal">
+                                Kích thước:
+                                <span class="pl-[8px] font-bold text-[#222] text-sm">@{{product.picked.size.size_name}}</span>
+                            </div>
+                            <div class="mt-[15px] -mx-1 flex flex-wrap">
+                                <div ng-repeat="s in product.picked.color.sizes" title="Còn @{{ s.quantity }} sản phẩm"
+                                    ng-click="changeSize(product, s)"
+                                    ng-class="{ 'bg-black text-white' : product.picked.size.size_id == s.size_id, 'bg-stone-200' : product.picked.size.size_id != s.size_id}"
+                                    class="flex justify-center items-center w-[64px] h-[40px] m-1 text-sm font-bold rounded-2xl cursor-pointer transition-all">
+                                    @{{ s.size_name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quantity -->
+                    <div>
+                        <div class="mt-[15px]">
+                            <div class="font-bold text-base">
+                                Số lượng
+                            </div>
+                            <div class="flex mt-[15px] h-[30px] items-center">
+                                <button ng-click="decrease()"
+                                    class="w-[30px] h-[35px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default">
+                                    <i class='bx bx-minus'></i>
+                                </button>
+                                <input type="text" value="1" ng-model="product.picked.quantity"
+                                    class="text-sm w-[48px] h-[35px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center">
+                                <button ng-click="increase()"
+                                    class="w-[30px] h-[35px] border border-gray-300 flex items-center justify-center rounded-tr-[100px] rounded-br-[100px] focus:border-black ">
+                                    <i class='bx bx-plus'></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-[25px]">
+                        <button
+                            class="h-[54px] text-[18px] px-[30px] font-extrabold text-white bg-black hover:bg-[rgba(34,34,34,.8)]">
+                            THÊM VÀO GIỎ HÀNG
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
