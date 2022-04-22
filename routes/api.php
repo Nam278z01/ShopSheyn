@@ -2,7 +2,13 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ColorController;
+use App\Http\Controllers\SizeController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderStateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +26,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resources([
-    'product' => ProductController::class
+    'category' => CategoryController::class,
+    'subcategory' => SubCategoryController::class,
+    'product' => ProductController::class,
+    'color' => ColorController::class,
+    'size' => SizeController::class,
+    'order' => OrderController::class,
+    'orderstate' => OrderStateController::class,
 ]);
-

@@ -1,23 +1,20 @@
-app.controller('ProductDetailsController', function ($scope, $rootScope, $http) {
+app.controller('ProductDetailsController', function ($scope, $rootScope, $http, API_URL) {
     $http({
         method: 'GET',
-        url: "../api/productdetails.json"
+        url: API_URL + "/api/product/" + 1,
     }).then((res) => {
-        $scope.product = res.data
+        $scope.product = res.data.data
         $scope.product.picked = {}
         $scope.product.picked.quantity = 0
         $scope.changeColor($scope.product, $scope.product.colors[0])
-        console.log($scope.product)
     })
 
     $scope.changeColor = function (product, color) {
         product.picked.color = color
-        console.log(color)
     }
 
     $scope.changeSize = function (product, size) {
         product.picked.size = size
-        console.log(size)
     }
 
     $scope.increase = function () {

@@ -1,25 +1,29 @@
-var app = angular.module("myApp", [])
+var app = angular.module("myApp", ['angularUtils.directives.dirPagination', 'ui.router'])
 
 app.constant('API_URL', '');
 
-app.run(function ($rootScope) {
-
+app.run(function ($rootScope, $http, API_URL) {
+    $http({
+        method: 'GET',
+        url: API_URL + "/api/category",
+    }).then((res) => {
+        $rootScope.categories = res.data.data
+    })
 })
 
-// app.config(function ($routeProvider) {
-//     $routeProvider
-//         .when("/", {
-//             templateUrl: "./home.html"
-//         })
-//         .when("/product", {
-//             templateUrl: "./product.html",
-//             controller: "ProductController"
-//         })
-//         .when("/cart", {
-//             templateUrl: "./cart.html"
-//         })
-//         .when("/details", {
-//             templateUrl: "./details.html",
-//             controller: "ProductDetailsController"
-//         })
-// });
+app.config(function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+    $stateProvider
+        .state('home', {
+            url: "/",
+            templateUrl: "html/home.html"
+        })
+        .state('product', {
+            url: "/product",
+            templateUrl: "html/product.html"
+        })
+        .state('details', {
+            url: "/details",
+            templateUrl: "html/details.html"
+        })
+});
