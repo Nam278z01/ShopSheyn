@@ -1,7 +1,7 @@
-app.controller('ProductDetailsController', function ($scope, $rootScope, $http, API_URL) {
+app.controller('ProductDetailsController', function ($scope, $rootScope, $http, $routeParams, API_URL) {
     $http({
         method: 'GET',
-        url: API_URL + "/api/product/" + 1,
+        url: API_URL + "/api/product/" + $routeParams.product_id,
     }).then((res) => {
         $scope.product = res.data.data
         $scope.product.picked = {}

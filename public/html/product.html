@@ -1,4 +1,4 @@
-<div class="px-[50px] bg-[#fff]" ng-controller="ProductController">
+<div class="px-[50px] bg-[#fff]">
     <div class="">
         <!-- Bread crumb -->
         <div class="text-xs whitespace-nowrap">
@@ -13,36 +13,106 @@
         </div>
 
         <!-- Filter -->
-        <div class="flex justify-end items-center my-[15px] h-[40px] px-[22px] text-xs">
+        <div class="flex justify-end items-center my-[15px] h-[40px] text-xs">
             <label class="px-[22px]">Sắp xếp theo</label>
-            <select
+            <select ng-model="filter.sort" ng-change="changeSort()"
                 class="w-[200px] border border-solid border-gray-300 focus:border-black focus:outline-none text-sm px-3 py-1.5">
-                <option value="2" selected>Hàng mới</option>
-                <option value="3">Bán chạy</option>
-                <option value="3">Giảm nhiều</option>
-                <option value="4">Giá thấp đến cao</option>
-                <option value="5">Giá cao đến thấp</option>
+                <option ng-value="1">Hàng mới</option>
+                <option ng-value="2">Bán chạy</option>
+                <option ng-value="3">Giảm nhiều</option>
+                <option ng-value="4">Giá thấp đến cao</option>
+                <option ng-value="5">Giá cao đến thấp</option>
             </select>
         </div>
     </div>
 
-    <div class="flex pl-[205px] relative">
+    <div class="flex relative">
         <!-- Filter -->
-        <div class="absolute w-[205px] pr-[25px] pb-[10px] left-0 top-0">
-            <div class="border-t border-[rgba(0,0,0,0.05]">
+        <div class="absolute left-0 -top-[40px] w-[190px]">
+            <a href="#!/product"
+                class="flex justify-center items-center h-[36px] w-full text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white">
+                Xóa tất cả
+            </a>
+        </div>
+
+        <div class="w-[205px] pr-[15px] pb-[10px]">
+            <div class="border-t border-[rgba(0,0,0,0.05] w-full">
                 <div class="pt-5 pb-4">
-                    <h3 class="font-semibold text-sm">Danh Mục</h3>
+                    <div class="font-semibold text-sm flex items-center">
+                        <i class='bx bx-menu-alt-left text-xl'></i>
+                        <span class="ml-3 font-bold">DANH MỤC</span>
+                    </div>
+                    <ul class="mt-3 text-[13px]">
+                        <li class="leading-7 capitalize" ng-click="changeCategory(undefine, false, null)">
+                            <span ng-class="{'text-[#fa6338]': changeCategory(undefine, true)}" class="text-black font-bold hover:text-[#fa6338] cursor-pointer">Tất cả</span>
+                        </li>
+                        <li ng-repeat="c in categories" class="leading-7 capitalize" ng-click="changeCategory(c.category_id, false, c)">
+                            <span ng-class="{'text-[#fa6338]': changeCategory(c.category_id, true, c)}" class="text-black font-bold hover:text-[#fa6338] cursor-pointer">{{ c.category_name }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="pt-5 pb-4">
+                    <div class="font-semibold text-sm flex items-center">
+                        <i class='bx bx-filter text-xl'></i>
+                        <span class="ml-3 font-bold">BỘ LỌC</span>
+                    </div>
+                    <div class="py-5 text-[13px] border-b border-[rgba(0,0,0,0.05] w-full" ng-if="subcategories.length > 0">
+                        <div class="capitalize font-bold mb-2">
+                            Theo danh mục
+                        </div>
+                        <label ng-repeat="sc in subcategories" ng-click="changeSubCategories(sc)"
+                            class="h-[28px] capitalize flex items-center cursor-pointer">
+                            <input ng-if="sc.checked" type="checkbox" class="mr-2" checked>
+                            <input ng-if="!sc.checked" type="checkbox" class="mr-2">
+                            <span class="text-[#000000cc] font-semibold hover:text-[#fa6338]">{{ sc.subcategory_name }}</span>
+                        </label>
+                    </div>
+                    <div class="py-5 text-[13px]">
+                        <div class="capitalize font-bold mb-2">
+                            Khoảng giá
+                        </div>
+                        <div class="flex items-center py-3 w-full justify-between">
+                            <input ng-model="filter.min_price" type="text"
+                                class="w-[75px] h-[32px] border border-[rgb(0 0 0 / 10%)] px-2 focus:outline-none focus:border-black text-xs"
+                                placeholder="₫ TỪ">
+                            <i class='bx bx-minus text-xl text-[rgb(0 0 0 / 10%)]'></i>
+                            <input ng-model="filter.max_price" type="text"
+                                class="w-[75px] h-[32px] border border-[rgb(0 0 0 / 10%)] px-2 focus:outline-none focus:border-black text-xs"
+                                placeholder="₫ ĐẾN">
+                        </div>
+                        <button ng-click="changePrice()"
+                            class="w-full h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[rgba(34,34,34,.8)]">
+                            ÁP DỤNG
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- List of Product -->
-        <div class="w-full pl-[20px]">
+        <div class="flex-1 pl-[20px]">
             <div class="flex flex-wrap -mx-[10px]">
                 <!-- Normal -->
-                <div ng-repeat="p in products" class="w-1/4 px-[10px]" ng-init="changeColor(p, p.colors[0])">
+                <div ng-repeat="x in [].constructor(8) track by $index" ng-if="isLoading" class="card w-1/4 px-[10px]">
+                    <div class="cover skeleton w-full pb-[132%]">
+                    </div>
+                    <div class="min-h-[116px]">
+                        <p class="mt-2 h-4 w-4/5 skeleton"></p>
+                        <p class="mt-[6px] w-3/4 h-5 skeleton"></p>
+                        <div class="flex mt-[6px]">
+                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
+                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
+                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
+                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
+                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div dir-paginate="p in products | itemsPerPage: filter.page_size" total-items="total_row" current-page="page" ng-if="!isLoading" ng-init="changeColor(p, p.colors[0])"
+                    class="w-1/4 px-[10px]">
                     <div class="w-full pb-[132%] h-0 relative overflow-hidden bg-[#f7f7f7] group">
-                        <a href="#!/details?id={{ p.product_id }}" class="w-full inline-block">
+                        <a href="#!/details?product_id={{ p.product_id }}" class="w-full inline-block">
                             <img src="/image/{{p.picked.color.product_image1}}" alt="{{ p.product_name }}"
                                 class="w-full">
                             <img src="/image/{{p.picked.color.product_image2}}" alt="{{ p.product_name }}"
@@ -62,7 +132,7 @@
                     </div>
                     <div class="min-h-[116px]">
                         <div class="mt-2 text-xs">
-                            <a href="#!/details?id={{ p.product_id }}"
+                            <a href="#!/details?product_id={{ p.product_id }}"
                                 class="block w-full text-[#767676] overflow-hidden whitespace-nowrap text-ellipsis hover:text-black hover:underline ">
                                 {{ p.product_name }}
                             </a>
@@ -91,6 +161,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="flex justify-end">
+                <dir-pagination-controls max-size="5" boundary-links="true" on-page-change="pageChanged(newPageNumber)"></dir-pagination-controls>
             </div>
         </div>
     </div>
