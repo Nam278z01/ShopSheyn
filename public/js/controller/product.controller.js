@@ -23,6 +23,15 @@ app.controller('ProductController', function ($scope, $rootScope, $http, $routeP
         $scope.products = res.data.data
         $scope.total_row = res.data.total_row
         $scope.isLoading = false
+
+        //Khởi tạo màu
+        if ($scope.products) {
+            $scope.products.map((product) => {
+                product.picked = {}
+                product.picked.color = product.colors[0]
+                return product
+            })
+        }
     })
     $scope.changeColor = function (product, color) {
         product.picked = {}
@@ -31,9 +40,10 @@ app.controller('ProductController', function ($scope, $rootScope, $http, $routeP
 
     $rootScope.changeSort = function (type, value) {
         if (type) {
-            return $scope.filter.sort == value
+            return $scope.filter.sort == value && $location.path() == '/product'
         } else {
-            $location.search('sort', $scope.filter.sort)
+            $scope.filter.page = 1
+            $location.search($scope.filter)
         }
     }
 
@@ -43,7 +53,7 @@ app.controller('ProductController', function ($scope, $rootScope, $http, $routeP
         if (type) {
             if ($scope.filter.category_id == category_id && $location.path() == '/product' && category) {
                 $scope.subcategories = category.subcategories
-                $scope.subcategories = $scope.subcategories.map((subcategory) => {
+                $scope.subcategories.map((subcategory) => {
                     if ($scope.filter.list_subcategory_id) {
                         subcategory.checked = JSON.parse($scope.filter.list_subcategory_id).includes(subcategory.subcategory_id) ? true : false
                     } else {
@@ -54,6 +64,7 @@ app.controller('ProductController', function ($scope, $rootScope, $http, $routeP
             }
             return $scope.filter.category_id == category_id && $location.path() == '/product'
         } else {
+            $scope.filter.page = 1
             $scope.filter.category_id = category_id
             $scope.filter.list_subcategory_id = undefined
             $location.search($scope.filter)
@@ -66,15 +77,16 @@ app.controller('ProductController', function ($scope, $rootScope, $http, $routeP
                 return subcategory_id != subcategory.subcategory_id
             })
             $scope.filter.list_subcategory_id = arr.length > 0 ? JSON.stringify(arr) : undefined
-            console.log($scope.filter.list_subcategory_id)
         } else {
             let arr = $scope.filter.list_subcategory_id ? JSON.parse($scope.filter.list_subcategory_id) : []
             $scope.filter.list_subcategory_id = JSON.stringify([...arr, subcategory.subcategory_id])
         }
+        $scope.filter.page = 1
         $location.search($scope.filter)
     }
 
     $rootScope.changePrice = function () {
+        $scope.filter.page = 1
         $scope.filter.min_price = $scope.filter.min_price ? $scope.filter.min_price : undefined
         $scope.filter.max_price = $scope.filter.max_price ? $scope.filter.max_price : undefined
         $location.search($scope.filter)

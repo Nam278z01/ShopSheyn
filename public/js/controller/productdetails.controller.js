@@ -28,4 +28,5 @@ app.controller('ProductDetailsController', function ($scope, $rootScope, $http, 
             $scope.product.picked.quantity--
         }
     }
+
 })

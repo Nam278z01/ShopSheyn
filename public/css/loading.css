@@ -34,3 +34,18 @@
         background-position: 100% 0;
     }
 }
+
+/* Scrollbar */
+.scrollbar::-webkit-scrollbar {
+    width: 2px;
+    background-color: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    width: 2px;
+    background-color: transparent;
+}
+
+.scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: #fa6338;
+}

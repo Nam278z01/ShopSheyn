@@ -8,7 +8,7 @@ app.filter("jsDate", function () {
     };
 });
 
-app.run(function ($rootScope, $http, $routeParams, $location, API_URL) {
+app.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL) {
     $http({
         method: 'GET',
         url: API_URL + "/api/category",
@@ -23,19 +23,24 @@ app.run(function ($rootScope, $http, $routeParams, $location, API_URL) {
         if ($location.path() == '/product') {
             $location.path('/product').search('text_search', $rootScope.text_search);
         } else {
-            $location.path('/product').search({text_search: $rootScope.text_search});
+            $location.path('/product').search({ text_search: $rootScope.text_search });
         }
     }
 
     $rootScope.activeNavigation = function (path) {
         return $location.path() == path
     }
+
+    $rootScope.$on('$routeChangeStart', function (evt, absNewUrl, absOldUrl) {
+        $window.scrollTo(0, 0);
+    })
 })
 
 app.config(function ($routeProvider) {
     $routeProvider
         .when("/", {
-            templateUrl: "html/home.html"
+            templateUrl: "html/home.html",
+            controller: "HomeController"
         })
         .when("/product", {
             templateUrl: "html/product.html",
