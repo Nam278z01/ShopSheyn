@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
-class CartResource extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,6 +36,30 @@ class CartResource extends Controller
     public function store(Request $request)
     {
         //
+        $product = (object) [
+            "product_id" => $request->product_id,
+            "quantity" => $request->quantity,
+            "size_id" => $request->size_id,
+        ];
+        if (Session::missing("cart")) {
+            Session::put("cart", []);
+            Session::push("cart", $product);
+        } else {
+            $cart = Session::get("cart");
+            $isExists = false;
+            foreach ($cart as $p) {
+                if($p->size_id == $product->size_id){
+                    $p->quantity += $product->quantity;
+                    $isExists = true;
+                    break;
+                }
+            }
+            if(!$isExists) {
+                Session::push("cart", $product);
+            }
+        }
+        Session::save();
+        return Session::get("cart");
     }
 
     /**

@@ -36,7 +36,7 @@
         </div>
         <div class="w-[205px] pr-[15px] pb-[10px]">
             <div
-                class="scrollbar sticky top-[54px] border-t border-[rgba(0,0,0,0.05] w-full overflow-y-scroll h-[90vh]">
+                class="scrollbar overflow-y-scroll sticky top-[54px] border-t border-[rgba(0,0,0,0.05] w-full h-[90vh]">
                 <div class="pt-5 pb-4">
                     <div class="font-semibold text-sm flex items-center">
                         <i class='bx bx-menu-alt-left text-xl'></i>
@@ -116,8 +116,7 @@
                 </div>
 
                 <div dir-paginate="p in products | itemsPerPage: filter.page_size" total-items="total_row"
-                    current-page="filter.page" ng-if="!isLoading"
-                    class="w-1/4 px-[10px]">
+                    current-page="filter.page" ng-if="!isLoading" class="w-1/4 px-[10px]">
                     <div class="w-full pb-[132%] h-0 relative overflow-hidden bg-[#f7f7f7] group">
                         <a href="#!/details?product_id={{ p.product_id }}" class="w-full inline-block">
                             <img src="/image/{{p.picked.color.product_image1}}" alt="{{ p.product_name }}"

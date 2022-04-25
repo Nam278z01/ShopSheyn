@@ -22,7 +22,6 @@ app.controller('ProductController', function ($scope, $rootScope, $http, $routeP
     }).then((res) => {
         $scope.products = res.data.data
         $scope.total_row = res.data.total_row
-        $scope.isLoading = false
 
         //Khởi tạo màu
         if ($scope.products) {
@@ -32,6 +31,8 @@ app.controller('ProductController', function ($scope, $rootScope, $http, $routeP
                 return product
             })
         }
+
+        $scope.isLoading = false
     })
     $scope.changeColor = function (product, color) {
         product.picked = {}

@@ -7,6 +7,7 @@ use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\SizeController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderStateController;
 
@@ -31,6 +32,7 @@ Route::resources([
     'product' => ProductController::class,
     'color' => ColorController::class,
     'size' => SizeController::class,
+    'cart' => CartController::class,
     'order' => OrderController::class,
     'orderstate' => OrderStateController::class,
 ]);

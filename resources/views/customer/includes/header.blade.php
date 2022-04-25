@@ -95,32 +95,29 @@
                         <span class="text-[#fa6338] text-sm font-bold ml-1 absolute left-1/2 top-[10px] bg-[rgba(255,255,255,0.9)] min-w-[15px] min-h-[15px] text-center block rounded-full">1</span>
                     </a>
                     <div class="absolute top-[54px] right-0 w-[400px] bg-white shadow-[0_6px_6px_0_#00000014] invisible group-hover:visible">
-                        <div class="pt-[10px]">
+                        <div class="scrollbar overflow-y-scroll pt-[10px] h-[290px]">
                             <!-- Normal -->
-                            <div class="flex my-[10px] mx-[20px]">
-                                <div class="w-[90px]">
-                                    <img src="../image/image5.webp" alt="Image" class="w-full">
+                            <div ng-repeat="product in cart" class="flex my-[10px] mx-[20px]">
+                                <div class="w-[90px] relative">
+                                    <img src="../image/@{{product.picked.color.product_image1}}" alt="@{{product.product_name}}" class="w-full">
+                                    <div ng-if="product.product_discount != 0" class="absolute top-[6px] left-0 w-[40px] text-center text-xs leading-[20px] bg-[#222] text-white">-45%</div>
                                 </div>
                                 <div class="ml-[10px] flex-1">
                                     <div class="text-xs mb-[5px]">
-                                        <span>Cover Ups Bé gái Thắt nút Chim hồng hạc</span>
+                                        <span>@{{product.product_name}}</span>
                                     </div>
                                     <div class="flex py-1 -mx-[10px]">
-                                        <select class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1">
-                                            <option value="1" selected>Trắng</option>
-                                            <option value="2">Xanh</option>
+                                        <select ng-change="changeColorInCart(product, product.picked.color, '@{{product.picked.color}}')" ng-model="product.picked.color" ng-options="color.color_name for color in product.colors" class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1">
                                         </select>
-                                        <select class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1">
-                                            <option value="1" selected>X</option>
-                                            <option value="2">XL</option>
+                                        <select ng-model="product.picked.size" ng-options="size.size_name for size in product.picked.color.sizes"  class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1">
                                         </select>
                                     </div>
                                     <div class="flex mt-[5px] h-[30px] items-center">
-                                        <button class="w-[25px] h-[24px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default">
+                                        <button ng-click="increaseInCart(product.picked)" class="w-[25px] h-[24px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default">
                                             <i class='bx bx-minus text-xs'></i>
                                         </button>
-                                        <input type="text" value="1" class="text-[13px] w-[30px] h-[24px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center">
-                                        <button class="w-[25px] h-[24px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tr-[100px] rounded-br-[100px]">
+                                        <input ng-model="product.picked.quantity" type="text" class="text-[13px] w-[30px] h-[24px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center">
+                                        <button ng-click="increaseInCart(product.picked)" class="w-[25px] h-[24px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tr-[100px] rounded-br-[100px]">
                                             <i class='bx bx-plus text-xs'></i>
                                         </button>
                                     </div>
@@ -129,52 +126,16 @@
                                             <i class='bx bx-trash text-[16px]'></i>
                                         </button>
                                         <div class="flex flex-col">
-                                            <span class="text-black font-bold text-[13px]">
-                                                378.000đ
+                                            <span ng-if="product.product_discount == 0" class="text-black font-bold text-[13px]">
+                                                @{{product.picked.color.product_price | number:0}}₫
                                             </span>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Discount -->
-                            <div class="flex my-[10px] mx-[20px]">
-                                <div class="w-[90px] relative">
-                                    <img src="../image/image5.webp" alt="Image" class="w-full">
-                                    <div class="absolute top-[6px] left-0 w-[40px] text-center text-xs leading-[20px] bg-[#222] text-white">-45%</div>
-                                </div>
-                                <div class="ml-[10px] flex-1">
-                                    <div class="text-xs mb-[5px]">
-                                        <span>Cover Ups Bé gái Thắt nút Chim hồng hạc</span>
-                                    </div>
-                                    <div class="flex py-1 -mx-[10px]">
-                                        <select class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1">
-                                            <option value="1" selected>Trắng</option>
-                                            <option value="2">Xanh</option>
-                                        </select>
-                                        <select class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1">
-                                            <option value="1" selected>X</option>
-                                            <option value="2">XL</option>
-                                        </select>
-                                    </div>
-                                    <div class="flex mt-[5px] h-[30px] items-center">
-                                        <button class="w-[25px] h-[24px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default">
-                                            <i class='bx bx-minus text-xs'></i>
-                                        </button>
-                                        <input type="text" value="1" class="text-[13px] w-[30px] h-[24px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center">
-                                        <button class="w-[25px] h-[24px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tr-[100px] rounded-br-[100px]">
-                                            <i class='bx bx-plus text-xs'></i>
-                                        </button>
-                                    </div>
-                                    <div class="py-1 flex justify-between">
-                                        <button>
-                                            <i class='bx bx-trash text-[16px]'></i>
-                                        </button>
-                                        <div class="flex flex-col text-sm">
+                                        <div ng-if="product.product_discount != 0" class="flex flex-col text-sm">
                                             <span class="text-[#fa6338] font-bold text-[13px]">
-                                                378.000đ
+                                                @{{product.picked.color.product_price - product.picked.color.product_price * product.product_discount / 100 | number:0}}₫
                                             </span>
                                             <del class="text-[#999] text-xs">
-                                                398.000đ
+                                                @{{product.picked.color.product_price | number:0}}₫
                                             </del>
                                         </div>
                                     </div>
