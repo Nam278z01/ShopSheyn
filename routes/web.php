@@ -18,6 +18,22 @@ Route::get('/', function () {
     return view('customer.index');
 });
 
+Route::get('/product', function () {
+    return view('customer.index');
+});
+
+Route::get('/details', function () {
+    return view('customer.index');
+});
+
+Route::get('/cart', function () {
+    return view('customer.index');
+});
+
+Route::get('/admin', function () {
+    return view('admin.index');
+});
+
 // Route::get('/product', function () {
 //     return view('customer.product');
 // });

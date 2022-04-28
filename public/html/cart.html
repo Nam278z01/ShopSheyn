@@ -1,62 +1,101 @@
 <div class="px-[50px] bg-[#fff]">
     <div class="flex">
         <!-- Info customer -->
-        <div class="w-3/5 p-[20px] border-r border-dashed border-[#e5e5e5]">
-
+        <div class="w-3/5 p-[20px] border-r border-dashed border-[#e5e5e5] relative">
             <!-- Info -->
-            <div>
+            <div class="sticky top-[94px]">
                 <div>
-                    <div class="my-[20px] text-2xl font-bold">Thông tin vận chuyển</div>
+                    <div>
+                        <div class="my-[20px] text-2xl font-bold">
+                            Thông tin vận chuyển
+                        </div>
+                    </div>
+                    <div class="py-[15px] relative">
+                        <label for="" class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white rounded-[2px]"
+                            >Họ tên</label
+                        >
+                        <input
+                            type="text"
+                            placeholder="Họ tên"
+                            class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+                        />
+                    </div>
+                    <div class="py-[15px] relative">
+                        <label for="" class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white rounded-[2px]"
+                            >Số điện thoại</label
+                        >
+                        <input
+                            type="text"
+                            placeholder="Số điện thoại"
+                            class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+                        />
+                    </div>
+                    <div class="py-[15px] relative">
+                        <label for="" class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white rounded-[2px]"
+                            >Địa chỉ chi tiết</label
+                        >
+                        <input
+                            type="text"
+                            placeholder="Địa chỉ chi tiết"
+                            class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+                        />
+                    </div>
+                    <div class="py-[15px] relative">
+                        <label for="" class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white rounded-[2px]"
+                            >Ghi chú</label
+                        >
+                        <input
+                            type="text"
+                            placeholder="Ghi chú"
+                            class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+                        />
+                    </div>
                 </div>
-                <div class="py-[15px]">
-                    <label for="" class="text-sm whitespace-nowrap mr-3">Họ tên:</label>
-                    <input type="text" placeholder="Họ tên"
-                    class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 focus:outline-none focus:border-black text-sm" />
-                </div>
-                <div class="py-[15px]">
-                    <label for="" class="text-sm whitespace-nowrap mr-3">Số điện thoại:</label>
-                    <input type="text" placeholder="Số điện thoại"
-                    class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 focus:outline-none focus:border-black text-sm" />
-                </div>
-                <div class="py-[15px]">
-                    <label for="" class="text-sm whitespace-nowrap mr-3">Địa chỉ chi tiết:</label>
-                    <input type="text" placeholder="Địa chỉ chi tiết"
-                    class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 focus:outline-none focus:border-black text-sm" />
-                </div>
-                <div class="py-[15px]">
-                    <label for="" class="text-sm whitespace-nowrap mr-3">Ghi chú:</label>
-                    <input type="text" placeholder="Ghi chú"
-                    class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 focus:outline-none focus:border-black text-sm" />
-                </div>
-            </div>
 
-            <!-- Payment -->
-            <div>
+                <!-- Payment -->
                 <div>
-                    <div class="my-[20px] text-2xl font-bold">Hình thức thanh toán</div>
+                    <div>
+                        <div class="my-[20px] text-2xl font-bold">
+                            Hình thức thanh toán
+                        </div>
+                    </div>
+                    <div class="py-[15px]">
+                        <label
+                            for="payment-cod"
+                            class="flex items-center px-[20px] py-[15px] border border-[#fa6338] rounded-2xl"
+                        >
+                            <div
+                                class="w-[20px] h-[20px] rounded-full border border-[#fa6338] relative"
+                            >
+                                <input
+                                    type="radio"
+                                    id="payment-cod"
+                                    name="payment-method"
+                                    class="hidden peer"
+                                    checked
+                                />
+                                <span
+                                    class="w-[12px] h-[12px] rounded-full bg-[#fa6338] absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 hidden peer-checked:block"
+                                ></span>
+                            </div>
+                            <div class="mx-[15px]">
+                                <img src="../image/COD.svg" alt="Image" />
+                            </div>
+                            <div class="text-[13px] font-medium">
+                                COD <br />
+                                Thanh toán khi nhận hàng
+                            </div>
+                        </label>
+                    </div>
                 </div>
-                <div class="py-[15px]">
-                    <label for="payment-cod" class="flex items-center px-[20px] py-[15px] border border-black">
-                        <div class="w-[20px] h-[20px] rounded-full border border-black relative">
-                            <input type="radio" id="payment-cod" name="payment-method" class="hidden peer" checked>
-                            <span class="w-[12px] h-[12px] rounded-full bg-black absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 hidden peer-checked:block"></span>
-                        </div>
-                        <div class="mx-[15px]">
-                            <img src="../image/COD.svg" alt="Image">
-                        </div>
-                        <div class="text-sm">
-                            COD <br>
-                            Thanh toán khi nhận hàng
-                        </div>
-                    </label>
-                </div>
-            </div>
 
-            <div class="mt-[30px]">
-                <button
-                    class="h-[54px] w-full text-[18px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white">
-                    THANH TOÁN 567K (COD)
-                </button>
+                <div class="mt-[30px]">
+                    <button
+                        class="h-[54px] w-full text-[18px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
+                    >
+                        THANH TOÁN {{ total_price | number: 0 }}₫ (COD)
+                    </button>
+                </div>
             </div>
         </div>
         <!-- Cart details -->
@@ -67,87 +106,96 @@
 
             <!-- Items -->
             <div class="py-[15px]">
-
                 <!-- Normal -->
-                <div class="flex mb-3">
-                    <div class="w-[126px] flex-1">
-                        <img src="../image/image5.webp" alt="Image" class="w-full">
+                <div
+                    ng-repeat="product in cart track by product.cart_id"
+                    class="flex mb-3"
+                >
+                    <div class="w-[126px] flex-1 relative">
+                        <img
+                            src="/image/{{
+                            product.picked.color.product_image1
+                        }}"
+                            alt="{{ product.product_name }}"
+                            class="w-full"
+                        />
+                        <div
+                            ng-if="product.product_discount != 0"
+                            class="absolute top-[6px] left-0 w-[40px] text-center text-xs leading-[20px] bg-[#222] text-white"
+                        >
+                            -{{ product.product_discount }}%
+                        </div>
                     </div>
                     <div class="ml-[20px] flex-[3]">
                         <div>
-                            <span class="text-sm mb-[5px]">Cover Ups Bé gái Thắt nút Chim hồng hạc</span>
+                            <span class="text-sm mb-[5px]"
+                                >{{ product.product_name }}</span
+                            >
                         </div>
                         <div class="flex py-[15px] -mx-[10px]">
-                            <select class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-sm px-3 py-1">
-                                <option value="1" selected>Trắng</option>
-                                <option value="2">Xanh</option>
-                            </select>
-                            <select class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-sm px-3 py-1">
-                                <option value="1" selected>X</option>
-                                <option value="2">XL</option>
-                            </select>
+                            <select
+                                ng-change="changeColorInCart(product, product.picked.color, '{{
+                                product.picked.color
+                            }}'); editCart(product)"
+                                ng-model="product.picked.color"
+                                ng-options="color.color_name for color in product.colors"
+                                class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-sm px-3 py-1"
+                            ></select>
+                            <select
+                                ng-model="product.picked.size"
+                                ng-change="editCart(product)"
+                                ng-options="size.size_name for size in product.picked.color.sizes"
+                                class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-sm px-3 py-1"
+                            ></select>
                         </div>
                         <div class="flex mt-[5px] h-[30px] items-center">
-                            <button class="w-[25px] h-[28px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default">
-                                <i class='bx bx-minus'></i>
+                            <button
+                                ng-click="decreaseInCart(product)"
+                                class="w-[25px] h-[28px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default"
+                            >
+                                <i class="bx bx-minus"></i>
                             </button>
-                            <input type="text" value="1" class="text-[13px] w-[34px] h-[28px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center">
-                            <button class="w-[25px] h-[28px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tr-[100px] rounded-br-[100px]">
-                                <i class='bx bx-plus'></i>
+                            <input
+                                ng-model="product.picked.quantity"
+                                type="text"
+                                value="1"
+                                class="text-[13px] w-[34px] h-[28px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center"
+                            />
+                            <button
+                                ng-click="increaseInCart(product)"
+                                class="w-[25px] h-[28px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tr-[100px] rounded-br-[100px]"
+                            >
+                                <i class="bx bx-plus"></i>
                             </button>
                         </div>
                         <div class="py-[15px] flex justify-between">
-                            <button>
-                                <i class='bx bx-trash' ></i>
+                            <button
+                                ng-click="removeProductFromCart(product.cart_id)"
+                            >
+                                <i class="bx bx-trash"></i>
                             </button>
                             <div class="flex flex-col">
-                                <span class="text-black font-bold text-sm">
-                                    378.000đ
+                                <span
+                                    ng-if="product.product_discount == 0"
+                                    class="text-black font-bold text-sm"
+                                >
+                                    {{ product.picked.color .product_price *
+                                    product.picked.quantity | number: 0 }}₫
                                 </span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Discount -->
-                <div class="flex mb-3">
-                    <div class="w-[126px] flex-1 relative">
-                        <img src="../image/image5.webp" alt="Image" class="w-full">
-                        <div class="absolute top-[6px] left-0 w-[40px] text-center text-xs leading-[20px] bg-[#222] text-white">-45%</div>
-                    </div>
-                    <div class="ml-[20px] flex-[3]">
-                        <div>
-                            <span class="text-sm mb-[5px]">Cover Ups Bé gái Thắt nút Chim hồng hạc Cover Ups Bé gái Thắt nút Chim hồng hạc</span>
-                        </div>
-                        <div class="flex py-[15px] -mx-[10px]">
-                            <select class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-sm px-3 py-1">
-                                <option value="1" selected>Trắng</option>
-                                <option value="2">Xanh</option>
-                            </select>
-                            <select class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-sm px-3 py-1">
-                                <option value="1" selected>X</option>
-                                <option value="2">XL</option>
-                            </select>
-                        </div>
-                        <div class="flex mt-[5px] h-[30px] items-center">
-                            <button class="w-[25px] h-[28px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default">
-                                <i class='bx bx-minus'></i>
-                            </button>
-                            <input type="text" value="1" class="text-[13px] w-[34px] h-[28px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center">
-                            <button class="w-[25px] h-[28px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tr-[100px] rounded-br-[100px]">
-                                <i class='bx bx-plus'></i>
-                            </button>
-                        </div>
-                        <div class="py-[15px] flex justify-between">
-                            <button>
-                                <i class='bx bx-trash'></i>
-                            </button>
-                            <div class="flex flex-col text-sm">
-                                <span class="text-[#fa6338] font-bold text-sm">
-                                    378.000đ
+                            <div
+                                ng-if="product.product_discount != 0"
+                                class="flex flex-col text-sm"
+                            >
+                                <span class="text-[#fa6338] font-bold">
+                                    {{ (product.picked.color .product_price -
+                                    (product.picked.color .product_price *
+                                    product.product_discount) / 100) *
+                                    product.picked.quantity | number: 0 }}₫
                                 </span>
                                 <del class="text-[#999] text-xs">
-                                    398.000đ
+                                    {{ product.picked.color .product_price *
+                                    product.picked.quantity | number: 0 }}₫
                                 </del>
                             </div>
                         </div>
@@ -157,19 +205,25 @@
 
             <!-- Discount -->
             <div class="my-[25px] h-[40px] relative">
-                <input type="text" placeholder="Mã giảm giá"
-                    class="h-full w-full border border-[rgb(0 0 0 / 10%)] pl-3 pr-14 focus:outline-none focus:border-black text-sm" />
+                <input
+                    type="text"
+                    placeholder="Mã giảm giá"
+                    class="h-full w-full border border-[rgb(0 0 0 / 10%)] pl-3 pr-14 focus:outline-none focus:border-black text-sm"
+                />
                 <button
-                    class="absolute top-0 right-0 h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[rgba(34,34,34,.8)]">
+                    class="absolute top-0 right-0 h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[rgba(34,34,34,.8)]"
+                >
                     Áp dụng
                 </button>
             </div>
 
             <!-- Total -->
-            <div class="py-[15px] border-t border-b border-dashed border-[#e5e5e5]">
+            <div
+                class="py-[15px] border-t border-b border-dashed border-[#e5e5e5]"
+            >
                 <div class="flex justify-between text-sm mb-[15px]">
                     <p>Tạm tính</p>
-                    <p>398.000đ</p>
+                    <p>{{ total_price | number: 0 }}₫</p>
                 </div>
                 <div class="flex justify-between text-sm mb-[15px]">
                     <p>Giảm giá</p>
@@ -183,7 +237,7 @@
             <div class="my-[20px]">
                 <div class="flex justify-between text-sm mb-[15px]">
                     <p>Tổng cộng</p>
-                    <p class="text-2xl font-bold text-[#fa6338]">398.000đ</p>
+                    <p class="text-2xl font-bold text-[#fa6338]">{{ total_price | number: 0 }}₫</p>
                 </div>
             </div>
         </div>

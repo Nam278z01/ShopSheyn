@@ -4,10 +4,20 @@
         <div class="text-xs whitespace-nowrap">
             <div class="py-4">
                 <div class="inline-block">
-                    <a href="#" class="text-[#999] hover:underline hover:text-black">Trang chủ</a>
+                    <a
+                        href="#"
+                        class="text-[#999] hover:underline hover:text-black"
+                        >Trang chủ</a
+                    >
                 </div>
-                <div class="inline-block before:content-['/'] before:px-2 before:text-[#999]">
-                    <a href="#" class="text-[#999] hover:underline hover:text-black">Quần áo nữ</a>
+                <div
+                    class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
+                >
+                    <a
+                        href="#"
+                        class="text-[#999] hover:underline hover:text-black"
+                        >Quần áo nữ</a
+                    >
                 </div>
             </div>
         </div>
@@ -15,8 +25,11 @@
         <!-- Filter -->
         <div class="flex justify-end items-center my-[15px] h-[40px] text-xs">
             <label class="px-[22px]">Sắp xếp theo</label>
-            <select ng-model="filter.sort" ng-change="changeSort()"
-                class="w-[200px] border border-solid border-gray-300 focus:border-black focus:outline-none text-sm px-3 py-1.5">
+            <select
+                ng-model="filter.sort"
+                ng-change="changeSort()"
+                class="w-[200px] border border-solid border-gray-300 focus:border-black focus:outline-none text-sm px-3 py-1.5"
+            >
                 <option ng-value="1">Hàng mới</option>
                 <option ng-value="2">Bán chạy</option>
                 <option ng-value="3">Giảm nhiều</option>
@@ -29,65 +42,105 @@
     <div class="flex relative">
         <!-- Filter -->
         <div class="absolute left-0 -top-[40px] w-[190px]">
-            <a href="#!/product"
-                class="flex justify-center items-center h-[36px] w-full text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white">
+            <a
+                href="/product"
+                class="flex justify-center items-center h-[36px] w-full text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
+            >
                 Xóa tất cả
             </a>
         </div>
         <div class="w-[205px] pr-[15px] pb-[10px]">
             <div
-                class="scrollbar overflow-y-scroll sticky top-[54px] border-t border-[rgba(0,0,0,0.05] w-full h-[90vh]">
+                class="scrollbar overflow-y-scroll sticky top-[54px] border-t border-[rgba(0,0,0,0.05] w-full h-[90vh]"
+            >
                 <div class="pt-5 pb-4">
                     <div class="font-semibold text-sm flex items-center">
-                        <i class='bx bx-menu-alt-left text-xl'></i>
+                        <i class="bx bx-menu-alt-left text-xl"></i>
                         <span class="ml-3 font-bold">DANH MỤC</span>
                     </div>
                     <ul class="mt-3 text-[13px]">
-                        <li class="leading-7 capitalize" ng-click="changeCategory(undefine, false, null)">
-                            <span ng-class="{'text-[#fa6338]': changeCategory(undefine, true)}"
-                                class="text-black font-bold hover:text-[#fa6338] cursor-pointer">Tất cả</span>
+                        <li
+                            class="leading-7 capitalize"
+                            ng-click="changeCategory(undefine, false, null)"
+                        >
+                            <span
+                                ng-class="{'text-[#fa6338]': changeCategory(undefine, true)}"
+                                class="text-black font-bold hover:text-[#fa6338] cursor-pointer"
+                                >Tất cả</span
+                            >
                         </li>
-                        <li ng-repeat="c in categories" class="leading-7 capitalize"
-                            ng-click="changeCategory(c.category_id, false, c)">
-                            <span ng-class="{'text-[#fa6338]': changeCategory(c.category_id, true, c)}"
-                                class="text-black font-bold hover:text-[#fa6338] cursor-pointer">{{ c.category_name
-                                }}</span>
+                        <li
+                            ng-repeat="c in categories"
+                            class="leading-7 capitalize"
+                            ng-click="changeCategory(c.category_id, false, c)"
+                        >
+                            <span
+                                ng-class="{'text-[#fa6338]': changeCategory(c.category_id, true, c)}"
+                                class="text-black font-bold hover:text-[#fa6338] cursor-pointer"
+                                >{{ c.category_name }}</span
+                            >
                         </li>
                     </ul>
                 </div>
                 <div class="pt-5 pb-4">
                     <div class="font-semibold text-sm flex items-center">
-                        <i class='bx bx-filter text-xl'></i>
+                        <i class="bx bx-filter text-xl"></i>
                         <span class="ml-3 font-bold">BỘ LỌC</span>
                     </div>
-                    <div class="py-5 text-[13px] border-b border-[rgba(0,0,0,0.05] w-full"
-                        ng-if="subcategories.length > 0">
+                    <div
+                        class="py-5 text-[13px] border-b border-[rgba(0,0,0,0.05] w-full"
+                        ng-if="subcategories.length > 0"
+                    >
                         <div class="capitalize font-bold mb-2">
                             Theo danh mục
                         </div>
-                        <label ng-repeat="sc in subcategories" ng-click="changeSubCategories(sc)"
-                            class="h-[28px] capitalize flex items-center cursor-pointer">
-                            <input ng-if="sc.checked" type="checkbox" class="mr-2" checked>
-                            <input ng-if="!sc.checked" type="checkbox" class="mr-2">
-                            <span class="text-[#000000cc] font-semibold hover:text-[#fa6338]">{{ sc.subcategory_name
-                                }}</span>
+                        <label
+                            ng-repeat="sc in subcategories"
+                            ng-click="changeSubCategories(sc)"
+                            class="h-[28px] capitalize flex items-center cursor-pointer"
+                        >
+                            <input
+                                ng-if="sc.checked"
+                                type="checkbox"
+                                class="mr-2"
+                                checked
+                            />
+                            <input
+                                ng-if="!sc.checked"
+                                type="checkbox"
+                                class="mr-2"
+                            />
+                            <span
+                                class="text-[#000000cc] font-semibold hover:text-[#fa6338]"
+                                >{{ sc.subcategory_name }}</span
+                            >
                         </label>
                     </div>
                     <div class="py-5 text-[13px]">
-                        <div class="capitalize font-bold mb-2">
-                            Khoảng giá
-                        </div>
-                        <div class="flex items-center py-3 w-full justify-between">
-                            <input ng-model="filter.min_price" type="text"
+                        <div class="capitalize font-bold mb-2">Khoảng giá</div>
+                        <div
+                            class="flex items-center py-3 w-full justify-between"
+                        >
+                            <input
+                                ng-model="filter.min_price"
+                                type="text"
                                 class="w-[75px] h-[32px] border border-[rgb(0 0 0 / 10%)] px-2 focus:outline-none focus:border-black text-xs"
-                                placeholder="₫ TỪ">
-                            <i class='bx bx-minus text-xl text-[rgb(0 0 0 / 10%)]'></i>
-                            <input ng-model="filter.max_price" type="text"
+                                placeholder="₫ TỪ"
+                            />
+                            <i
+                                class="bx bx-minus text-xl text-[rgb(0 0 0 / 10%)]"
+                            ></i>
+                            <input
+                                ng-model="filter.max_price"
+                                type="text"
                                 class="w-[75px] h-[32px] border border-[rgb(0 0 0 / 10%)] px-2 focus:outline-none focus:border-black text-xs"
-                                placeholder="₫ ĐẾN">
+                                placeholder="₫ ĐẾN"
+                            />
                         </div>
-                        <button ng-click="changePrice()"
-                            class="w-full h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[rgba(34,34,34,.8)]">
+                        <button
+                            ng-click="changePrice()"
+                            class="w-full h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[rgba(34,34,34,.8)]"
+                        >
                             ÁP DỤNG
                         </button>
                     </div>
@@ -99,70 +152,125 @@
         <div class="flex-1 pl-[20px]">
             <div class="flex flex-wrap -mx-[10px]">
                 <!-- Normal -->
-                <div ng-repeat="x in [].constructor(8) track by $index" ng-if="isLoading" class="card w-1/4 px-[10px]">
-                    <div class="cover skeleton w-full pb-[132%]">
-                    </div>
+                <div
+                    ng-repeat="x in [].constructor(8) track by $index"
+                    ng-if="isLoading"
+                    class="card w-1/4 px-[10px]"
+                >
+                    <div class="cover skeleton w-full pb-[132%]"></div>
                     <div class="min-h-[116px]">
                         <p class="mt-2 h-4 w-4/5 skeleton"></p>
                         <p class="mt-[6px] w-3/4 h-5 skeleton"></p>
                         <div class="flex mt-[6px]">
-                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
-                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
-                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
-                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
-                            <p class="w-[25px] h-[25px] mr-2 rounded-full skeleton"></p>
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
                         </div>
                     </div>
                 </div>
 
-                <div dir-paginate="p in products | itemsPerPage: filter.page_size" total-items="total_row"
-                    current-page="filter.page" ng-if="!isLoading" class="w-1/4 px-[10px]">
-                    <div class="w-full pb-[132%] h-0 relative overflow-hidden bg-[#f7f7f7] group">
-                        <a href="#!/details?product_id={{ p.product_id }}" class="w-full inline-block">
-                            <img src="/image/{{p.picked.color.product_image1}}" alt="{{ p.product_name }}"
-                                class="w-full">
-                            <img src="/image/{{p.picked.color.product_image2}}" alt="{{ p.product_name }}"
-                                class="w-full absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500">
+                <div
+                    dir-paginate="p in products | itemsPerPage: filter.page_size"
+                    total-items="total_row"
+                    current-page="filter.page"
+                    ng-if="!isLoading"
+                    class="w-1/4 px-[10px]"
+                >
+                    <div
+                        class="w-full pb-[132%] h-0 relative overflow-hidden bg-[#f7f7f7] group"
+                    >
+                        <a
+                            href="/details?product_id={{ p.product_id }}"
+                            class="w-full inline-block"
+                        >
+                            <img
+                                src="/image/{{p.picked.color.product_image1}}"
+                                alt="{{ p.product_name }}"
+                                class="w-full"
+                            />
+                            <img
+                                src="/image/{{p.picked.color.product_image2}}"
+                                alt="{{ p.product_name }}"
+                                class="w-full absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500"
+                            />
                         </a>
                         <div
-                            class="absolute bottom-0 left-0 right-0 px-[15px] py-[15px] transition-all group-hover:flex flex-wrap hidden">
-                            <div ng-repeat="s in p.picked.color.sizes" title="Còn {{ s.quantity }} sản phẩm"
-                                class="flex justify-center items-center w-[48px] h-[43px] m-1 text-sm font-bold rounded-2xl bg-white cursor-pointer transition-all hover:bg-black hover:text-white">
+                            class="absolute bottom-0 left-0 right-0 px-[15px] py-[15px] transition-all group-hover:flex flex-wrap hidden"
+                        >
+                            <div
+                                ng-repeat="s in p.picked.color.sizes"
+                                ng-click="addToCartInProductPage(p, s)"
+                                title="Còn {{ s.quantity }} sản phẩm"
+                                class="flex justify-center items-center w-[48px] h-[43px] m-1 text-sm font-bold rounded-2xl bg-white cursor-pointer transition-all hover:bg-black hover:text-white"
+                            >
                                 {{ s.size_name }}
                             </div>
                         </div>
                         <!-- IF Discount -->
-                        <div ng-if="p.product_discount != 0"
-                            class="absolute top-[6px] left-0 w-[50px] text-center text-xs leading-[20px] bg-[#222] text-white">
-                            -{{ p.product_discount }}%</div>
+                        <div
+                            ng-if="p.product_discount != 0"
+                            class="absolute top-[6px] left-0 w-[50px] text-center text-xs leading-[20px] bg-[#222] text-white"
+                        >
+                            -{{ p.product_discount }}%
+                        </div>
                     </div>
                     <div class="min-h-[116px]">
                         <div class="mt-2 text-xs">
-                            <a href="#!/details?product_id={{ p.product_id }}"
-                                class="block w-full text-[#767676] overflow-hidden whitespace-nowrap text-ellipsis hover:text-black hover:underline ">
+                            <a
+                                href="/details?product_id={{ p.product_id }}"
+                                class="block w-full text-[#767676] overflow-hidden whitespace-nowrap text-ellipsis hover:text-black hover:underline"
+                            >
                                 {{ p.product_name }}
                             </a>
                         </div>
                         <div class="mt-[6px] flex items-center">
-                            <span ng-if="p.product_discount == 0" class="text-black text-sm block font-bold">
+                            <span
+                                ng-if="p.product_discount == 0"
+                                class="text-black text-sm block font-bold"
+                            >
                                 {{p.picked.color.product_price | number:0}}₫
                             </span>
                             <!-- IF Discount -->
-                            <span ng-if="p.product_discount != 0" class="text-[#fa6338] text-sm block font-bold mr-1">
-                                {{p.picked.color.product_price - p.picked.color.product_price * p.product_discount / 100
-                                | number:0}}₫
+                            <span
+                                ng-if="p.product_discount != 0"
+                                class="text-[#fa6338] text-sm block font-bold mr-1"
+                            >
+                                {{p.picked.color.product_price -
+                                p.picked.color.product_price *
+                                p.product_discount / 100 | number:0}}₫
                             </span>
-                            <del ng-if="p.product_discount != 0" class="text-[#999] text-xs">
+                            <del
+                                ng-if="p.product_discount != 0"
+                                class="text-[#999] text-xs"
+                            >
                                 {{p.picked.color.product_price | number:0}}₫
                             </del>
                         </div>
                         <div ng-if="p.colors.length > 1" class="mt-[6px] flex">
-                            <div ng-repeat="cl in p.colors"
+                            <div
+                                ng-repeat="cl in p.colors"
                                 ng-class="{'border-black p-[2px]' : p.picked.color.color_id == cl.color_id}"
-                                ng-mouseenter="changeColor(p, cl)" title="{{ cl.color_name }}"
-                                class="w-[25px] h-[25px] rounded-full border mr-2 cursor-pointer">
-                                <img src="/image/{{ cl.product_image1 }}" alt="{{ cl.color_name }}"
-                                    class="w-full h-full object-cover rounded-full">
+                                ng-mouseenter="changeColor(p, cl)"
+                                title="{{ cl.color_name }}"
+                                class="w-[25px] h-[25px] rounded-full border mr-2 cursor-pointer"
+                            >
+                                <img
+                                    src="/image/{{ cl.product_image1 }}"
+                                    alt="{{ cl.color_name }}"
+                                    class="w-full h-full object-cover rounded-full"
+                                />
                             </div>
                         </div>
                     </div>
@@ -170,10 +278,13 @@
             </div>
 
             <div class="flex justify-end">
-                <dir-pagination-controls max-size="7" boundary-links="true" on-page-change="pageChanged(newPageNumber)">
+                <dir-pagination-controls
+                    max-size="7"
+                    boundary-links="true"
+                    on-page-change="pageChanged(newPageNumber)"
+                >
                 </dir-pagination-controls>
             </div>
         </div>
     </div>
-
 </div>
