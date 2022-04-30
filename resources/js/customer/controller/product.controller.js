@@ -1,4 +1,4 @@
-app.controller(
+myApp.controller(
     "ProductController",
     function ($scope, $rootScope, $http, $routeParams, $location, API_URL) {
         $scope.filter = {

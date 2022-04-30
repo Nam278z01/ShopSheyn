@@ -1,4 +1,4 @@
-app.controller(
+myApp.controller(
     "ProductDetailsController",
     function ($scope, $rootScope, $http, $routeParams, API_URL) {
         $scope.isLoading = true;

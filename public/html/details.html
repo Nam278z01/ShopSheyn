@@ -28,7 +28,10 @@
                 <!-- Image -->
                 <div class="w-[730px]">
                     <div class="w-full relative group">
-                        <div class="flex -mx-1 overflow-hidden">
+                        <div
+                            class="flex -mx-1 overflow-hidden image-slider"
+                            slick-slider
+                        >
                             <div
                                 class="w-2/4 px-1 flex-shrink-0"
                                 ng-class="{'skeleton h-[480px]': isLoading}"
@@ -49,21 +52,30 @@
                                     class="w-full"
                                 />
                             </div>
-                            <div class="w-2/4 px-1 flex-shrink-0">
+                            <div
+                                ng-if="product.picked.color.product_image3"
+                                class="w-2/4 px-1 flex-shrink-0"
+                            >
                                 <img
                                     src="/image/{{ product.picked.color.product_image3 }}"
                                     alt="{{ p.product_name }}"
                                     class="w-full"
                                 />
                             </div>
-                            <div class="w-2/4 px-1 flex-shrink-0">
+                            <div
+                                ng-if="product.picked.color.product_image4"
+                                class="w-2/4 px-1 flex-shrink-0"
+                            >
                                 <img
                                     src="/image/{{ product.picked.color.product_image4 }}"
                                     alt="{{ p.product_name }}"
                                     class="w-full"
                                 />
                             </div>
-                            <div class="w-2/4 px-1 flex-shrink-0">
+                            <div
+                                ng-if="product.picked.color.product_image5"
+                                class="w-2/4 px-1 flex-shrink-0"
+                            >
                                 <img
                                     src="/image/{{ product.picked.color.product_image5 }}"
                                     alt="{{ p.product_name }}"
@@ -71,7 +83,7 @@
                                 />
                             </div>
                         </div>
-                        <button
+                        <!-- <button
                             class="absolute left-[15px] top-2/4 -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center hidden group-hover:flex hover:bg-white"
                         >
                             <i class="bx bx-chevron-left"></i>
@@ -80,7 +92,7 @@
                             class="absolute right-[15px] top-2/4 -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center hidden group-hover:flex hover:bg-white"
                         >
                             <i class="bx bx-chevron-right"></i>
-                        </button>
+                        </button> -->
                     </div>
 
                     <div class="w-full mt-2 flex justify-center">
@@ -108,7 +120,7 @@
                         <div
                             ng-if="isLoading || product.picked.color.product_image3"
                             ng-class="{'skeleton': isLoading}"
-                            class="px-[2px] w-[68px] h-[90px] cursor-pointer opacity-30"
+                            class="px-[2px] w-[68px] h-[90px] cursor-pointer"
                         >
                             <img
                                 src="/image/{{ product.picked.color.product_image3 }}"
@@ -119,7 +131,7 @@
                         <div
                             ng-if="isLoading || product.picked.color.product_image4"
                             ng-class="{'skeleton': isLoading}"
-                            class="px-[2px] w-[68px] h-[90px] cursor-pointer opacity-30"
+                            class="px-[2px] w-[68px] h-[90px] cursor-pointer"
                         >
                             <img
                                 src="/image/{{ product.picked.color.product_image4 }}"
@@ -130,7 +142,7 @@
                         <div
                             ng-if="isLoading || product.picked.color.product_image5"
                             ng-class="{'skeleton': isLoading}"
-                            class="px-[2px] w-[68px] h-[90px] cursor-pointer opacity-30"
+                            class="px-[2px] w-[68px] h-[90px] cursor-pointer"
                         >
                             <img
                                 src="/image/{{ product.picked.color.product_image5 }}"

@@ -30,8 +30,14 @@ Route::get('/cart', function () {
     return view('customer.index');
 });
 
-Route::get('/admin', function () {
-    return view('admin.index');
+Route::prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return view('admin.index');
+    });
+
+    Route::get('/product', function () {
+        return view('admin.product');
+    });
 });
 
 // Route::get('/product', function () {

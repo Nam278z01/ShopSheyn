@@ -74,13 +74,13 @@
                     <nav
                         class="absolute z-10 top-full left-0 right-0 py-[20px] bg-white invisible group-hover:visible transition-all pointer-events-auto"
                     >
-                        <div class="flex flex-wrap h-[320px] justify-center">
+                        <div class="flex flex-wrap h-[300px] justify-center">
                             <div class="px-[15px] text-[13px] w-[400px]">
                                 <h6 class="font-bold text-[#8e8e8e]">
                                     Danh Mục
                                 </h6>
                                 <ul
-                                    class="mt-5 flex flex-col flex-wrap h-[300px]"
+                                    class="mt-5 flex flex-col flex-wrap h-[270px]"
                                 >
                                     <li class="leading-7 capitalize w-2/4">
                                         <a
