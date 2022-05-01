@@ -10,39 +10,10 @@
                     alt="@{{ admin.PersonName }}"
                 />
             </div>
-            <div class="pull-left info">
-                <p>@{{ admin.PersonName }}</p>
-                <a href="#"
-                    ><i class="fa fa-circle text-success"></i>
-                    Online</a
-                >
-            </div>
         </div>
-        <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input
-                    type="text"
-                    name="q"
-                    class="form-control"
-                    placeholder="Search..."
-                />
-                <span class="input-group-btn">
-                    <button
-                        type="submit"
-                        name="search"
-                        id="search-btn"
-                        class="btn btn-flat"
-                    >
-                        <i class="fa fa-search"></i>
-                    </button>
-                </span>
-            </div>
-        </form>
-        <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">MAIN NAVIGATION</li>
+            <li class="header">ĐIỀU HƯỚNG CHÍNH</li>
             <li class="" ng-class="{ active: isActiveNav(0) }">
                 <a href="~/Administrator/DashBoard/Index">
                     <i class="fa fa-dashboard"></i>
@@ -54,7 +25,7 @@
                 ng-class="{ active: isActiveNav(1) }"
             >
                 <a href="#">
-                    <i class="fa fa-music"></i>
+                    <i class="fa fa-edit"></i>
                     <span>Quản lý</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
@@ -63,33 +34,18 @@
                 <ul class="treeview-menu">
                     <li ng-class="{ active: isActiveSubNav(0) }">
                         <a href="~/Administrator/SongMana/Index"
-                            ><i class="fa fa-circle-o"></i>Bài
-                            hát</a
+                            ><i class="fa fa-circle-o"></i>Danh mục</a
                         >
                     </li>
                     <li ng-class="{ active: isActiveSubNav(1) }">
                         <a
                             href="~/Administrator/PlaylistAdminMana/Index"
-                            ><i class="fa fa-circle-o"></i>Playlist
-                            Admin</a
+                            ><i class="fa fa-circle-o"></i>Sản phẩm</a
                         >
                     </li>
                     <li ng-class="{ active: isActiveSubNav(2) }">
                         <a href="~/Administrator/AlbumMana/Index"
-                            ><i class="fa fa-circle-o"></i>Album</a
-                        >
-                    </li>
-                    <li ng-class="{ active: isActiveSubNav(3) }">
-                        <a href="~/Administrator/ArtistMana/Index"
-                            ><i class="fa fa-circle-o"></i>Nghệ
-                            sĩ</a
-                        >
-                    </li>
-                    <li ng-class="{ active: isActiveSubNav(4) }">
-                        <a
-                            href="~/Administrator/CollectionMana/Index"
-                            ><i class="fa fa-circle-o"></i>Tuyển
-                            tập</a
+                            ><i class="fa fa-circle-o"></i>Đơn hàng</a
                         >
                     </li>
                 </ul>

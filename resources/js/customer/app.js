@@ -1,4 +1,5 @@
-window.$ = require("jquery");
+import $ from 'jquery'
+window.$ = window.jQuery = $
 require("slick-carousel");
 require("angular");
 require("angular-route");

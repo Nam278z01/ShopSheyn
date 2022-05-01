@@ -19,7 +19,7 @@ myApp.controller(
         $scope.isLoading = true;
         $http({
             method: "GET",
-            url: API_URL + "/api/product",
+            url: API_URL + "/api/product/search",
             params: $scope.filter,
         }).then((res) => {
             $scope.products = res.data.data;

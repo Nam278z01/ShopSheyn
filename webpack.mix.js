@@ -13,15 +13,10 @@ const mix = require("laravel-mix");
 
 mix.js("resources/js/app.js", "public/js")
     .js("resources/js/customer/app.js", "public/js/customer.js")
-    .styles(
-        [
-            "resources/css/customer/loading.css",
-            "resources/css/customer/pagination.css",
-            "node_modules/slick-carousel/slick/slick.css",
-        ],
-        "public/css/customer.css"
-    )
-    .postCss("resources/css/app.css", "public/css/app.css", [
+    .js("resources/js/admin/app.js", "public/js/admin.js")
+    .postCss("resources/css/admin/app.css", "public/css/admin.css")
+    .postCss("resources/css/customer/app.css", "public/css/customer.css")
+    .postCss("resources/css/customer/tailwind.css", "public/css/customer.css", [
         //
         require("tailwindcss"),
     ]);

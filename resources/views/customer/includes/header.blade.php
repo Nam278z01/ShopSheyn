@@ -231,7 +231,7 @@
                             >
                                 <div class="w-[90px] relative">
                                     <img
-                                        src="/image/@{{
+                                        src="/image/product/@{{
                                             product.picked.color.product_image1
                                         }}"
                                         alt="@{{ product.product_name }}"

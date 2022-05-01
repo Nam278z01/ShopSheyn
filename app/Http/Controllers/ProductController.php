@@ -14,7 +14,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function search()
     {
         //
         $page = request()->get('page');
@@ -28,6 +28,12 @@ class ProductController extends Controller
         $data = DB::select('call getProductsSearch(?, ?, ?, ?, ?, ?, ?, ?, @total_row)', [$page, $page_size, $category_id, $list_subcategory_id, $text_search, $min_price, $max_price, $sort]);
         $total_row = DB::select('select @total_row as total_row');
         return ["data" => json_decode($data[0]->data), "total_row" => $total_row[0]->total_row];
+    }
+
+    public function index()
+    {
+        //
+        return ProductResource::collection(Product::all());
     }
 
     /**
