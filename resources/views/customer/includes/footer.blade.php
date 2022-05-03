@@ -97,7 +97,7 @@
                             <li class="mr-[10px] w-[30px] h-[30px]">
                                 <a href="#">
                                     <img
-                                        src="../image/fb.png"
+                                        src="/image/product/fb.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -106,7 +106,7 @@
                             <li class="mr-[10px] w-[30px] h-[30px]">
                                 <a href="#">
                                     <img
-                                        src="../image/ig.png"
+                                        src="/image/product/ig.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -115,7 +115,7 @@
                             <li class="mr-[10px] w-[30px] h-[30px]">
                                 <a href="#">
                                     <img
-                                        src="../image/tw.png"
+                                        src="/image/product/tw.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -124,7 +124,7 @@
                             <li class="mr-[10px] w-[30px] h-[30px]">
                                 <a href="#">
                                     <img
-                                        src="../image/yt.png"
+                                        src="/image/product/yt.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -133,7 +133,7 @@
                             <li class="mr-[10px] w-[30px] h-[30px]">
                                 <a href="#">
                                     <img
-                                        src="../image/pt.png"
+                                        src="/image/product/pt.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -142,7 +142,7 @@
                             <li class="mr-[10px] w-[30px] h-[30px]">
                                 <a href="#">
                                     <img
-                                        src="../image/sn.png"
+                                        src="/image/product/sn.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -151,7 +151,7 @@
                             <li class="mr-[10px] w-[30px] h-[30px]">
                                 <a href="#">
                                     <img
-                                        src="../image/tt.png"
+                                        src="/image/product/tt.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -199,7 +199,7 @@
                             <li class="mr-[10px] w-[36px] h-[24px]">
                                 <a href="#">
                                     <img
-                                        src="../image/cod.png"
+                                        src="/image/product/cod.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -208,7 +208,7 @@
                             <li class="mr-[10px] w-[36px] h-[24px]">
                                 <a href="#">
                                     <img
-                                        src="../image/vs.png"
+                                        src="/image/product/vs.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -217,7 +217,7 @@
                             <li class="mr-[10px] w-[36px] h-[24px]">
                                 <a href="#">
                                     <img
-                                        src="../image/mc.png"
+                                        src="/image/product/mc.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />
@@ -226,7 +226,7 @@
                             <li class="mr-[10px] w-[36px] h-[24px]">
                                 <a href="#">
                                     <img
-                                        src="../image/pp.png"
+                                        src="/image/product/pp.png"
                                         alt="Image"
                                         class="w-full h-full"
                                     />

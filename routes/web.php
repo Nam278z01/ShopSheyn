@@ -38,16 +38,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/product', function () {
         return view('admin.product');
     });
+
+    Route::get('/upload', function () {
+        return view('admin.upload');
+    });
 });
-
-// Route::get('/product', function () {
-//     return view('customer.product');
-// });
-
-// Route::get('/details', function () {
-//     return view('customer.details');
-// });
-
-// Route::get('/cart', function () {
-//     return view('customer.cart');
-// });

@@ -21,6 +21,7 @@
         "tailwindcss": "^3.0.24"
     },
     "dependencies": {
+        "@gruposinternet/angular-ckeditor": "^1.0.2",
         "angular": "1.8.3",
         "angular-animate": "^1.7.2",
         "angular-aria": "^1.7.2",

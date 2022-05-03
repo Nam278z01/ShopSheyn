@@ -3,37 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\Product;
-use App\Http\Resources\ProductResource;
 
-class ProductController extends Controller
+class UploadController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function search()
-    {
-        //
-        $page = request()->get('page');
-        $page_size = request()->get('page_size');
-        $category_id = request()->get('category_id');
-        $list_subcategory_id = request()->get('list_subcategory_id');
-        $text_search = request()->get('text_search');
-        $min_price = request()->get('min_price');
-        $max_price = request()->get('max_price');
-        $sort = request()->get('sort');
-        $data = DB::select('call getProductsSearch(?, ?, ?, ?, ?, ?, ?, ?, @total_row)', [$page, $page_size, $category_id, $list_subcategory_id, $text_search, $min_price, $max_price, $sort]);
-        $total_row = DB::select('select @total_row as total_row');
-        return ["data" => json_decode($data[0]->data), "total_row" => $total_row[0]->total_row];
-    }
-
     public function index()
     {
         //
-        return ProductResource::collection(Product::orderByDesc('created_time')->get());
     }
 
     /**
@@ -55,6 +35,18 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+        if ($request->hasFile('files')) {
+            $array_name = [];
+            $files = $request->file('files');
+            foreach ($files as $file) {
+                $name = time() . $file->getClientOriginalName();
+                $array_name[] = $name;
+                $file->move(public_path('/image/'), $name);
+            }
+            return $array_name;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -66,7 +58,6 @@ class ProductController extends Controller
     public function show($id)
     {
         //
-        return new ProductResource(Product::findOrFail($id));
     }
 
     /**

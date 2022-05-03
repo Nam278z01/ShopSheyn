@@ -10,6 +10,7 @@ use App\Http\Controllers\SizeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderStateController;
+use App\Http\Controllers\UploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,5 @@ Route::resources([
     'cart' => CartController::class,
     'order' => OrderController::class,
     'orderstate' => OrderStateController::class,
+    'upload' => UploadController::class,
 ]);

@@ -1,6 +1,172 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./node_modules/@gruposinternet/angular-ckeditor/angular-ckeditor.js":
+/*!***************************************************************************!*\
+  !*** ./node_modules/@gruposinternet/angular-ckeditor/angular-ckeditor.js ***!
+  \***************************************************************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
+  // AMD
+  if (true) !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! angular */ "./node_modules/angular/index.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+		__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+		(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  // Global
+  else {}
+}(this, function (angular) {
+
+  angular
+  .module('ckeditor', [])
+  .directive('ckeditor', ['$parse', ckeditorDirective]);
+
+  // Polyfill setImmediate function.
+  var setImmediate = window && window.setImmediate ? window.setImmediate : function (fn) {
+    setTimeout(fn, 0);
+  };
+
+  /**
+   * CKEditor directive.
+   *
+   * @example
+   * <div ckeditor="options" ng-model="content" ready="onReady()"></div>
+   */
+
+  function ckeditorDirective($parse) {
+    return {
+      restrict: 'A',
+      require: ['ckeditor', 'ngModel'],
+      controller: [
+        '$scope',
+        '$element',
+        '$attrs',
+        '$parse',
+        '$q',
+        ckeditorController
+      ],
+      link: function (scope, element, attrs, ctrls) {
+        // get needed controllers
+        var controller = ctrls[0]; // our own, see below
+        var ngModelController = ctrls[1];
+
+        // Initialize the editor content when it is ready.
+        controller.ready().then(function initialize() {
+          // Sync view on specific events.
+          ['dataReady', 'change', 'blur', 'saveSnapshot'].forEach(function (event) {
+            controller.onCKEvent(event, function syncView() {
+              ngModelController.$setViewValue(controller.instance.getData() || '');
+            });
+          });
+
+          controller.instance.setReadOnly(!! attrs.readonly);
+          attrs.$observe('readonly', function (readonly) {
+            controller.instance.setReadOnly(!! readonly);
+          });
+
+          // Defer the ready handler calling to ensure that the editor is
+          // completely ready and populated with data.
+          setImmediate(function () {
+            $parse(attrs.ready)(scope);
+          });
+        });
+
+        // Set editor data when view data change.
+        ngModelController.$render = function syncEditor() {
+          controller.ready().then(function () {
+            // "noSnapshot" prevent recording an undo snapshot
+            controller.instance.setData(ngModelController.$viewValue || '', {
+              noSnapshot: true,
+              callback: function () {
+                // Amends the top of the undo stack with the current DOM changes
+                // ie: merge snapshot with the first empty one
+                // http://docs.ckeditor.com/#!/api/CKEDITOR.editor-event-updateSnapshot
+                controller.instance.fire('updateSnapshot');
+              }
+            });
+          });
+        };
+      }
+    };
+  }
+
+  /**
+   * CKEditor controller.
+   */
+
+  function ckeditorController($scope, $element, $attrs, $parse, $q) {
+    var config = $parse($attrs.ckeditor)($scope) || {};
+    var editorElement = $element[0];
+    var instance;
+    var readyDeferred = $q.defer(); // a deferred to be resolved when the editor is ready
+
+    // Create editor instance.
+    if (editorElement.hasAttribute('contenteditable') &&
+        editorElement.getAttribute('contenteditable').toLowerCase() == 'true') {
+      instance = this.instance = CKEDITOR.inline(editorElement, config);
+    }
+    else {
+      instance = this.instance = CKEDITOR.replace(editorElement, config);
+    }
+
+    /**
+     * Listen on events of a given type.
+     * This make all event asynchronous and wrapped in $scope.$apply.
+     *
+     * @param {String} event
+     * @param {Function} listener
+     * @returns {Function} Deregistration function for this listener.
+     */
+
+    this.onCKEvent = function (event, listener) {
+      instance.on(event, asyncListener);
+
+      function asyncListener() {
+        var args = arguments;
+        setImmediate(function () {
+          applyListener.apply(null, args);
+        });
+      }
+
+      function applyListener() {
+        var args = arguments;
+        $scope.$apply(function () {
+          listener.apply(null, args);
+        });
+      }
+
+      // Return the deregistration function
+      return function $off() {
+        instance.removeListener(event, applyListener);
+      };
+    };
+
+    this.onCKEvent('instanceReady', function() {
+      readyDeferred.resolve(true);
+    });
+
+    /**
+     * Check if the editor if ready.
+     *
+     * @returns {Promise}
+     */
+    this.ready = function ready() {
+      return readyDeferred.promise;
+    };
+
+    // Destroy editor when the scope is destroyed.
+    $scope.$on('$destroy', function onDestroy() {
+      // do not delete too fast or pending events will throw errors
+      readyDeferred.promise.then(function() {
+        instance.destroy(false);
+      });
+    });
+  }
+}));
+
+
+/***/ }),
+
 /***/ "./node_modules/angular-animate/angular-animate.js":
 /*!*********************************************************!*\
   !*** ./node_modules/angular-animate/angular-animate.js ***!
@@ -82845,7 +83011,19 @@ myApp.run(function ($rootScope, $http, $window, API_URL) {
   \************************************************************************/
 /***/ (() => {
 
-myApp.controller("ProductManagementController", function ($scope, $rootScope, $http, API_URL, $mdDialog, NgTableParams, Upload) {
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+myApp.controller("ProductManagementController", function ($scope, $rootScope, $http, API_URL, $mdDialog, NgTableParams, Upload, $timeout) {
   $rootScope.currentIndex = 1;
   $rootScope.currentSubIndex = 1;
   $http({
@@ -82868,7 +83046,115 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     url: API_URL + "/api/category"
   }).then(function (res) {
     $scope.categories = res.data.data;
-  });
+  }); // File upload
+
+  $scope.uploadFiles = function (files, cl) {
+    cl.files = [].concat(_toConsumableArray(cl.files), _toConsumableArray(files));
+  };
+
+  $scope.removeFile = function (cl, index) {
+    cl.files.splice(index, 1);
+  }; // Editor options.
+
+
+  $scope.options = {
+    language: "vi",
+    allowedContent: true,
+    entities: false
+  }; // Called when the editor is completely ready.
+
+  $scope.onReady = function () {// ...
+  };
+
+  $scope.product = {
+    product_discount: 0,
+    colors: [{
+      color_name: '',
+      sizes: [{
+        size_name: '',
+        quantity: 0
+      }],
+      files: []
+    }],
+    sizes: [{
+      size_name: '',
+      quantity: 0
+    }]
+  };
+
+  $scope.addColor = function () {
+    $scope.product.colors.push({
+      color_name: '',
+      sizes: JSON.parse(JSON.stringify(_toConsumableArray($scope.product.sizes))),
+      files: []
+    });
+  };
+
+  $scope.removeColor = function (index) {
+    if ($scope.product.colors.length > 1) {
+      $scope.product.colors.splice(index, 1);
+    }
+  };
+
+  $scope.addSize = function () {
+    $scope.product.sizes.push({
+      size_name: '',
+      quantity: 0
+    });
+    $scope.product.colors.forEach(function (color) {
+      color.sizes.push({
+        size_name: '',
+        quantity: 0
+      });
+    });
+  };
+
+  $scope.changeSizeName = function ($index, size) {
+    $scope.product.colors.forEach(function (color) {
+      color.sizes[$index].size_name = size.size_name;
+    });
+  };
+
+  $scope.removeSize = function (index) {
+    if ($scope.product.sizes.length > 1) {
+      $scope.product.sizes.splice(index, 1);
+    }
+
+    $scope.product.colors.forEach(function (color) {
+      color.sizes.splice(index, 1);
+    });
+  };
+
+  $scope.showProduct = function () {
+    console.log($scope.product);
+  };
+
+  $scope.uploadFilesIntoServer = function () {
+    $scope.files = $scope.product.colors.reduce(function (colors, colorCurrent) {
+      return [].concat(_toConsumableArray(colors), _toConsumableArray(colorCurrent.files));
+    }, []);
+    console.log($scope.files);
+
+    if ($scope.files && $scope.files.length) {
+      Upload.upload({
+        url: API_URL + "/api/upload",
+        data: {
+          files: $scope.files
+        }
+      }).then(function (response) {
+        $timeout(function () {
+          $scope.result = response.data;
+          $scope.progress = 0;
+        });
+      }, function (response) {
+        if (response.status > 0) {
+          $scope.errorMsg = response.status + ': ' + response.data;
+        }
+      }, function (evt) {
+        $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+      });
+    }
+  };
 });
 
 /***/ }),
@@ -104071,11 +104357,13 @@ __webpack_require__(/*! ng-table/bundles/ng-table.min */ "./node_modules/ng-tabl
 
 __webpack_require__(/*! ui-select */ "./node_modules/ui-select/index.js");
 
+__webpack_require__(/*! @gruposinternet/angular-ckeditor */ "./node_modules/@gruposinternet/angular-ckeditor/angular-ckeditor.js");
+
 __webpack_require__(/*! ./js/adminlte.min */ "./resources/js/admin/js/adminlte.min.js");
 
 __webpack_require__(/*! ./js/demo */ "./resources/js/admin/js/demo.js");
 
-window.myApp = angular.module("myApp", ["ngSanitize", "ngTable", "ui.select", "ngMaterial", "ngMessages", "ngFileUpload"]);
+window.myApp = angular.module("myApp", ["ngSanitize", "ngTable", "ui.select", "ngMaterial", "ngMessages", "ngFileUpload", 'ckeditor']);
 
 __webpack_require__(/*! ./controller/app.management */ "./resources/js/admin/controller/app.management.js");
 
