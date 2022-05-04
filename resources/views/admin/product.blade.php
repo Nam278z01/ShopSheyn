@@ -943,20 +943,9 @@
                                 >Hủy</md-button
                             >
                             <md-button
-                                class="md-primary md-cancel-button md-button md-default-theme md-ink-ripple"
-                                type="button"
-                                ng-click="showProduct()"
-                                >Show</md-button
-                            >
-                            <md-button
-                                class="md-raised md-primary"
-                                type="button"
-                                ng-click="uploadFilesIntoServer()"
-                                >Upload</md-button
-                            >
-                            <md-button
                                 class="md-raised md-primary"
                                 type="submit"
+                                ng-click="addProduct()"
                                 >Lưu</md-button
                             >
                         </section>

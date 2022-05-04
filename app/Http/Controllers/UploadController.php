@@ -39,9 +39,9 @@ class UploadController extends Controller
             $array_name = [];
             $files = $request->file('files');
             foreach ($files as $file) {
-                $name = time() . $file->getClientOriginalName();
+                $name = "UploadTest" . uniqid() . $file->getClientOriginalName();
                 $array_name[] = $name;
-                $file->move(public_path('/image/'), $name);
+                $file->move(public_path('/image/product/'), $name);
             }
             return $array_name;
         } else {

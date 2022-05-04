@@ -125,11 +125,7 @@ myApp.controller(
                 color.sizes.splice(index, 1);
             })
         }
-        $scope.showProduct = function () {
-            console.log($scope.product)
-        }
-
-        $scope.uploadFilesIntoServer = function () {
+        $scope.addProduct = function () {
             $scope.files =  $scope.product.colors.reduce(function (colors, colorCurrent) {
                 return [...colors, ...colorCurrent.files]
             }, []);
@@ -143,15 +139,42 @@ myApp.controller(
                 }).then(function (response) {
                     $timeout(function () {
                         $scope.result = response.data;
-                        $scope.progress = 0;
+                        //Enter src img
+                        $scope.product.colors.forEach(function (color) {
+                            color.files.forEach(function (file, index) {
+                                color[`product_image${index + 1}`] = $scope.result.shift()
+                            })
+                        })
+                        //Remove sizes, files
+                        $scope.product.subcategory_id = $scope.category_piked.subcategory.subcategory_id
+                        let { sizes ,...product_new} = $scope.product
+                        product_new = JSON.parse(JSON.stringify(product_new))
+                        $scope.product.colors.forEach(function ({ files, ...color }, index) {
+                            product_new.colors[index] = color
+                        })
+                        //Add Product
+                        $http({
+                            method: "POST",
+                            url: API_URL + "/api/product",
+                            data: product_new,
+                            "Content-Type": "application/json"
+                        }).then((res) => {
+                            $scope.progress = 100
+                            $scope.products.unshift(res.data.data)
+                            $scope.tableParams.reload()
+                            $timeout(function () {
+                                $scope.progress = 0
+                            }, 1000)
+                        });
                     });
+
                 }, function (response) {
                     if (response.status > 0) {
                         $scope.errorMsg = response.status + ': ' + response.data;
                     }
                 }, function (evt) {
                     $scope.progress =
-                        Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+                        Math.min(100, parseInt(100.0 * evt.loaded / evt.total) * 90 / 100);
                 });
             }
         };

@@ -10,7 +10,8 @@ class Product extends Model
     use HasFactory;
     protected $table = 'product';
     protected $primaryKey = 'product_id';
-    public $timestamps = false;
+    const CREATED_AT = 'created_time';
+    const UPDATED_AT = 'updated_time';
     public function subcategory(){
         return $this->belongsTo(SubCategory::class, 'subcategory_id', 'subcategory_id');
     }

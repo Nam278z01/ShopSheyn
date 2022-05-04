@@ -83011,6 +83011,13 @@ myApp.run(function ($rootScope, $http, $window, API_URL) {
   \************************************************************************/
 /***/ (() => {
 
+var _excluded = ["sizes"],
+    _excluded2 = ["files"];
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -83125,11 +83132,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     });
   };
 
-  $scope.showProduct = function () {
-    console.log($scope.product);
-  };
-
-  $scope.uploadFilesIntoServer = function () {
+  $scope.addProduct = function () {
     $scope.files = $scope.product.colors.reduce(function (colors, colorCurrent) {
       return [].concat(_toConsumableArray(colors), _toConsumableArray(colorCurrent.files));
     }, []);
@@ -83143,15 +83146,48 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
         }
       }).then(function (response) {
         $timeout(function () {
-          $scope.result = response.data;
-          $scope.progress = 0;
+          $scope.result = response.data; //Enter src img
+
+          $scope.product.colors.forEach(function (color) {
+            color.files.forEach(function (file, index) {
+              color["product_image".concat(index + 1)] = $scope.result.shift();
+            });
+          }); //Remove sizes, files
+
+          $scope.product.subcategory_id = $scope.category_piked.subcategory.subcategory_id;
+
+          var _$scope$product = $scope.product,
+              sizes = _$scope$product.sizes,
+              product_new = _objectWithoutProperties(_$scope$product, _excluded);
+
+          product_new = JSON.parse(JSON.stringify(product_new));
+          $scope.product.colors.forEach(function (_ref, index) {
+            var files = _ref.files,
+                color = _objectWithoutProperties(_ref, _excluded2);
+
+            product_new.colors[index] = color;
+          }); //Add Product
+
+          $http({
+            method: "POST",
+            url: API_URL + "/api/product",
+            data: product_new,
+            "Content-Type": "application/json"
+          }).then(function (res) {
+            $scope.progress = 100;
+            $scope.products.unshift(res.data.data);
+            $scope.tableParams.reload();
+            $timeout(function () {
+              $scope.progress = 0;
+            }, 1000);
+          });
         });
       }, function (response) {
         if (response.status > 0) {
           $scope.errorMsg = response.status + ': ' + response.data;
         }
       }, function (evt) {
-        $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total));
+        $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total) * 90 / 100);
       });
     }
   };
