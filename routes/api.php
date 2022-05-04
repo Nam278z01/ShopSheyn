@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/product/search', [ProductController::class, 'search']);
+Route::post('/upload/delete', [UploadController::class, 'deleteFiles']);
 
 Route::resources([
     'category' => CategoryController::class,

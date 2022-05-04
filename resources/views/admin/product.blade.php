@@ -200,6 +200,14 @@
                                 (tableParams.page() - 1) * tableParams.count()
                         }}
                     </td>
+                    <td title="'Danh mục nhỏ'"
+                        filter="{'subcategory.subcategory_name': 'text'}"
+                        sortable="'subcategory.subcategory_name'"
+                    >
+                        @{{
+                            row.subcategory.subcategory_name
+                        }}
+                    </td>
                     <td title="'Ảnh'">
                         <img
                             ng-src="/image/product/@{{
@@ -228,7 +236,7 @@
                         filter="{'created_time': 'text'}"
                         sortable="'created_time'"
                     >
-                        @{{ row.created_time }}
+                        @{{ row.created_time | jsDate | date: "dd-MM-yyyy HH:mm:ss" }}
                     </td>
                     <td title="'Thao tác'" align="right">
                         <section
@@ -237,9 +245,6 @@
                             layout-align="end center"
                             layout-wrap
                         >
-                            <md-button class="md-icon-button md-raised">
-                                <md-icon md-font-icon="ion-eye"></md-icon>
-                            </md-button>
                             <md-button
                                 class="md-icon-button md-raised md-warn"
                                 md-colors="{background: 'amber-400'}"
@@ -247,6 +252,7 @@
                                 <md-icon md-font-icon="ion-edit"></md-icon>
                             </md-button>
                             <md-button
+                                ng-click="showModalDelete(row)"
                                 class="md-icon-button md-raised"
                                 md-colors="{background: 'red-400'}"
                                 data-toggle="modal"
@@ -985,6 +991,7 @@
                                 >Hủy</md-button
                             >
                             <md-button
+                                ng-click="deleteProduct()"
                                 class="md-raised md-primary"
                                 type="submit"
                                 >Lưu</md-button

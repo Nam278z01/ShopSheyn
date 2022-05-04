@@ -10,10 +10,7 @@
             content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
             name="viewport"
         />
-        <link
-            href="/css/admin.css"
-            rel="stylesheet"
-        />
+        <link href="/css/admin.css" rel="stylesheet" />
         <!-- Google Font -->
         <link
             rel="stylesheet"
@@ -68,29 +65,29 @@
             }
 
             /*Toast / Snackbar*/
-            #snackbar {
-                min-width: 250px;
-                margin-left: -125px;
-                color: #fff;
-                text-align: center;
-                border-radius: 2px;
-                padding: 16px;
+            #toaster {
                 position: fixed;
-                z-index: 9999;
-                left: 50%;
-                top: -60px;
-                font-size: 17px;
-                opacity: 0;
+                top: 56px;
+                height: 48px;
+                left: 0;
+                width: 100%;
+                z-index: 10000;
             }
-
-            #snackbar.show {
-                top: 30px;
-                opacity: 1;
-                transition: top linear 0.2s, opacity linear 0.2s;
-            }
-
-            .md-select-menu-container, md-backdrop {
+            .md-select-menu-container,
+            md-backdrop {
                 z-index: 9999 !important;
+            }
+            md-toast.md-success-toast-theme .md-toast-content {
+                background-color: #66bb6a;
+            }
+            md-toast.md-error-toast-theme .md-toast-content {
+                background-color: #f44336;
+            }
+            md-toast.md-warning-toast-theme .md-toast-content {
+                background-color: #ffa726;
+            }
+            md-toast.md-info-toast-theme .md-toast-content {
+                background-color: #29b6f6;
             }
         </style>
     </head>
@@ -98,8 +95,7 @@
         ng-app="myApp"
         class="hold-transition skin-black-light sidebar-collapse sidebar-mini fixed"
     >
-        <!-- Toast / Snackbar -->
-        <div id="snackbar">@{{ snackbarContent }}</div>
+        <div id="toaster"></div>
         <!-- Site wrapper -->
         <div class="wrapper">
             @include('admin.includes.header')
@@ -135,8 +131,7 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <!-- Home tab content -->
-                    <div class="tab-pane" id="control-sidebar-home-tab">
-                    </div>
+                    <div class="tab-pane" id="control-sidebar-home-tab"></div>
                     <!-- /.tab-pane -->
                 </div>
             </aside>

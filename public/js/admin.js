@@ -82904,93 +82904,8 @@ myApp.filter("jsDate", function () {
     return x.replace("/Date(", "").replace(")/", "");
   };
 });
-myApp.filter('propsFilter', function () {
-  return function (items, props) {
-    var out = [];
-
-    if (angular.isArray(items)) {
-      var keys = Object.keys(props);
-      items.forEach(function (item) {
-        var itemMatches = false;
-
-        for (var i = 0; i < keys.length; i++) {
-          var prop = keys[i];
-          var text = props[prop].toLowerCase();
-
-          if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
-            itemMatches = true;
-            break;
-          }
-        }
-
-        if (itemMatches) {
-          out.push(item);
-        }
-      });
-    } else {
-      // Let the output be the input untouched
-      out = items;
-    }
-
-    return out;
-  };
-});
-myApp.run(function ($rootScope, $http, $window, API_URL) {
-  $rootScope.snackbarContent = "Hello!";
-  var myTimeout;
-
-  $rootScope.showSnackbar = function (content, kind) {
-    $rootScope.snackbarContent = content;
-    var snackbar = $('#snackbar');
-
-    if (kind == 'error') {
-      snackbar.css({
-        'background-color': '#F44336'
-      });
-      snackbar.css({
-        'background-image': 'unset'
-      });
-    } else if (kind == 'success') {
-      snackbar.css({
-        'background-image': 'linear-gradient(to right, #2F80ED, #00AEEF)'
-      });
-      snackbar.css({
-        'background-color': 'unset'
-      });
-    } else if (kind == 'warning') {
-      snackbar.css({
-        'background-image': 'linear-gradient(45deg, #F2AF12 0%, #FFD200 100%)'
-      });
-      snackbar.css({
-        'background-color': 'unset'
-      });
-    } else {
-      snackbar.css({
-        'background-color': 'rgba(24, 34, 45, 1)'
-      });
-      snackbar.css({
-        'background-image': 'unset'
-      });
-    }
-
-    if (snackbar.hasClass('show')) {
-      snackbar.removeClass('show');
-      setTimeout(function () {
-        clearTimeout(myTimeout);
-        snackbar.addClass('show');
-        myTimeout = setTimeout(function () {
-          snackbar.removeClass('show');
-        }, 3000);
-      }, 100);
-    } else {
-      snackbar.addClass('show');
-      myTimeout = setTimeout(function () {
-        snackbar.removeClass('show');
-      }, 3000);
-    }
-  }; //Như tab controls ấy
-
-
+myApp.run(function ($rootScope, $http, API_URL, $mdToast) {
+  // Sidebar active
   $rootScope.currentIndex = -1;
   $rootScope.currentSubIndex = -1;
 
@@ -83000,6 +82915,11 @@ myApp.run(function ($rootScope, $http, $window, API_URL) {
 
   $rootScope.isActiveSubNav = function (index) {
     return index == $rootScope.currentSubIndex;
+  }; // Toast
+
+
+  $rootScope.showSimpleToast = function (toast_name, type) {
+    $mdToast.show($mdToast.simple().parent(document.querySelectorAll('#toaster')).position('top right').textContent(toast_name).hideDelay(3000).theme(type + "-toast"));
   };
 });
 
@@ -83073,25 +82993,29 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
   $scope.onReady = function () {// ...
   };
 
-  $scope.product = {
-    product_discount: 0,
-    colors: [{
-      color_name: '',
-      sizes: [{
-        size_name: '',
-        quantity: 0
+  function initialProduct() {
+    $scope.product = {
+      product_discount: 0,
+      colors: [{
+        color_name: "",
+        sizes: [{
+          size_name: "",
+          quantity: 0
+        }],
+        files: []
       }],
-      files: []
-    }],
-    sizes: [{
-      size_name: '',
-      quantity: 0
-    }]
-  };
+      sizes: [{
+        size_name: "",
+        quantity: 0
+      }]
+    };
+  }
+
+  initialProduct();
 
   $scope.addColor = function () {
     $scope.product.colors.push({
-      color_name: '',
+      color_name: "",
       sizes: JSON.parse(JSON.stringify(_toConsumableArray($scope.product.sizes))),
       files: []
     });
@@ -83105,12 +83029,12 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
 
   $scope.addSize = function () {
     $scope.product.sizes.push({
-      size_name: '',
+      size_name: "",
       quantity: 0
     });
     $scope.product.colors.forEach(function (color) {
       color.sizes.push({
-        size_name: '',
+        size_name: "",
         quantity: 0
       });
     });
@@ -83133,63 +83057,115 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
   };
 
   $scope.addProduct = function () {
-    $scope.files = $scope.product.colors.reduce(function (colors, colorCurrent) {
-      return [].concat(_toConsumableArray(colors), _toConsumableArray(colorCurrent.files));
-    }, []);
-    console.log($scope.files);
+    if (!$scope.progress) {
+      var files = $scope.product.colors.reduce(function (colors, colorCurrent) {
+        return [].concat(_toConsumableArray(colors), _toConsumableArray(colorCurrent.files));
+      }, []);
 
-    if ($scope.files && $scope.files.length) {
-      Upload.upload({
-        url: API_URL + "/api/upload",
-        data: {
-          files: $scope.files
-        }
-      }).then(function (response) {
-        $timeout(function () {
-          $scope.result = response.data; //Enter src img
+      if (files && files.length) {
+        Upload.upload({
+          url: API_URL + "/api/upload",
+          data: {
+            files: files
+          }
+        }).then(function (response) {
+          $timeout(function () {
+            $scope.result = response.data; //Enter src img
 
-          $scope.product.colors.forEach(function (color) {
-            color.files.forEach(function (file, index) {
-              color["product_image".concat(index + 1)] = $scope.result.shift();
+            $scope.product.colors.forEach(function (color) {
+              color.files.forEach(function (file, index) {
+                color["product_image".concat(index + 1)] = $scope.result.shift();
+              });
+            }); //Remove sizes, files
+
+            $scope.product.subcategory_id = $scope.category_piked.subcategory.subcategory_id;
+
+            var _$scope$product = $scope.product,
+                sizes = _$scope$product.sizes,
+                product_new = _objectWithoutProperties(_$scope$product, _excluded);
+
+            product_new = JSON.parse(JSON.stringify(product_new));
+            $scope.product.colors.forEach(function (_ref, index) {
+              var files = _ref.files,
+                  color = _objectWithoutProperties(_ref, _excluded2);
+
+              product_new.colors[index] = color;
+            }); //Add Product
+
+            $http({
+              method: "POST",
+              url: API_URL + "/api/product",
+              data: product_new,
+              "Content-Type": "application/json"
+            }).then(function (res) {
+              $scope.progress = 100;
+              $scope.products.unshift(res.data.data);
+              $scope.tableParams.reload();
+              $timeout(function () {
+                $rootScope.showSimpleToast("Thêm sản phẩm thành công!", "success");
+                $scope.progress = 0;
+                initialProduct();
+              }, 1000);
             });
-          }); //Remove sizes, files
-
-          $scope.product.subcategory_id = $scope.category_piked.subcategory.subcategory_id;
-
-          var _$scope$product = $scope.product,
-              sizes = _$scope$product.sizes,
-              product_new = _objectWithoutProperties(_$scope$product, _excluded);
-
-          product_new = JSON.parse(JSON.stringify(product_new));
-          $scope.product.colors.forEach(function (_ref, index) {
-            var files = _ref.files,
-                color = _objectWithoutProperties(_ref, _excluded2);
-
-            product_new.colors[index] = color;
-          }); //Add Product
-
-          $http({
-            method: "POST",
-            url: API_URL + "/api/product",
-            data: product_new,
-            "Content-Type": "application/json"
-          }).then(function (res) {
-            $scope.progress = 100;
-            $scope.products.unshift(res.data.data);
-            $scope.tableParams.reload();
-            $timeout(function () {
-              $scope.progress = 0;
-            }, 1000);
           });
+        }, function (response) {
+          if (response.status > 0) {
+            $scope.errorMsg = response.status + ": " + response.data;
+          }
+        }, function (evt) {
+          $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total) * 90 / 100);
         });
-      }, function (response) {
-        if (response.status > 0) {
-          $scope.errorMsg = response.status + ': ' + response.data;
-        }
-      }, function (evt) {
-        $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total) * 90 / 100);
-      });
+      }
+    } else {
+      $rootScope.showSimpleToast("Xin chờ chút!", "warning");
     }
+  };
+
+  $scope.showModalDelete = function (product) {
+    $scope.productForDetele = product;
+  };
+
+  $scope.deleteProduct = function () {
+    var paths = [];
+    $scope.productForDetele.colors.forEach(function (color) {
+      if (color.product_image1) {
+        paths.push(color.product_image1);
+      }
+
+      if (color.product_image2) {
+        paths.push(color.product_image2);
+      }
+
+      if (color.product_image3) {
+        paths.push(color.product_image3);
+      }
+
+      if (color.product_image4) {
+        paths.push(color.product_image4);
+      }
+
+      if (color.product_image5) {
+        paths.push(color.product_image5);
+      }
+    });
+    $http({
+      method: "POST",
+      url: API_URL + "/api/upload/delete",
+      data: {
+        paths: paths
+      },
+      "Content-Type": "application/json"
+    }).then(function (res) {
+      $http({
+        method: "DELETE",
+        url: API_URL + "/api/product" + $scope.productForDetele.product_id
+      }).then(function (res) {
+        $rootScope.showSimpleToast("Xóa sản phẩm thành công!", "success");
+        $scope.products = $scope.products.filter(function (p) {
+          return p.product_id != $scope.productForDetele.product_id;
+        });
+      });
+    });
   };
 });
 

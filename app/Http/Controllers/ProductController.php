@@ -64,22 +64,30 @@ class ProductController extends Controller
         $product->subcategory_id = $request->subcategory_id;
         $product->admin_created_id = 1;
         $product->save();
-        foreach($request->colors as $color) {
+        foreach ($request->colors as $color) {
             $color_new = new Color();
             $color_new->color_name = $color['color_name'];
             $color_new->product_price = $color['product_price'];
             $color_new->product_image1 = $color['product_image1'];
-            $color_new->product_image2 = $color['product_image2'];
-            $color_new->product_image3 = $color['product_image3'];
-            $color_new->product_image4 = $color['product_image4'];
-            $color_new->product_image5 = $color['product_image5'];
+            if (isset($color['product_image2'])) {
+                $color_new->product_image2 = $color['product_image2'];
+            }
+            if (isset($color['product_image3'])) {
+                $color_new->product_image2 = $color['product_image3'];
+            }
+            if (isset($color['product_image4'])) {
+                $color_new->product_image2 = $color['product_image4'];
+            }
+            if (isset($color['product_image5'])) {
+                $color_new->product_image2 = $color['product_image5'];
+            }
             $color_new->product_id = $product->product_id;
             $color_new->save();
-            foreach($color['sizes'] as $size) {
+            foreach ($color['sizes'] as $size) {
                 $size_new = new Size();
-                $size_new->color_id = $color_new->color_id;
                 $size_new->size_name = $size['size_name'];
                 $size_new->quantity = $size['quantity'];
+                $size_new->color_id = $color_new->color_id;
                 $size_new->save();
             }
         }
@@ -131,5 +139,8 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+        $product = Product::find($id);
+        $product->delete();
+        return response()->json("success");
     }
 }

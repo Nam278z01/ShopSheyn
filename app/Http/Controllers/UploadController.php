@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class UploadController extends Controller
 {
@@ -39,13 +40,24 @@ class UploadController extends Controller
             $array_name = [];
             $files = $request->file('files');
             foreach ($files as $file) {
-                $name = "UploadTest" . uniqid() . $file->getClientOriginalName();
+                $name = uniqid() . $file->getClientOriginalName();
                 $array_name[] = $name;
                 $file->move(public_path('/image/product/'), $name);
             }
             return $array_name;
         } else {
-            return null;
+            return response()->json("failed");;
+        }
+    }
+    public function deleteFiles(Request $request)
+    {
+        if ($request->has('paths')) {
+            foreach($request->paths as $path) {
+                File::delete(public_path("/image/product/" . $path));
+            }
+            return response()->json("success");
+        } else {
+            return response()->json("failed");;
         }
     }
 
