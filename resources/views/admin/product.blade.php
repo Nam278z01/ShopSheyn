@@ -994,6 +994,7 @@
                                 ng-click="deleteProduct()"
                                 class="md-raised md-primary"
                                 type="submit"
+                                data-dismiss="modal"
                                 >Lưu</md-button
                             >
                         </section>

@@ -203,7 +203,7 @@ myApp.controller(
         };
         $scope.showModalDelete = function (product) {
             $scope.productForDetele = product;
-        }
+        };
         $scope.deleteProduct = function () {
             let paths = [];
             $scope.productForDetele.colors.forEach(function (color) {
@@ -231,15 +231,26 @@ myApp.controller(
             }).then((res) => {
                 $http({
                     method: "DELETE",
-                    url: API_URL + "/api/product" + $scope.productForDetele.product_id,
+                    url:
+                        API_URL +
+                        "/api/product/" +
+                        $scope.productForDetele.product_id,
                 }).then((res) => {
                     $rootScope.showSimpleToast(
                         "Xóa sản phẩm thành công!",
                         "success"
                     );
                     $scope.products = $scope.products.filter(function (p) {
-                        return p.product_id != $scope.productForDetele.product_id
-                    })
+                        return (
+                            p.product_id != $scope.productForDetele.product_id
+                        );
+                    });
+                    let index = $scope.products.findIndex(
+                        (p) =>
+                            p.product_id == $scope.productForDetele.product_id
+                    );
+                    $scope.products.splice(index, 1);
+                    $scope.tableParams.reload();
                 });
             });
         };

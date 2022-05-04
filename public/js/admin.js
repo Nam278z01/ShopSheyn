@@ -83158,12 +83158,17 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     }).then(function (res) {
       $http({
         method: "DELETE",
-        url: API_URL + "/api/product" + $scope.productForDetele.product_id
+        url: API_URL + "/api/product/" + $scope.productForDetele.product_id
       }).then(function (res) {
         $rootScope.showSimpleToast("Xóa sản phẩm thành công!", "success");
         $scope.products = $scope.products.filter(function (p) {
           return p.product_id != $scope.productForDetele.product_id;
         });
+        var index = $scope.products.findIndex(function (p) {
+          return p.product_id == $scope.productForDetele.product_id;
+        });
+        $scope.products.splice(index, 1);
+        $scope.tableParams.reload();
       });
     });
   };

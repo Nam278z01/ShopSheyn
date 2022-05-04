@@ -69,9 +69,9 @@ CREATE TABLE IF NOT EXISTS `color` (
   PRIMARY KEY (`color_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `color_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.color: ~49 rows (approximately)
+-- Dumping data for table shop.color: ~52 rows (approximately)
 INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`, `product_image2`, `product_image3`, `product_image4`, `product_image5`, `product_id`) VALUES
 	(1, 'Đen', 142000, '1610954054037523ce2e1b5541c69040ccb4102400_thumbnail_900x.webp', '1610954057e9d333c568dd4f28a5fd56343acb912e_thumbnail_900x.webp', '16109540614aabaa892deb01c5d59b17e73326a2a8_thumbnail_900x.webp', '1610954064b4d703949275742134916533ca2c4253_thumbnail_900x.webp', '16109540670d4cab359190a6ff9e445efeb15b2a6b_thumbnail_900x.webp', 1),
 	(2, 'Xanh trời', 279000, '16454131255afcc643a69b66c26689dda9181d1c54_thumbnail_900x.webp', '1645413133d534d4842ab0c89cbb2edd272669590e_thumbnail_900x.webp', '1645413131f0602c3612f8dabe2c0356f3e366ffcb_thumbnail_900x.webp', NULL, NULL, 2),
@@ -124,7 +124,14 @@ INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`
 	(49, 'Xanh lá', 278000, '1650274524083d5d9a79db8ff46c414e3d3a1362e1_thumbnail_900x.webp', '1650274526e0987f78c5859170b1515315e10fb7e4_thumbnail_900x.webp', '16502745290f8b42f597028116756112efaeff5e79_thumbnail_900x.webp', '1650274531330a2338fd78ff81ab9c77a196082b90_thumbnail_900x.webp', '16502745349dad44e449c384edd7144cf0af1c8142_thumbnail_900x.webp', 39),
 	(50, 'Đen', 150000, '164670543625c6b79029d2e8ed0a09908e1b1841a3_thumbnail_900x.webp', '163464202207bdbc9c8d85c9028d95899b3c5f1e64_thumbnail_900x.webp', '164670543804dba17cd2592b6c93a3bbdf9febf96b_thumbnail_900x.webp', '16353053841578f2ce53fea0590a635d8f452bb96b_thumbnail_900x.webp', '16353049002f10fe69f7673ee5c5324f47fcb3332e_thumbnail_900x.webp', 40),
 	(51, 'Xanh biển', 201000, '16502464128b69050d080c8cff002915dd21718ac0_thumbnail_900x.webp', '16502464133a8c27a167103f088c5d8ca84587a335_thumbnail_900x.webp', '16502464150dd0c47afe04e0ec81b625e25cbb504e_thumbnail_900x.webp', '1650246417207a39d4d22bbc53bb0ed35a635b8edd_thumbnail_900x.webp', '1650246418e68980516f9f336489bd247e390bbdcf_thumbnail_900x.webp', 41),
-	(52, 'Trắng', 215000, '1649308829343dedac17eda39992b6d25e36cbc496_thumbnail_900x.webp', '1649308825555b86f4a2a4685ad1acb6d1eee062f5_thumbnail_900x.webp', '1649308827b7b33f3bf54e64db937d1445949b2091_thumbnail_900x.webp', '16493088314ad1b0d6cfa36691ebad6772dcecd814_thumbnail_900x.webp', '1649308823de44f16ad4ea952f9a209b130ac31b52_thumbnail_900x.webp', 42);
+	(52, 'Trắng', 215000, '1649308829343dedac17eda39992b6d25e36cbc496_thumbnail_900x.webp', '1649308825555b86f4a2a4685ad1acb6d1eee062f5_thumbnail_900x.webp', '1649308827b7b33f3bf54e64db937d1445949b2091_thumbnail_900x.webp', '16493088314ad1b0d6cfa36691ebad6772dcecd814_thumbnail_900x.webp', '1649308823de44f16ad4ea952f9a209b130ac31b52_thumbnail_900x.webp', 42),
+	(53, 'Đen', 405000, '62727da5d37951635328428e5b8778498fd991150eeb3e570dddd0a_thumbnail_900x.webp', '62727da5d4f8a1635328439ce48aa47a741a7013297a683e130c05d_thumbnail_900x.webp', '62727da5d5fdc1635328476f1247ced91f61062b6bbbf0eff7ca608_thumbnail_900x.webp', '62727da5d64cd16353284501aef2fd52b47b6112b8efbef09de461c_thumbnail_900x.webp', '62727da5d696e16353284548081c79c4afe466cc0979e2625cf04b5_thumbnail_900x.webp', 43),
+	(54, 'Nâu', 397000, '62727da5d6d861650519559b838ec39ef10c7f238660e60ac36e7b3_thumbnail_900x.webp', '62727da5d73bd1650519562ac13a272c8fdccfe8c2058db166d767a_thumbnail_900x.webp', '62727da5d772c1650519567e33a68056711184c86841e5d949fe7cc_thumbnail_900x.webp', '62727da5d7eab16505195701eb579ffe7bf6bca7d09be8f262a533a_thumbnail_900x.webp', '62727da5d9576165051956503101d28f212069074613ed481b6a8d7_thumbnail_900x.webp', 43),
+	(55, 'Xám', 497000, '627280efdce2c1636527285cbf8c9de7dedc59b241bb01a98a779a3_thumbnail_900x.webp', '627280efdd48f1636527287ac7d25371c8bdbaf2f2b4f199eb5e416_thumbnail_900x.webp', '627280efdd91b1636527291e04950049717d12d1f61a71359736c69_thumbnail_900x.webp', '627280efdde3e16365272819250e48e87dca996131fbfc48650850c_thumbnail_900x.webp', '627280efdeed41636607288630425494be09e3a9b3c3ff34040a01d_thumbnail_900x.webp', 44),
+	(56, 'Be', 343000, '62728a5d07be51636527069c09f9b943991e827b05546c9dd6b3108_thumbnail_900x.webp', '62728a5d08b591636527071b02ded15934bbe7481a7d94b88bb259e_thumbnail_900x.webp', '62728a5d0903c16365270739e60e50130bcbe8fece665124070db27_thumbnail_900x.webp', '62728a5d0964716365270833b846794335f2b571e7525921b056a0c_thumbnail_900x.webp', '62728a5d09b81163652708648c2f38991d37b7216c769c3ba69ddb1_thumbnail_900x.webp', 45),
+	(57, 'Trắng Đen', 420000, '62728b238f2771648019467ff7329436b38a6287f1fd1e17c269efb_thumbnail_900x.webp', '62728b238f8901648019455ad048550e08341929a51f3043046dc75_thumbnail_900x.webp', '62728b238fde01648019462a092205a2c9291515def578f3f7f4bc6_thumbnail_900x.webp', '62728b239016016480194513f322f1aa8386f15a6a5223b99838435_thumbnail_900x.webp', '62728b239049a16480194593117ce8cfcd57a1ce0f1979eb6a96cc3_thumbnail_900x.webp', 46),
+	(58, 'Đỏ cam', 373000, '62729162152f416508512886f609cbc2323b538755baac77a92a26b_thumbnail_900x.webp', '627291621607016508512967ab4ccdc375acad11eb23891ea9a9498_thumbnail_900x.webp', '62729162169e516508513201b2d0cad84d2696fb6f71bf9a9af5c6a_thumbnail_900x.webp', '6272916217400165085129157b6a88dc63906d312886303faedbdd4_thumbnail_900x.webp', '627291621791b165085129494e92323e4eadcdf8bc33795ef28323d_thumbnail_900x.webp', 47),
+	(60, 'Xanh lá', 249000, '62729514714151636354374dd57016001f2b1b4dd64ba13fde684d0_thumbnail_900x.webp', '62729514728571636354356200362d31139785d430172f995a8b10e_thumbnail_900x.webp', NULL, NULL, NULL, 50);
 
 -- Dumping structure for table shop.customer
 CREATE TABLE IF NOT EXISTS `customer` (
@@ -208,9 +215,9 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`admin_updated_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `product_ibfk_2` FOREIGN KEY (`admin_created_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `product_ibfk_3` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.product: ~36 rows (approximately)
+-- Dumping data for table shop.product: ~40 rows (approximately)
 INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `product_discount`, `subcategory_id`, `created_time`, `updated_time`, `admin_updated_id`, `admin_created_id`) VALUES
 	(1, 'Áo sơ mi Nút màu trơn Thanh lịch', NULL, 40, 7, '2022-04-16 00:00:00', NULL, NULL, 1),
 	(2, 'Áo sơ mi nữ Nút phía trước Sọc Giải trí', NULL, 0, 7, '2022-04-17 00:00:00', NULL, NULL, 1),
@@ -251,7 +258,13 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `pro
 	(39, 'Áo thun nữ Con số Hoa Giải trí', NULL, 0, 3, '2022-04-16 07:00:00', NULL, NULL, 1),
 	(40, 'Áo thun nữ Đồ họa Lá thư Giải trí', NULL, 32, 3, '2022-04-16 06:00:00', NULL, NULL, 1),
 	(41, 'Áo thun nữ Dây kéo màu trơn Giải trí', NULL, 15, 3, '2022-04-16 05:00:00', NULL, NULL, 1),
-	(42, 'Áo thun nữ Hoa Lá thư Giải trí', NULL, 0, 3, '2022-04-16 04:00:00', NULL, NULL, 1);
+	(42, 'Áo thun nữ Hoa Lá thư Giải trí', NULL, 0, 3, '2022-04-16 04:00:00', NULL, NULL, 1),
+	(43, 'DAZY Quần nữ Xếp li màu trơn Thanh lịch', NULL, 0, 26, '2022-05-04 13:20:38', '2022-05-04 13:20:38', NULL, 1),
+	(44, 'Dazy-Less Quần nữ Nút Túi Uốn nếp màu trơn Giải trí', NULL, 0, 26, '2022-05-04 13:34:40', '2022-05-04 13:34:40', NULL, 1),
+	(45, 'DAZY Quần nữ Túi màu trơn Giải trí', NULL, 0, 26, '2022-05-04 14:14:53', '2022-05-04 14:14:53', NULL, 1),
+	(46, 'Quần nữ Nút Sọc ca rô Sẵn sàng', NULL, 0, 26, '2022-05-04 14:18:11', '2022-05-04 14:18:11', NULL, 1),
+	(47, 'Quần nữ Thắt lưng Túi Quần paper-bag màu trơn Boho', NULL, 0, 26, '2022-05-04 14:44:50', '2022-05-04 14:44:50', NULL, 1),
+	(50, 'Quần nữ Thắt nơ trước màu trơn Giải trí', NULL, 0, 26, '2022-05-04 15:00:36', '2022-05-04 15:00:36', NULL, 1);
 
 -- Dumping structure for table shop.size
 CREATE TABLE IF NOT EXISTS `size` (
@@ -262,9 +275,9 @@ CREATE TABLE IF NOT EXISTS `size` (
   PRIMARY KEY (`size_id`),
   KEY `color_id` (`color_id`),
   CONSTRAINT `size_ibfk_1` FOREIGN KEY (`color_id`) REFERENCES `color` (`color_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=208 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.size: ~157 rows (approximately)
+-- Dumping data for table shop.size: ~174 rows (approximately)
 INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(1, 'XS', 10, 1),
 	(2, 'S', 23, 1),
@@ -439,7 +452,34 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(173, 'XL', 65, 51),
 	(174, 'M', 45, 52),
 	(175, 'X', 54, 52),
-	(176, 'XL', 64, 52);
+	(176, 'XL', 64, 52),
+	(177, 'S', 23, 53),
+	(178, 'M', 554, 53),
+	(179, 'L', 45, 53),
+	(180, 'XL', 324, 53),
+	(181, 'S', 12, 54),
+	(182, 'M', 5, 54),
+	(183, 'L', 56, 54),
+	(184, 'XL', 657, 54),
+	(185, 'S', 234, 55),
+	(186, 'L', 54, 55),
+	(187, 'X', 23, 55),
+	(188, 'XL', 56, 55),
+	(189, 'S', 23, 56),
+	(190, 'M', 34, 56),
+	(191, 'L', 45, 56),
+	(192, 'XL', 87, 56),
+	(193, 'S', 34, 57),
+	(194, 'M', 78, 57),
+	(195, 'L', 87, 57),
+	(196, 'XL', 56, 57),
+	(197, 'S', 64, 58),
+	(198, 'M', 33, 58),
+	(199, 'L', 435, 58),
+	(200, 'XL', 54, 58),
+	(205, 'S', 23, 60),
+	(206, 'M', 112, 60),
+	(207, 'L', 32, 60);
 
 -- Dumping structure for table shop.subcategory
 CREATE TABLE IF NOT EXISTS `subcategory` (
