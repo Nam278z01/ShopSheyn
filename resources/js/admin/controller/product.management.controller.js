@@ -82,8 +82,6 @@ myApp.controller(
                 ],
             };
         }
-        initialProduct();
-
         $scope.addColor = function () {
             $scope.product.colors.push({
                 color_name: "",
@@ -121,6 +119,15 @@ myApp.controller(
                 color.sizes.splice(index, 1);
             });
         };
+
+        $scope.showModalEditAndCreate = function (form_name, product) {
+            $scope.form_name = form_name;
+            if (form_name == "THÊM SẢN PHẨM") {
+                initialProduct();
+            } else {
+
+            }
+        }
         $scope.addProduct = function () {
             if (!$scope.progress) {
                 let files = $scope.product.colors.reduce(function (

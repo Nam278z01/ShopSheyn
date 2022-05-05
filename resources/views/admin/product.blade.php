@@ -147,7 +147,7 @@
     }
 
     .product-classify-body-cell-input {
-        color: #333;
+        color: black;
         text-align: center;
         font-size: 14px;
         height: 100%;
@@ -176,9 +176,10 @@
             layout-wrap
         >
             <md-button
+                ng-click="showModalEditAndCreate('THÊM SẢN PHẨM')"
                 class="md-raised md-primary"
                 data-toggle="modal"
-                data-target="#modaladd-editsong"
+                data-target="#modaladd-edit"
                 >Thêm sản phẩm
             </md-button>
         </section>
@@ -246,8 +247,11 @@
                             layout-wrap
                         >
                             <md-button
+                                ng-click="showModalEditAndCreate('SỬA THÔNG TIN SẢN PHẨM', row)"
                                 class="md-icon-button md-raised md-warn"
                                 md-colors="{background: 'amber-400'}"
+                                data-toggle="modal"
+                                data-target="#modaladd-edit"
                             >
                                 <md-icon md-font-icon="ion-edit"></md-icon>
                             </md-button>
@@ -256,7 +260,7 @@
                                 class="md-icon-button md-raised"
                                 md-colors="{background: 'red-400'}"
                                 data-toggle="modal"
-                                data-target="#modaldeletesong"
+                                data-target="#modaldelete"
                             >
                                 <md-icon md-font-icon="ion-trash-b"></md-icon>
                             </md-button>
@@ -267,19 +271,19 @@
         </div>
         <div
             class="modal fade"
-            id="modaladd-editsong"
+            id="modaladd-edit"
             role="dialog"
             aria-labelledby="myLargeModalLabel"
         >
             <form class="modal-dialog modal-lg" role="form" name="productForm">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="background-color: #3f51b5">
                         <h4
                             class="modal-title"
                             id="myModalLabel"
-                            style="text-align: center"
+                            style="text-align: center; color: white"
                         >
-                            @{{ feature }}
+                            @{{ form_name }}
                         </h4>
                     </div>
                     <div class="modal-body">
@@ -961,19 +965,19 @@
         </div>
         <div
             class="modal fade"
-            id="modaldeletesong"
+            id="modaldelete"
             role="dialog"
             aria-labelledby="mySmallModalLabel"
         >
             <form class="modal-dialog modal-sm" role="form">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header" style="background-color: #3f51b5; color: white">
                         <h4
                             class="modal-title"
                             id="myModalLabel"
                             style="text-align: center"
                         >
-                            Bạn có đồng ý muốn xóa sản phẩm?
+                            Bạn có chắc chắn muốn xóa sản phẩm?
                         </h4>
                     </div>
                     <div class="modal-body"></div>
@@ -995,7 +999,7 @@
                                 class="md-raised md-primary"
                                 type="submit"
                                 data-dismiss="modal"
-                                >Lưu</md-button
+                                >Đồng ý</md-button
                             >
                         </section>
                     </div>

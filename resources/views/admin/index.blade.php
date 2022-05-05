@@ -93,7 +93,7 @@
     </head>
     <body
         ng-app="myApp"
-        class="hold-transition skin-black-light sidebar-collapse sidebar-mini fixed"
+        class="hold-transition skin-blue sidebar-mini fixed"
     >
         <div id="toaster"></div>
         <!-- Site wrapper -->
