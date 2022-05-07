@@ -83013,7 +83013,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     }
 
     if ($scope.form_name != "THÊM SẢN PHẨM") {
-      $scope.product.files_for_delete.push(cl["product_image".concat(index + 1)]);
+      cl.files_for_delete.push(cl["product_image".concat(index + 1)]);
       cl["product_image".concat(index + 1)] = null;
     }
   }; // Editor options.

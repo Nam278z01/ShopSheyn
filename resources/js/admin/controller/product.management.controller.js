@@ -66,7 +66,7 @@ myApp.controller(
                 cl.files[index] = undefined;
             }
             if ($scope.form_name != "THÊM SẢN PHẨM") {
-                $scope.product.files_for_delete.push(
+                cl.files_for_delete.push(
                     cl[`product_image${index + 1}`]
                 );
                 cl[`product_image${index + 1}`] = null;
