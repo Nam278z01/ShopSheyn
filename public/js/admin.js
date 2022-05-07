@@ -82932,7 +82932,7 @@ myApp.run(function ($rootScope, $http, API_URL, $mdToast) {
 /***/ (() => {
 
 var _excluded = ["sizes"],
-    _excluded2 = ["files"];
+    _excluded2 = ["files", "files_for_delete"];
 
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
@@ -82942,13 +82942,19 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _toArray(arr) { return _arrayWithHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 myApp.controller("ProductManagementController", function ($scope, $rootScope, $http, API_URL, $mdDialog, NgTableParams, Upload, $timeout) {
   $rootScope.currentIndex = 1;
@@ -82975,12 +82981,41 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     $scope.categories = res.data.data;
   }); // File upload
 
-  $scope.uploadFiles = function (files, cl) {
-    cl.files = [].concat(_toConsumableArray(cl.files), _toConsumableArray(files));
+  $scope.uploadFiles = function (files, cl, index) {
+    var quantity = files.length + cl.files.filter(function (file) {
+      return file != undefined;
+    }).length;
+    cl.product_image1 && quantity++;
+    cl.product_image2 && quantity++;
+    cl.product_image3 && quantity++;
+    cl.product_image4 && quantity++;
+    cl.product_image5 && quantity++;
+
+    if (quantity <= 5) {
+      var _files = _toArray(files),
+          one_file = _files[0],
+          several_files = _files.slice(1);
+
+      cl.files[index] = one_file;
+      cl.files.forEach(function (file, index) {
+        if (!file && !cl["product_image".concat(index + 1)]) {
+          cl.files[index] = several_files.shift();
+        }
+      });
+    } else {
+      $rootScope.showSimpleToast("Tối đa 5 ảnh một màu!", "warning");
+    }
   };
 
   $scope.removeFile = function (cl, index) {
-    cl.files.splice(index, 1);
+    if (cl.files) {
+      cl.files[index] = undefined;
+    }
+
+    if ($scope.form_name != "THÊM SẢN PHẨM") {
+      $scope.product.files_for_delete.push(cl["product_image".concat(index + 1)]);
+      cl["product_image".concat(index + 1)] = null;
+    }
   }; // Editor options.
 
 
@@ -83002,7 +83037,8 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
           size_name: "",
           quantity: 0
         }],
-        files: []
+        files: _toConsumableArray(Array(5)),
+        files_for_delete: []
       }],
       sizes: [{
         size_name: "",
@@ -83015,7 +83051,8 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     $scope.product.colors.push({
       color_name: "",
       sizes: JSON.parse(JSON.stringify(_toConsumableArray($scope.product.sizes))),
-      files: []
+      files: _toConsumableArray(Array(5)),
+      files_for_delete: []
     });
   };
 
@@ -83058,17 +83095,37 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     $scope.form_name = form_name;
 
     if (form_name == "THÊM SẢN PHẨM") {
+      $scope.category_picked = null;
       initialProduct();
-    } else {}
+    } else {
+      $scope.product = JSON.parse(JSON.stringify(product));
+      $scope.category_picked = $scope.categories.find(function (c) {
+        return c.category_id == $scope.product.subcategory.category_id;
+      });
+      $scope.category_picked.subcategory = $scope.category_picked.subcategories.find(function (sc) {
+        return sc.subcategory_id == $scope.product.subcategory.subcategory_id;
+      });
+      $scope.product = JSON.parse(JSON.stringify(product));
+      $scope.product.sizes = JSON.parse(JSON.stringify($scope.product.colors[0].sizes));
+      $scope.product.sizes.forEach(function (size) {
+        size.quantity = 0;
+      });
+      $scope.product.colors.forEach(function (color) {
+        color.files = _toConsumableArray(Array(5));
+        color.files_for_delete = [];
+      });
+    }
   };
 
-  $scope.addProduct = function () {
+  $scope.addOrEditProduct = function () {
     if (!$scope.progress) {
       var files = $scope.product.colors.reduce(function (colors, colorCurrent) {
         return [].concat(_toConsumableArray(colors), _toConsumableArray(colorCurrent.files));
-      }, []);
+      }, []).filter(function (file) {
+        return file != undefined;
+      });
 
-      if (files && files.length) {
+      if (files && files.length || $scope.form_name != "THÊM SẢN PHẨM") {
         Upload.upload({
           url: API_URL + "/api/upload",
           data: {
@@ -83080,11 +83137,13 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
 
             $scope.product.colors.forEach(function (color) {
               color.files.forEach(function (file, index) {
-                color["product_image".concat(index + 1)] = $scope.result.shift();
+                if (file != undefined) {
+                  color["product_image".concat(index + 1)] = $scope.result.shift();
+                }
               });
             }); //Remove sizes, files
 
-            $scope.product.subcategory_id = $scope.category_piked.subcategory.subcategory_id;
+            $scope.product.subcategory_id = $scope.category_picked.subcategory.subcategory_id;
 
             var _$scope$product = $scope.product,
                 sizes = _$scope$product.sizes,
@@ -83093,26 +83152,61 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
             product_new = JSON.parse(JSON.stringify(product_new));
             $scope.product.colors.forEach(function (_ref, index) {
               var files = _ref.files,
+                  files_for_delete = _ref.files_for_delete,
                   color = _objectWithoutProperties(_ref, _excluded2);
 
               product_new.colors[index] = color;
-            }); //Add Product
+            }); // Add Product
 
-            $http({
-              method: "POST",
-              url: API_URL + "/api/product",
-              data: product_new,
-              "Content-Type": "application/json"
-            }).then(function (res) {
-              $scope.progress = 100;
-              $scope.products.unshift(res.data.data);
-              $scope.tableParams.reload();
-              $timeout(function () {
+            if ($scope.form_name == "THÊM SẢN PHẨM") {
+              $http({
+                method: "POST",
+                url: API_URL + "/api/product",
+                data: product_new,
+                "Content-Type": "application/json"
+              }).then(function (res) {
+                $scope.progress = 100;
+                $scope.products.unshift(res.data.data);
+                $scope.tableParams.reload();
                 $rootScope.showSimpleToast("Thêm sản phẩm thành công!", "success");
-                $scope.progress = 0;
                 initialProduct();
-              }, 1000);
-            });
+                $timeout(function () {
+                  $scope.progress = 0;
+                }, 500);
+              });
+            } else {
+              // Edit Product
+              var paths = [];
+              $scope.product.colors.forEach(function (color) {
+                paths = [].concat(_toConsumableArray(paths), _toConsumableArray(color.files_for_delete));
+              });
+              $http({
+                method: "POST",
+                url: API_URL + "/api/upload/delete",
+                data: {
+                  paths: paths
+                },
+                "Content-Type": "application/json"
+              }).then(function (res) {
+                $http({
+                  method: "PUT",
+                  url: API_URL + "/api/product/" + product_new.product_id,
+                  data: product_new,
+                  "Content-Type": "application/json"
+                }).then(function (res) {
+                  $scope.progress = 100;
+                  var index = $scope.products.findIndex(function (p) {
+                    return p.product_id == product_new.product_id;
+                  });
+                  $scope.products[index] = res.data.data;
+                  $scope.tableParams.reload();
+                  $rootScope.showSimpleToast("Sửa thông tin sản phẩm thành công!", "success");
+                  $timeout(function () {
+                    $scope.progress = 0;
+                  }, 500);
+                });
+              });
+            }
           });
         }, function (response) {
           if (response.status > 0) {
@@ -83128,31 +83222,17 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
   };
 
   $scope.showModalDelete = function (product) {
-    $scope.productForDetele = product;
+    $scope.product_for_delete = product;
   };
 
   $scope.deleteProduct = function () {
     var paths = [];
-    $scope.productForDetele.colors.forEach(function (color) {
-      if (color.product_image1) {
-        paths.push(color.product_image1);
-      }
-
-      if (color.product_image2) {
-        paths.push(color.product_image2);
-      }
-
-      if (color.product_image3) {
-        paths.push(color.product_image3);
-      }
-
-      if (color.product_image4) {
-        paths.push(color.product_image4);
-      }
-
-      if (color.product_image5) {
-        paths.push(color.product_image5);
-      }
+    $scope.product_for_delete.colors.forEach(function (color) {
+      color.product_image1 && paths.push(color.product_image1);
+      color.product_image2 && paths.push(color.product_image2);
+      color.product_image3 && paths.push(color.product_image3);
+      color.product_image4 && paths.push(color.product_image4);
+      color.product_image5 && paths.push(color.product_image5);
     });
     $http({
       method: "POST",
@@ -83164,14 +83244,11 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     }).then(function (res) {
       $http({
         method: "DELETE",
-        url: API_URL + "/api/product/" + $scope.productForDetele.product_id
+        url: API_URL + "/api/product/" + $scope.product_for_delete.product_id
       }).then(function (res) {
         $rootScope.showSimpleToast("Xóa sản phẩm thành công!", "success");
-        $scope.products = $scope.products.filter(function (p) {
-          return p.product_id != $scope.productForDetele.product_id;
-        });
         var index = $scope.products.findIndex(function (p) {
-          return p.product_id == $scope.productForDetele.product_id;
+          return p.product_id == $scope.product_for_delete.product_id;
         });
         $scope.products.splice(index, 1);
         $scope.tableParams.reload();

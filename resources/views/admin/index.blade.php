@@ -68,7 +68,6 @@
             #toaster {
                 position: fixed;
                 top: 56px;
-                height: 48px;
                 left: 0;
                 width: 100%;
                 z-index: 10000;
@@ -93,7 +92,7 @@
     </head>
     <body
         ng-app="myApp"
-        class="hold-transition skin-blue sidebar-mini fixed"
+        class="hold-transition skin-black-light sidebar-mini fixed"
     >
         <div id="toaster"></div>
         <!-- Site wrapper -->

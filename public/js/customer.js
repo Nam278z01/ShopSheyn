@@ -39497,6 +39497,27 @@ myApp.filter("jsDate", function () {
   };
 });
 myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL) {
+  $rootScope.title = "Shop Sheyn";
+
+  $rootScope.search = function () {
+    $rootScope.text_search = $rootScope.text_search ? $rootScope.text_search : undefined;
+
+    if ($location.path() == "/product") {
+      $location.path("/product").search("text_search", $rootScope.text_search);
+    } else {
+      $location.path("/product").search({
+        text_search: $rootScope.text_search
+      });
+    }
+  };
+
+  $rootScope.activeNavigation = function (path) {
+    return $location.path() == path;
+  };
+
+  $rootScope.$on("$routeChangeStart", function (evt, absNewUrl, absOldUrl) {
+    $window.scrollTo(0, 0);
+  });
   $http({
     method: "GET",
     url: API_URL + "/api/category"
@@ -39521,10 +39542,15 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
         });
       });
     });
+    recalculateTotalPrice();
+  });
+
+  function recalculateTotalPrice() {
     $rootScope.total_price = $rootScope.cart.reduce(function (total, current) {
-      return total + current.picked.color.product_price * current.picked.quantity;
+      return total + (current.picked.color.product_price - current.picked.color.product_price * current.product_discount / 100) * current.picked.quantity;
     }, 0);
-  }); // Add Cart
+  } // Add Cart
+
 
   $rootScope.addToCartInProductPage = function (product, size) {
     var product_new = JSON.parse(JSON.stringify(product));
@@ -39550,10 +39576,32 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
         return p.picked.size.size_id == product_new.picked.size.size_id;
       });
       index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
-      $rootScope.total_price = $rootScope.cart.reduce(function (total, current) {
-        return total + current.picked.color.product_price * current.picked.quantity;
-      }, 0);
+      recalculateTotalPrice();
     });
+  };
+
+  $rootScope.addToCartInDetailsPage = function (product) {
+    var product_new = JSON.parse(JSON.stringify(product));
+    product_new.cart_id = Math.floor(Date.now() * Math.random());
+
+    if (product_new.picked.size) {
+      $http({
+        method: "POST",
+        url: API_URL + "/api/cart",
+        data: {
+          cart_id: product_new.cart_id,
+          product_id: product_new.product_id,
+          size_id: product_new.picked.size.size_id,
+          quantity: product_new.picked.quantity
+        }
+      }).then(function (res) {
+        var index = $rootScope.cart.findIndex(function (p) {
+          return p.picked.size.size_id == product_new.picked.size.size_id;
+        });
+        index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
+        recalculateTotalPrice();
+      });
+    }
   }; //  EditCart
 
 
@@ -39567,9 +39615,7 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
         quantity: product.picked.quantity
       }
     }).then(function (res) {
-      $rootScope.total_price = $rootScope.cart.reduce(function (total, current) {
-        return total + current.picked.color.product_price * current.picked.quantity;
-      }, 0);
+      recalculateTotalPrice();
     });
   }; // Remove product in cart
 
@@ -39582,33 +39628,10 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
       $rootScope.cart = $rootScope.cart.filter(function (product) {
         return product.cart_id != cart_id;
       });
-      $rootScope.total_price = $rootScope.cart.reduce(function (total, current) {
-        return total + current.picked.color.product_price * current.picked.quantity;
-      }, 0);
+      recalculateTotalPrice();
     });
-  };
+  }; //Cart
 
-  $rootScope.title = "Shop Sheyn";
-
-  $rootScope.search = function () {
-    $rootScope.text_search = $rootScope.text_search ? $rootScope.text_search : undefined;
-
-    if ($location.path() == "/product") {
-      $location.path("/product").search("text_search", $rootScope.text_search);
-    } else {
-      $location.path("/product").search({
-        text_search: $rootScope.text_search
-      });
-    }
-  };
-
-  $rootScope.activeNavigation = function (path) {
-    return $location.path() == path;
-  };
-
-  $rootScope.$on("$routeChangeStart", function (evt, absNewUrl, absOldUrl) {
-    $window.scrollTo(0, 0);
-  }); //Cart
 
   $rootScope.changeColorInCart = function (product, color, old_color) {
     //Giữ size

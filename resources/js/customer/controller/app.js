@@ -14,6 +14,31 @@ myApp.run(function (
     $window,
     API_URL
 ) {
+    $rootScope.title = "Shop Sheyn";
+
+    $rootScope.search = function () {
+        $rootScope.text_search = $rootScope.text_search
+            ? $rootScope.text_search
+            : undefined;
+        if ($location.path() == "/product") {
+            $location
+                .path("/product")
+                .search("text_search", $rootScope.text_search);
+        } else {
+            $location
+                .path("/product")
+                .search({ text_search: $rootScope.text_search });
+        }
+    };
+
+    $rootScope.activeNavigation = function (path) {
+        return $location.path() == path;
+    };
+
+    $rootScope.$on("$routeChangeStart", function (evt, absNewUrl, absOldUrl) {
+        $window.scrollTo(0, 0);
+    });
+
     $http({
         method: "GET",
         url: API_URL + "/api/category",
@@ -39,17 +64,25 @@ myApp.run(function (
                 });
             });
         });
+        recalculateTotalPrice();
+    });
+
+    function recalculateTotalPrice() {
         $rootScope.total_price = $rootScope.cart.reduce(function (
             total,
             current
         ) {
             return (
                 total +
-                current.picked.color.product_price * current.picked.quantity
+                (current.picked.color.product_price -
+                    (current.picked.color.product_price *
+                        current.product_discount) /
+                        100) *
+                    current.picked.quantity
             );
         },
         0);
-    });
+    }
 
     // Add Cart
     $rootScope.addToCartInProductPage = function (product, size) {
@@ -78,17 +111,36 @@ myApp.run(function (
                       product_new.picked.quantity)
                 : $rootScope.cart.unshift(product_new);
 
-            $rootScope.total_price = $rootScope.cart.reduce(function (
-                total,
-                current
-            ) {
-                return (
-                    total +
-                    current.picked.color.product_price * current.picked.quantity
-                );
-            },
-            0);
+            recalculateTotalPrice();
         });
+    };
+
+    $rootScope.addToCartInDetailsPage = function (product) {
+        let product_new = JSON.parse(JSON.stringify(product));
+        product_new.cart_id = Math.floor(Date.now() * Math.random());
+        if (product_new.picked.size) {
+            $http({
+                method: "POST",
+                url: API_URL + "/api/cart",
+                data: {
+                    cart_id: product_new.cart_id,
+                    product_id: product_new.product_id,
+                    size_id: product_new.picked.size.size_id,
+                    quantity: product_new.picked.quantity,
+                },
+            }).then((res) => {
+                let index = $rootScope.cart.findIndex(
+                    (p) =>
+                        p.picked.size.size_id == product_new.picked.size.size_id
+                );
+                index != -1
+                    ? ($rootScope.cart[index].picked.quantity +=
+                          product_new.picked.quantity)
+                    : $rootScope.cart.unshift(product_new);
+
+                recalculateTotalPrice();
+            });
+        }
     };
 
     //  EditCart
@@ -102,16 +154,7 @@ myApp.run(function (
                 quantity: product.picked.quantity,
             },
         }).then((res) => {
-            $rootScope.total_price = $rootScope.cart.reduce(function (
-                total,
-                current
-            ) {
-                return (
-                    total +
-                    current.picked.color.product_price * current.picked.quantity
-                );
-            },
-            0);
+            recalculateTotalPrice();
         });
     };
     // Remove product in cart
@@ -124,43 +167,9 @@ myApp.run(function (
                 return product.cart_id != cart_id;
             });
 
-            $rootScope.total_price = $rootScope.cart.reduce(function (
-                total,
-                current
-            ) {
-                return (
-                    total +
-                    current.picked.color.product_price * current.picked.quantity
-                );
-            },
-            0);
+            recalculateTotalPrice();
         });
     };
-
-    $rootScope.title = "Shop Sheyn";
-
-    $rootScope.search = function () {
-        $rootScope.text_search = $rootScope.text_search
-            ? $rootScope.text_search
-            : undefined;
-        if ($location.path() == "/product") {
-            $location
-                .path("/product")
-                .search("text_search", $rootScope.text_search);
-        } else {
-            $location
-                .path("/product")
-                .search({ text_search: $rootScope.text_search });
-        }
-    };
-
-    $rootScope.activeNavigation = function (path) {
-        return $location.path() == path;
-    };
-
-    $rootScope.$on("$routeChangeStart", function (evt, absNewUrl, absOldUrl) {
-        $window.scrollTo(0, 0);
-    });
 
     //Cart
     $rootScope.changeColorInCart = function (product, color, old_color) {
@@ -214,7 +223,7 @@ myApp.directive("slickSlider", function ($timeout) {
                     autoplay: true,
                     autoplaySpeed: 1000,
                 });
-            }, 1000)
+            }, 1000);
         });
     }
 

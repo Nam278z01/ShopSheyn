@@ -201,13 +201,12 @@
                                 (tableParams.page() - 1) * tableParams.count()
                         }}
                     </td>
-                    <td title="'Danh mục nhỏ'"
+                    <td
+                        title="'Danh mục nhỏ'"
                         filter="{'subcategory.subcategory_name': 'text'}"
                         sortable="'subcategory.subcategory_name'"
                     >
-                        @{{
-                            row.subcategory.subcategory_name
-                        }}
+                        @{{ row.subcategory.subcategory_name }}
                     </td>
                     <td title="'Ảnh'">
                         <img
@@ -237,7 +236,11 @@
                         filter="{'created_time': 'text'}"
                         sortable="'created_time'"
                     >
-                        @{{ row.created_time | jsDate | date: "dd-MM-yyyy HH:mm:ss" }}
+                        @{{
+                            row.created_time
+                                | jsDate
+                                | date: "dd-MM-yyyy HH:mm:ss"
+                        }}
                     </td>
                     <td title="'Thao tác'" align="right">
                         <section
@@ -315,7 +318,7 @@
                             <md-input-container flex="50">
                                 <label>Danh mục nhỏ</label>
                                 <md-select
-                                    ng-model="category_piked.subcategory"
+                                    ng-model="category_picked.subcategory"
                                 >
                                     <md-option
                                         ng-repeat="subcategory in category_picked.subcategories"
@@ -425,7 +428,13 @@
                                             ng-repeat="cl in product.colors"
                                             class="col-md-12"
                                         >
-                                            <div class="row">
+                                            <div
+                                                class="row"
+                                                style="
+                                                    display: flex;
+                                                    align-items: center;
+                                                "
+                                            >
                                                 <div class="col-md-8">
                                                     <md-input-container
                                                         class="md-block"
@@ -524,10 +533,15 @@
                                                     ng-if="cl.files[0]"
                                                     ngf-src="cl.files[0]"
                                                 />
+                                                <img
+                                                    class="product-color-img"
+                                                    ng-if="cl.product_image1 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
+                                                    ng-src="/image/product/@{{ cl.product_image1 }}"
+                                                />
                                                 <div
                                                     ng-click="removeFile(cl, 0)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[0]"
+                                                    ng-if="cl.files[0] || cl.product_image1"
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -539,8 +553,8 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[0]"
-                                                    ngf-select="uploadFiles($files, cl)"
+                                                    ng-if="!cl.files[0] && !cl.product_image1"
+                                                    ngf-select="uploadFiles($files, cl, 0)"
                                                     multiple
                                                     accept="image/*"
                                                     name="file"
@@ -566,10 +580,15 @@
                                                     ng-if="cl.files[1]"
                                                     ngf-src="cl.files[1]"
                                                 />
+                                                <img
+                                                    class="product-color-img"
+                                                    ng-if="cl.product_image2 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
+                                                    ng-src="/image/product/@{{ cl.product_image2 }}"
+                                                />
                                                 <div
                                                     ng-click="removeFile(cl, 1)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[1]"
+                                                    ng-if="cl.files[1] || cl.product_image2"
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -581,8 +600,8 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[1]"
-                                                    ngf-select="uploadFiles($files, cl)"
+                                                    ng-if="!cl.files[1] && !cl.product_image2"
+                                                    ngf-select="uploadFiles($files, cl, 1)"
                                                     multiple
                                                     accept="image/*"
                                                     name="file"
@@ -608,10 +627,15 @@
                                                     ng-if="cl.files[2]"
                                                     ngf-src="cl.files[2]"
                                                 />
+                                                <img
+                                                    class="product-color-img"
+                                                    ng-if="cl.product_image3 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
+                                                    ng-src="/image/product/@{{ cl.product_image3 }}"
+                                                />
                                                 <div
                                                     ng-click="removeFile(cl, 2)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[2]"
+                                                    ng-if="cl.files[2] || cl.product_image3"
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -623,8 +647,8 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[2]"
-                                                    ngf-select="uploadFiles($files, cl)"
+                                                    ng-if="!cl.files[2] && !cl.product_image3"
+                                                    ngf-select="uploadFiles($files, cl, 2)"
                                                     multiple
                                                     accept="image/*"
                                                     name="file"
@@ -650,10 +674,15 @@
                                                     ng-if="cl.files[3]"
                                                     ngf-src="cl.files[3]"
                                                 />
+                                                <img
+                                                    class="product-color-img"
+                                                    ng-if="cl.product_image4 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
+                                                    ng-src="/image/product/@{{ cl.product_image4 }}"
+                                                />
                                                 <div
                                                     ng-click="removeFile(cl, 3)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[3]"
+                                                    ng-if="cl.files[3] || cl.product_image4"
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -665,8 +694,8 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[3]"
-                                                    ngf-select="uploadFiles($files, cl)"
+                                                    ng-if="!cl.files[3] && !cl.product_image4"
+                                                    ngf-select="uploadFiles($files, cl, 3)"
                                                     multiple
                                                     accept="image/*"
                                                     name="file"
@@ -692,10 +721,15 @@
                                                     ng-if="cl.files[4]"
                                                     ngf-src="cl.files[4]"
                                                 />
+                                                <img
+                                                    class="product-color-img"
+                                                    ng-if="cl.product_image5 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
+                                                    ng-src="/image/product/@{{ cl.product_image5 }}"
+                                                />
                                                 <div
                                                     ng-click="removeFile(cl, 4)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[4]"
+                                                    ng-if="cl.files[4] || cl.product_image5"
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -707,8 +741,8 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[4]"
-                                                    ngf-select="uploadFiles($files, cl)"
+                                                    ng-if="!cl.files[4] && !cl.product_image5"
+                                                    ngf-select="uploadFiles($files, cl, 4)"
                                                     multiple
                                                     accept="image/*"
                                                     name="file"
@@ -743,7 +777,13 @@
                                             ng-repeat="s in product.sizes"
                                             class="col-md-12"
                                         >
-                                            <div class="row">
+                                            <div
+                                                class="row"
+                                                style="
+                                                    display: flex;
+                                                    align-items: center;
+                                                "
+                                            >
                                                 <div class="col-md-8">
                                                     <md-input-container
                                                         class="md-block"
@@ -955,7 +995,7 @@
                             <md-button
                                 class="md-raised md-primary"
                                 type="submit"
-                                ng-click="addProduct()"
+                                ng-click="addOrEditProduct()"
                                 >Lưu</md-button
                             >
                         </section>
@@ -971,7 +1011,10 @@
         >
             <form class="modal-dialog modal-sm" role="form">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color: #3f51b5; color: white">
+                    <div
+                        class="modal-header"
+                        style="background-color: #3f51b5; color: white"
+                    >
                         <h4
                             class="modal-title"
                             id="myModalLabel"

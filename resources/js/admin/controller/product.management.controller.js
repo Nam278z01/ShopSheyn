@@ -39,12 +39,38 @@ myApp.controller(
         });
 
         // File upload
-        $scope.uploadFiles = function (files, cl) {
-            cl.files = [...cl.files, ...files];
+        $scope.uploadFiles = function (files, cl, index) {
+            let quantity =
+                files.length +
+                cl.files.filter((file) => file != undefined).length;
+            cl.product_image1 && quantity++;
+            cl.product_image2 && quantity++;
+            cl.product_image3 && quantity++;
+            cl.product_image4 && quantity++;
+            cl.product_image5 && quantity++;
+            if (quantity <= 5) {
+                let [one_file, ...several_files] = files;
+                cl.files[index] = one_file;
+                cl.files.forEach(function (file, index) {
+                    if (!file && !cl[`product_image${index + 1}`]) {
+                        cl.files[index] = several_files.shift();
+                    }
+                });
+            } else {
+                $rootScope.showSimpleToast("Tối đa 5 ảnh một màu!", "warning");
+            }
         };
 
         $scope.removeFile = function (cl, index) {
-            cl.files.splice(index, 1);
+            if (cl.files) {
+                cl.files[index] = undefined;
+            }
+            if ($scope.form_name != "THÊM SẢN PHẨM") {
+                $scope.product.files_for_delete.push(
+                    cl[`product_image${index + 1}`]
+                );
+                cl[`product_image${index + 1}`] = null;
+            }
         };
 
         // Editor options.
@@ -71,7 +97,8 @@ myApp.controller(
                                 quantity: 0,
                             },
                         ],
-                        files: [],
+                        files: [...Array(5)],
+                        files_for_delete: [],
                     },
                 ],
                 sizes: [
@@ -86,7 +113,8 @@ myApp.controller(
             $scope.product.colors.push({
                 color_name: "",
                 sizes: JSON.parse(JSON.stringify([...$scope.product.sizes])),
-                files: [],
+                files: [...Array(5)],
+                files_for_delete: [],
             });
         };
         $scope.removeColor = function (index) {
@@ -123,21 +151,43 @@ myApp.controller(
         $scope.showModalEditAndCreate = function (form_name, product) {
             $scope.form_name = form_name;
             if (form_name == "THÊM SẢN PHẨM") {
+                $scope.category_picked = null;
                 initialProduct();
             } else {
-
+                $scope.product = JSON.parse(JSON.stringify(product));
+                $scope.category_picked = $scope.categories.find(
+                    (c) =>
+                        c.category_id == $scope.product.subcategory.category_id
+                );
+                $scope.category_picked.subcategory =
+                    $scope.category_picked.subcategories.find(
+                        (sc) =>
+                            sc.subcategory_id ==
+                            $scope.product.subcategory.subcategory_id
+                    );
+                $scope.product = JSON.parse(JSON.stringify(product));
+                $scope.product.sizes = JSON.parse(
+                    JSON.stringify($scope.product.colors[0].sizes)
+                );
+                $scope.product.sizes.forEach((size) => {
+                    size.quantity = 0;
+                });
+                $scope.product.colors.forEach((color) => {
+                    color.files = [...Array(5)];
+                    color.files_for_delete = [];
+                });
             }
-        }
-        $scope.addProduct = function () {
+        };
+        $scope.addOrEditProduct = function () {
             if (!$scope.progress) {
-                let files = $scope.product.colors.reduce(function (
-                    colors,
-                    colorCurrent
-                ) {
-                    return [...colors, ...colorCurrent.files];
-                },
-                []);
-                if (files && files.length) {
+                let files = $scope.product.colors
+                    .reduce(function (colors, colorCurrent) {
+                        return [...colors, ...colorCurrent.files];
+                    }, [])
+                    .filter(function (file) {
+                        return file != undefined;
+                    });
+                if (files && files.length || $scope.form_name != "THÊM SẢN PHẨM") {
                     Upload.upload({
                         url: API_URL + "/api/upload",
                         data: {
@@ -150,42 +200,85 @@ myApp.controller(
                                 //Enter src img
                                 $scope.product.colors.forEach(function (color) {
                                     color.files.forEach(function (file, index) {
-                                        color[`product_image${index + 1}`] =
-                                            $scope.result.shift();
+                                        if (file != undefined) {
+                                            color[`product_image${index + 1}`] =
+                                                $scope.result.shift();
+                                        }
                                     });
                                 });
                                 //Remove sizes, files
                                 $scope.product.subcategory_id =
-                                    $scope.category_piked.subcategory.subcategory_id;
+                                    $scope.category_picked.subcategory.subcategory_id;
                                 let { sizes, ...product_new } = $scope.product;
                                 product_new = JSON.parse(
                                     JSON.stringify(product_new)
                                 );
                                 $scope.product.colors.forEach(function (
-                                    { files, ...color },
+                                    { files, files_for_delete, ...color },
                                     index
                                 ) {
                                     product_new.colors[index] = color;
                                 });
-                                //Add Product
-                                $http({
-                                    method: "POST",
-                                    url: API_URL + "/api/product",
-                                    data: product_new,
-                                    "Content-Type": "application/json",
-                                }).then((res) => {
-                                    $scope.progress = 100;
-                                    $scope.products.unshift(res.data.data);
-                                    $scope.tableParams.reload();
-                                    $timeout(function () {
+                                // Add Product
+                                if ($scope.form_name == "THÊM SẢN PHẨM") {
+                                    $http({
+                                        method: "POST",
+                                        url: API_URL + "/api/product",
+                                        data: product_new,
+                                        "Content-Type": "application/json",
+                                    }).then((res) => {
+                                        $scope.progress = 100;
+                                        $scope.products.unshift(res.data.data);
+                                        $scope.tableParams.reload();
                                         $rootScope.showSimpleToast(
                                             "Thêm sản phẩm thành công!",
                                             "success"
                                         );
-                                        $scope.progress = 0;
                                         initialProduct();
-                                    }, 1000);
-                                });
+                                        $timeout(function () {
+                                            $scope.progress = 0;
+                                        }, 500);
+                                    });
+                                } else {
+                                    // Edit Product
+                                    let paths = [];
+                                    $scope.product.colors.forEach(function (
+                                        color
+                                    ) {
+                                        paths = [
+                                            ...paths,
+                                            ...color.files_for_delete,
+                                        ];
+                                    });
+                                    $http({
+                                        method: "POST",
+                                        url: API_URL + "/api/upload/delete",
+                                        data: { paths: paths },
+                                        "Content-Type": "application/json",
+                                    }).then((res) => {
+                                        $http({
+                                            method: "PUT",
+                                            url: API_URL + "/api/product/" + product_new.product_id,
+                                            data: product_new,
+                                            "Content-Type": "application/json",
+                                        }).then((res) => {
+                                            $scope.progress = 100;
+                                            let index = $scope.products.findIndex(
+                                                (p) =>
+                                                    p.product_id == product_new.product_id
+                                            );
+                                            $scope.products[index] = res.data.data;
+                                            $scope.tableParams.reload();
+                                            $rootScope.showSimpleToast(
+                                                "Sửa thông tin sản phẩm thành công!",
+                                                "success"
+                                            );
+                                            $timeout(function () {
+                                                $scope.progress = 0;
+                                            }, 500);
+                                        });
+                                    });
+                                }
                             });
                         },
                         function (response) {
@@ -209,26 +302,16 @@ myApp.controller(
             }
         };
         $scope.showModalDelete = function (product) {
-            $scope.productForDetele = product;
+            $scope.product_for_delete = product;
         };
         $scope.deleteProduct = function () {
             let paths = [];
-            $scope.productForDetele.colors.forEach(function (color) {
-                if (color.product_image1) {
-                    paths.push(color.product_image1);
-                }
-                if (color.product_image2) {
-                    paths.push(color.product_image2);
-                }
-                if (color.product_image3) {
-                    paths.push(color.product_image3);
-                }
-                if (color.product_image4) {
-                    paths.push(color.product_image4);
-                }
-                if (color.product_image5) {
-                    paths.push(color.product_image5);
-                }
+            $scope.product_for_delete.colors.forEach(function (color) {
+                color.product_image1 && paths.push(color.product_image1);
+                color.product_image2 && paths.push(color.product_image2);
+                color.product_image3 && paths.push(color.product_image3);
+                color.product_image4 && paths.push(color.product_image4);
+                color.product_image5 && paths.push(color.product_image5);
             });
             $http({
                 method: "POST",
@@ -241,20 +324,15 @@ myApp.controller(
                     url:
                         API_URL +
                         "/api/product/" +
-                        $scope.productForDetele.product_id,
+                        $scope.product_for_delete.product_id,
                 }).then((res) => {
                     $rootScope.showSimpleToast(
                         "Xóa sản phẩm thành công!",
                         "success"
                     );
-                    $scope.products = $scope.products.filter(function (p) {
-                        return (
-                            p.product_id != $scope.productForDetele.product_id
-                        );
-                    });
                     let index = $scope.products.findIndex(
                         (p) =>
-                            p.product_id == $scope.productForDetele.product_id
+                            p.product_id == $scope.product_for_delete.product_id
                     );
                     $scope.products.splice(index, 1);
                     $scope.tableParams.reload();
