@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OrderState extends Model
+class OrderDetails extends Model
 {
     use HasFactory;
-    protected $table = 'orderstate';
-    protected $primaryKey = 'orderstate_id';
+    protected $table = 'orderdetails';
+    protected $primaryKey = 'orderdetails_id';
     public $timestamps = false;
     public function order(){
         return $this->belongsTo(Orders::class, 'order_id', 'order_id');

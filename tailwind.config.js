@@ -1,11 +1,12 @@
 module.exports = {
     content: [
         "./resources/views/customer/includes/*.blade.php",
+        "./resources/views/customer/*.blade.php",
         "./public/html/*.html",
-        "./resources/js/customer/controller/app.js"
+        "./resources/js/customer/controller/app.js",
     ],
     theme: {
-        extend: {},
+        groups: ["example"],
     },
-    plugins: [],
-}
+    plugins: [require('tailwindcss-nested-groups')],
+};

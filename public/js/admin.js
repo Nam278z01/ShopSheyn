@@ -82904,6 +82904,12 @@ myApp.filter("jsDate", function () {
     return x.replace("/Date(", "").replace(")/", "");
   };
 });
+myApp.config(function ($mdThemingProvider) {
+  $mdThemingProvider.theme("success-toast");
+  $mdThemingProvider.theme("warning-toast");
+  $mdThemingProvider.theme("error-toast");
+  $mdThemingProvider.theme("info-toast");
+});
 myApp.run(function ($rootScope, $http, API_URL, $mdToast) {
   // Sidebar active
   $rootScope.currentIndex = -1;
@@ -82919,7 +82925,7 @@ myApp.run(function ($rootScope, $http, API_URL, $mdToast) {
 
 
   $rootScope.showSimpleToast = function (toast_name, type) {
-    $mdToast.show($mdToast.simple().parent(document.querySelectorAll('#toaster')).position('top right').textContent(toast_name).hideDelay(3000).theme(type + "-toast"));
+    $mdToast.show($mdToast.simple().parent(document.querySelectorAll("#toaster")).position("top right").textContent(toast_name).hideDelay(3000).theme(type + "-toast"));
   };
 });
 
@@ -83028,25 +83034,6 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
   $scope.onReady = function () {// ...
   };
 
-  function initialProduct() {
-    $scope.product = {
-      product_discount: 0,
-      colors: [{
-        color_name: "",
-        sizes: [{
-          size_name: "",
-          quantity: 0
-        }],
-        files: _toConsumableArray(Array(5)),
-        files_for_delete: []
-      }],
-      sizes: [{
-        size_name: "",
-        quantity: 0
-      }]
-    };
-  }
-
   $scope.addColor = function () {
     $scope.product.colors.push({
       color_name: "",
@@ -83056,10 +83043,22 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     });
   };
 
+  var files_for_delete = [];
+
   $scope.removeColor = function (index) {
     if ($scope.product.colors.length > 1) {
+      if ($scope.form_name != "THÊM SẢN PHẨM") {
+        $scope.product.colors[index].product_image1 && files_for_delete.push($scope.product.colors[index].product_image1);
+        $scope.product.colors[index].product_image2 && files_for_delete.push($scope.product.colors[index].product_image2);
+        $scope.product.colors[index].product_image3 && files_for_delete.push($scope.product.colors[index].product_image3);
+        $scope.product.colors[index].product_image4 && files_for_delete.push($scope.product.colors[index].product_image4);
+        $scope.product.colors[index].product_image5 && files_for_delete.push($scope.product.colors[index].product_image5);
+      }
+
       $scope.product.colors.splice(index, 1);
     }
+
+    console.log(files_for_delete);
   };
 
   $scope.addSize = function () {
@@ -83096,7 +83095,22 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
 
     if (form_name == "THÊM SẢN PHẨM") {
       $scope.category_picked = null;
-      initialProduct();
+      $scope.product = {
+        product_discount: 0,
+        colors: [{
+          color_name: "",
+          sizes: [{
+            size_name: "",
+            quantity: 0
+          }],
+          files: _toConsumableArray(Array(5)),
+          files_for_delete: []
+        }],
+        sizes: [{
+          size_name: "",
+          quantity: 0
+        }]
+      };
     } else {
       $scope.product = JSON.parse(JSON.stringify(product));
       $scope.category_picked = $scope.categories.find(function (c) {
@@ -83114,6 +83128,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
         color.files = _toConsumableArray(Array(5));
         color.files_for_delete = [];
       });
+      files_for_delete = [];
     }
   };
 
@@ -83168,8 +83183,8 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
                 $scope.progress = 100;
                 $scope.products.unshift(res.data.data);
                 $scope.tableParams.reload();
+                $scope.showModalEditAndCreate("THÊM SẢN PHẨM");
                 $rootScope.showSimpleToast("Thêm sản phẩm thành công!", "success");
-                initialProduct();
                 $timeout(function () {
                   $scope.progress = 0;
                 }, 500);
@@ -83184,7 +83199,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
                 method: "POST",
                 url: API_URL + "/api/upload/delete",
                 data: {
-                  paths: paths
+                  paths: [].concat(_toConsumableArray(paths), _toConsumableArray(files_for_delete))
                 },
                 "Content-Type": "application/json"
               }).then(function (res) {
@@ -83200,6 +83215,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
                   });
                   $scope.products[index] = res.data.data;
                   $scope.tableParams.reload();
+                  $scope.showModalEditAndCreate("SỬA THÔNG TIN SẢN PHẨM", res.data.data);
                   $rootScope.showSimpleToast("Sửa thông tin sản phẩm thành công!", "success");
                   $timeout(function () {
                     $scope.progress = 0;
@@ -104463,7 +104479,7 @@ __webpack_require__(/*! ./js/adminlte.min */ "./resources/js/admin/js/adminlte.m
 
 __webpack_require__(/*! ./js/demo */ "./resources/js/admin/js/demo.js");
 
-window.myApp = angular.module("myApp", ["ngSanitize", "ngTable", "ui.select", "ngMaterial", "ngMessages", "ngFileUpload", 'ckeditor']);
+window.myApp = angular.module("myApp", ["ngSanitize", "ngTable", "ui.select", 'ngAnimate', "ngMaterial", "ngMessages", "ngFileUpload", 'ckeditor']);
 
 __webpack_require__(/*! ./controller/app.management */ "./resources/js/admin/controller/app.management.js");
 

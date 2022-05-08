@@ -19,6 +19,7 @@ window.myApp = angular.module("myApp", [
     "ngSanitize",
     "ngTable",
     "ui.select",
+    'ngAnimate',
     "ngMaterial",
     "ngMessages",
     "ngFileUpload",

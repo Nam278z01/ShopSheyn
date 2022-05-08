@@ -6,6 +6,17 @@ myApp.filter("jsDate", function () {
     };
 });
 
+myApp.config(function ($mdThemingProvider) {
+    $mdThemingProvider
+        .theme("success-toast");
+    $mdThemingProvider
+        .theme("warning-toast");
+    $mdThemingProvider
+        .theme("error-toast");
+    $mdThemingProvider
+        .theme("info-toast");
+});
+
 myApp.run(function ($rootScope, $http, API_URL, $mdToast) {
     // Sidebar active
     $rootScope.currentIndex = -1;
@@ -18,15 +29,14 @@ myApp.run(function ($rootScope, $http, API_URL, $mdToast) {
     };
     // Toast
     $rootScope.showSimpleToast = function (toast_name, type) {
-        $mdToast
-            .show(
-                $mdToast
-                    .simple()
-                    .parent(document.querySelectorAll('#toaster'))
-                    .position('top right')
-                    .textContent(toast_name)
-                    .hideDelay(3000)
-                    .theme(type + "-toast")
-            )
+        $mdToast.show(
+            $mdToast
+                .simple()
+                .parent(document.querySelectorAll("#toaster"))
+                .position("top right")
+                .textContent(toast_name)
+                .hideDelay(3000)
+                .theme(type + "-toast")
+        );
     };
 });

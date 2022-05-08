@@ -1,5 +1,5 @@
 <header class="h-[54px]">
-    <div class="fixed left-0 w-full z-50">
+    <div class="fixed left-0 w-full z-40">
         <!-- Navigation -->
         <nav
             class="relative flex items-center h-[54px] w-full px-5 shadow-[0_6px_12px_0_#0000000a] bg-[#fff] border-b border-transparent hover:bg-[#f7f8fa]"
@@ -197,10 +197,53 @@
 
             <!-- User/Cart -->
             <div class="flex h-[54px] justify-end text-black ml-5 pr-[15px]">
-                <div
-                    class="relative h-[54px] flex justify-center items-center text-3xl mr-1 cursor-pointer p-1 hover:bg-white"
-                >
-                    <i class="bx bx-user"></i>
+                <div class="h-[54px] group">
+                    <a
+                        ng-class="{ 'bg-white': activeNavigation('/cart') }"
+                        href="/user"
+                        class="relative h-[54px] flex justify-center items-center text-3xl ml-1 px-1 cursor-pointer group-hover:bg-white hover:bg-white"
+                    >
+                        <i ng-if="!is_login" class="bx bx-user"></i>
+                        <img
+                            ng-if="is_login"
+                            class="rounded-full h-[30px] w-[30px]"
+                            ng-src="/image/img/@{{ customer.image }}"
+                            alt="Avatar"
+                        />
+                    </a>
+                    <div
+                        class="absolute top-[54px] right-0 min-w-[180px] bg-white shadow-[0_6px_6px_0_#00000014] invisible group-hover:visible"
+                    >
+                        <div class="mx-[20px] mb-[10px]">
+                            <div
+                                ng-if="!is_login"
+                                ng-click="showModalLogin()"
+                                class="border-b border-[#0000001a] text-xs leading-[45px] text-[#000000cc] font-bold cursor-pointer hover:text-black"
+                            >
+                                Đăng nhập / Đăng ký
+                            </div>
+                            <a
+                                href="/user"
+                                ng-if="is_login"
+                                class="block border-b border-[#0000001a] text-xs leading-[45px] text-[#000000cc] font-bold cursor-pointer hover:text-black"
+                            >
+                                @{{ customer.customer_name }}
+                            </a>
+                            <a
+                                href="/orders"
+                                class="text-xs leading-[36px] text-[#00000099] hover:text-[#222]"
+                            >
+                                Đơn hàng của tôi
+                            </a>
+                            <div
+                                ng-if="is_login"
+                                ng-click="logout()"
+                                class="text-xs leading-[36px] text-[#00000099] hover:text-[#222] cursor-pointer"
+                            >
+                                Đăng xuất
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="h-[54px] group">
                     <a
@@ -224,12 +267,22 @@
                         <div
                             class="scrollbar overflow-y-scroll pt-[10px] max-h-[300px] min-h-[100px]"
                         >
-                            <!-- Normal -->
+                            <div ng-if="cart.length == 0">
+                                <img
+                                    class="w-[64px] h-[64px] m-auto"
+                                    src="/image/product/cart-empty.png"
+                                    alt="Giỏ hàng rỗng"
+                                />
+                                <span
+                                    class="m-[20px] text-[#666] text-center block text-xs"
+                                    >Giỏ hàng rỗng</span
+                                >
+                            </div>
                             <div
                                 ng-repeat="product in cart track by product.cart_id"
                                 class="flex my-[10px] mx-[20px]"
                             >
-                                <div class="w-[90px] relative">
+                                <div class="w-[90px] relative group-scope">
                                     <img
                                         ng-src="/image/product/@{{
                                             product.picked.color.product_image1
@@ -237,6 +290,30 @@
                                         alt="@{{ product.product_name }}"
                                         class="w-full"
                                     />
+                                    <img
+                                        ng-src="/image/product/@{{
+                                            product.picked.color
+                                                .product_image2 ||
+                                                product.picked.color
+                                                    .product_image3 ||
+                                                product.picked.color
+                                                    .product_image4 ||
+                                                product.picked.color
+                                                    .product_image5
+                                        }}"
+                                        alt="@{{ product.product_name }}"
+                                        class="absolute top-0 left-0 w-full opacity-0 group-scope-hover:opacity-100 transition-all duration-500"
+                                    />
+                                    <div
+                                        ng-click="removeProductFromCart(product.cart_id)"
+                                        class="absolute bottom-0 h-[26px] hidden justify-center items-center w-full bg-[#00000080] group-scope-hover:flex cursor-pointer"
+                                    >
+                                        <button>
+                                            <i
+                                                class="bx bx-trash text-[16px] text-white"
+                                            ></i>
+                                        </button>
+                                    </div>
                                     <div
                                         ng-if="product.product_discount != 0"
                                         class="absolute top-[6px] left-0 w-[40px] text-center text-xs leading-[20px] bg-[#222] text-white"
@@ -265,37 +342,39 @@
                                         ></select>
                                     </div>
                                     <div
-                                        class="flex mt-[5px] h-[30px] items-center"
+                                        class="flex justify-between items-center"
                                     >
-                                        <button
-                                            ng-click="decreaseInCart(product)"
-                                            class="w-[25px] h-[24px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default"
+                                        <div
+                                            class="flex mt-[5px] h-[30px] items-center"
                                         >
-                                            <i class="bx bx-minus text-xs"></i>
-                                        </button>
-                                        <input
-                                            ng-model="product.picked.quantity"
-                                            type="text"
-                                            class="text-[13px] w-[30px] h-[24px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center"
-                                        />
-                                        <button
-                                            ng-click="increaseInCart(product)"
-                                            class="w-[25px] h-[24px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tr-[100px] rounded-br-[100px]"
-                                        >
-                                            <i class="bx bx-plus text-xs"></i>
-                                        </button>
-                                    </div>
-                                    <div class="py-1 flex justify-between">
-                                        <button
-                                            ng-click="removeProductFromCart(product.cart_id)"
-                                        >
-                                            <i
-                                                class="bx bx-trash text-[16px]"
-                                            ></i>
-                                        </button>
+                                            <button
+                                                ng-click="decreaseInCart(product)"
+                                                class="w-[25px] h-[24px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default"
+                                            >
+                                                <i
+                                                    class="bx bx-minus text-xs"
+                                                ></i>
+                                            </button>
+                                            <input
+                                                ng-model="product.picked.quantity"
+                                                type="text"
+                                                class="text-[13px] w-[30px] h-[24px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center"
+                                            />
+                                            <button
+                                                ng-click="increaseInCart(product)"
+                                                class="w-[25px] h-[24px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tr-[100px] rounded-br-[100px]"
+                                            >
+                                                <i
+                                                    class="bx bx-plus text-xs"
+                                                ></i>
+                                            </button>
+                                        </div>
                                         <div class="flex flex-col">
                                             <span
-                                                ng-if="product.product_discount == 0"
+                                                ng-if="
+                                                    product.product_discount ==
+                                                    0
+                                                "
                                                 class="text-black font-bold text-[13px]"
                                             >
                                                 @{{
@@ -307,7 +386,9 @@
                                             </span>
                                         </div>
                                         <div
-                                            ng-if="product.product_discount != 0"
+                                            ng-if="
+                                                product.product_discount != 0
+                                            "
                                             class="flex flex-col text-sm"
                                         >
                                             <span
@@ -338,6 +419,7 @@
                             </div>
                         </div>
                         <div
+                            ng-if="cart.length != 0"
                             class="h-[90px] m-[15px] pt-[15px] text-[13px] border-t border-dashed border-[#e5e5e5]"
                         >
                             <p class="flex justify-end items-center pb-2">

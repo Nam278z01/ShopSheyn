@@ -6,15 +6,112 @@ myApp.filter("jsDate", function () {
     };
 });
 
+myApp.factory(
+    "customerService",
+    function ($http, localStorageService, API_URL) {
+        function checkIfLoggedIn() {
+            if(localStorageService.get('authTokenCustomer'))
+                return true;
+            else
+                return false;
+        }
+        function login(email, password, onSuccess, onError) {
+            $http({
+                method: "POST",
+                url: API_URL + "/api/login",
+                data: {
+                    customer_email: email,
+                    customer_password: password,
+                },
+                "Content-Type": "application/json",
+            }).then(
+                function (response) {
+                    localStorageService.set(
+                        "authTokenCustomer",
+                        response.data.access_token
+                    );
+                    onSuccess(response);
+                },
+                function (response) {
+                    onError(response);
+                }
+            );
+        }
+
+        function logout() {
+            localStorageService.remove("authTokenCustomer");
+        }
+
+        function getCurrentToken() {
+            return localStorageService.get("authTokenCustomer");
+        }
+
+        return {
+            checkIfLoggedIn: checkIfLoggedIn,
+            login: login,
+            logout: logout,
+            getCurrentToken: getCurrentToken,
+        };
+    }
+);
+
+myApp.controller(
+    "LoginController",
+    function ($scope, $rootScope, API_URL, customerService, $window) {
+        $rootScope.login = function () {
+            customerService.login(
+                $scope.email,
+                $scope.password,
+                function (res) {
+                    if (res.data.status_code == 200) {
+                        $window.location.reload();
+                    }
+                },
+                function (err) {}
+            );
+        };
+    }
+);
+
 myApp.run(function (
     $rootScope,
     $http,
     $routeParams,
     $location,
     $window,
-    API_URL
+    API_URL,
+    customerService
 ) {
     $rootScope.title = "Shop Sheyn";
+    console.log(customerService.getCurrentToken())
+    if (customerService.checkIfLoggedIn()) {
+        $http({
+            method: "GET",
+            url: API_URL + "/api/customer",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + customerService.getCurrentToken(),
+            },
+        }).then((res) => {
+            $rootScope.is_login = true;
+            $rootScope.customer = res.data;
+        });
+    }
+    $rootScope.logout = function () {
+        $http({
+            method: "DELETE",
+            url: API_URL + "/api/logout",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + customerService.getCurrentToken(),
+            },
+        }).then((res) => {
+            if (res.data.status_code == 200) {
+                customerService.logout()
+                $window.location.reload();
+            }
+        });
+    }
 
     $rootScope.search = function () {
         $rootScope.text_search = $rootScope.text_search
@@ -38,6 +135,11 @@ myApp.run(function (
     $rootScope.$on("$routeChangeStart", function (evt, absNewUrl, absOldUrl) {
         $window.scrollTo(0, 0);
     });
+
+    $rootScope.is_show_modal_login = false;
+    $rootScope.showModalLogin = function () {
+        $rootScope.is_show_modal_login = !$rootScope.is_show_modal_login;
+    };
 
     $http({
         method: "GET",
@@ -247,6 +349,24 @@ myApp.config(function ($routeProvider, $locationProvider) {
         .when("/details", {
             templateUrl: "html/details.html",
             controller: "ProductDetailsController",
+        })
+        .when("/checkout", {
+            templateUrl: "html/checkout.html",
+        })
+        .when("/user", {
+            templateUrl: "html/user.html",
+        })
+        .when("/orders", {
+            templateUrl: "html/orders.html",
+        })
+        .when("/orderdetails", {
+            templateUrl: "html/orderdetails.html",
+        })
+        .when("/checkout", {
+            templateUrl: "html/checkout.html",
+        })
+        .otherwise({
+            redirectTo: "/",
         });
     $locationProvider.html5Mode({
         enabled: true,

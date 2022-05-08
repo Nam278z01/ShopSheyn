@@ -69,9 +69,9 @@ CREATE TABLE IF NOT EXISTS `color` (
   PRIMARY KEY (`color_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `color_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.color: ~59 rows (approximately)
+-- Dumping data for table shop.color: ~60 rows (approximately)
 INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`, `product_image2`, `product_image3`, `product_image4`, `product_image5`, `product_id`) VALUES
 	(1, 'Đen', 142000, '1610954054037523ce2e1b5541c69040ccb4102400_thumbnail_900x.webp', '1610954057e9d333c568dd4f28a5fd56343acb912e_thumbnail_900x.webp', '16109540614aabaa892deb01c5d59b17e73326a2a8_thumbnail_900x.webp', '1610954064b4d703949275742134916533ca2c4253_thumbnail_900x.webp', '16109540670d4cab359190a6ff9e445efeb15b2a6b_thumbnail_900x.webp', 1),
 	(2, 'Xanh trời', 279000, '16454131255afcc643a69b66c26689dda9181d1c54_thumbnail_900x.webp', '1645413133d534d4842ab0c89cbb2edd272669590e_thumbnail_900x.webp', '1645413131f0602c3612f8dabe2c0356f3e366ffcb_thumbnail_900x.webp', NULL, NULL, 2),
@@ -130,23 +130,29 @@ INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`
 	(55, 'Xám', 497000, '627280efdce2c1636527285cbf8c9de7dedc59b241bb01a98a779a3_thumbnail_900x.webp', '627280efdd48f1636527287ac7d25371c8bdbaf2f2b4f199eb5e416_thumbnail_900x.webp', '627280efdd91b1636527291e04950049717d12d1f61a71359736c69_thumbnail_900x.webp', '627280efdde3e16365272819250e48e87dca996131fbfc48650850c_thumbnail_900x.webp', '627280efdeed41636607288630425494be09e3a9b3c3ff34040a01d_thumbnail_900x.webp', 44),
 	(56, 'Be', 343000, '62728a5d07be51636527069c09f9b943991e827b05546c9dd6b3108_thumbnail_900x.webp', '62728a5d08b591636527071b02ded15934bbe7481a7d94b88bb259e_thumbnail_900x.webp', '62728a5d0903c16365270739e60e50130bcbe8fece665124070db27_thumbnail_900x.webp', '62728a5d0964716365270833b846794335f2b571e7525921b056a0c_thumbnail_900x.webp', '62728a5d09b81163652708648c2f38991d37b7216c769c3ba69ddb1_thumbnail_900x.webp', 45),
 	(57, 'Trắng Đen', 420000, '62728b238f2771648019467ff7329436b38a6287f1fd1e17c269efb_thumbnail_900x.webp', '62728b238f8901648019455ad048550e08341929a51f3043046dc75_thumbnail_900x.webp', '62728b238fde01648019462a092205a2c9291515def578f3f7f4bc6_thumbnail_900x.webp', '62728b239016016480194513f322f1aa8386f15a6a5223b99838435_thumbnail_900x.webp', '62728b239049a16480194593117ce8cfcd57a1ce0f1979eb6a96cc3_thumbnail_900x.webp', 46),
-	(58, 'Đỏ cam', 373000, '62729162152f416508512886f609cbc2323b538755baac77a92a26b_thumbnail_900x.webp', '627291621607016508512967ab4ccdc375acad11eb23891ea9a9498_thumbnail_900x.webp', '62729162169e516508513201b2d0cad84d2696fb6f71bf9a9af5c6a_thumbnail_900x.webp', '6272916217400165085129157b6a88dc63906d312886303faedbdd4_thumbnail_900x.webp', '627291621791b165085129494e92323e4eadcdf8bc33795ef28323d_thumbnail_900x.webp', 47);
+	(79, 'Đỏ cam', 373000, '62729162152f416508512886f609cbc2323b538755baac77a92a26b_thumbnail_900x.webp', '627291621607016508512967ab4ccdc375acad11eb23891ea9a9498_thumbnail_900x.webp', '62729162169e516508513201b2d0cad84d2696fb6f71bf9a9af5c6a_thumbnail_900x.webp', '6272916217400165085129157b6a88dc63906d312886303faedbdd4_thumbnail_900x.webp', '627291621791b165085129494e92323e4eadcdf8bc33795ef28323d_thumbnail_900x.webp', 47);
 
 -- Dumping structure for table shop.customer
 CREATE TABLE IF NOT EXISTS `customer` (
   `customer_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã admin',
-  `customer_username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Tên tài khoản',
-  `customer_password` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Mật khẩu',
-  `customer_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Vai trò',
-  `customer_email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Email',
-  `customer_phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Số điện thoại',
-  `customer_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Địa chỉ',
+  `customer_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Email',
+  `customer_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Mật khẩu',
+  `customer_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Vai trò',
   `gender` tinyint(1) DEFAULT NULL COMMENT 'Giới tinh',
   `birthdate` datetime DEFAULT NULL COMMENT 'Ngày sinh',
-  PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `customer_phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Số điện thoại',
+  `customer_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Địa chỉ',
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`customer_id`),
+  UNIQUE KEY `customer_email` (`customer_email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.customer: ~0 rows (approximately)
+INSERT INTO `customer` (`customer_id`, `customer_email`, `customer_password`, `customer_name`, `gender`, `birthdate`, `customer_phone`, `customer_address`, `remember_token`, `updated_at`, `created_at`, `email_verified_at`) VALUES
+	(1, 'nam278z01@gmail.com', '$2y$10$fLic40Gm3i3Uv68l7/iIiew6/TWs4oRCcm2viTV7GX8SDpwGcXAUu', 'Nguyễn Nam', NULL, NULL, NULL, NULL, NULL, '2022-05-08 07:15:52', '2022-05-08 07:15:52', NULL);
 
 -- Dumping structure for table shop.orderdetails
 CREATE TABLE IF NOT EXISTS `orderdetails` (
@@ -196,6 +202,26 @@ CREATE TABLE IF NOT EXISTS `orderstate` (
 
 -- Dumping data for table shop.orderstate: ~0 rows (approximately)
 
+-- Dumping structure for table shop.personal_access_tokens
+CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_id` bigint unsigned NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `last_used_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
+  KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dumping data for table shop.personal_access_tokens: ~0 rows (approximately)
+INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `created_at`, `updated_at`) VALUES
+	(6, 'App\\Models\\Customer', 1, 'authToken', 'ae13f789e111c28477f4bffc842b46c13906f54f50c4ed90c94bf947aaf38fd4', '["*"]', '2022-05-08 07:31:07', '2022-05-08 07:20:56', '2022-05-08 07:31:07');
+
 -- Dumping structure for table shop.product
 CREATE TABLE IF NOT EXISTS `product` (
   `product_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã sản phẩm',
@@ -203,10 +229,10 @@ CREATE TABLE IF NOT EXISTS `product` (
   `product_description` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Mô tả',
   `product_discount` tinyint NOT NULL DEFAULT '0' COMMENT 'Giảm giá (%)',
   `subcategory_id` int NOT NULL COMMENT 'Mã danh mục con',
-  `created_time` datetime NOT NULL COMMENT 'Thời gian tạo',
+  `created_time` datetime DEFAULT NULL COMMENT 'Thời gian tạo',
   `updated_time` datetime DEFAULT NULL COMMENT 'Thời gian cập nhập',
   `admin_updated_id` int DEFAULT NULL COMMENT 'Mã người cập nhập',
-  `admin_created_id` int NOT NULL COMMENT 'Mã người tạo',
+  `admin_created_id` int DEFAULT NULL COMMENT 'Mã người tạo',
   PRIMARY KEY (`product_id`),
   KEY `admin_updated_id` (`admin_updated_id`),
   KEY `admin_created_id` (`admin_created_id`),
@@ -214,9 +240,9 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`admin_updated_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `product_ibfk_2` FOREIGN KEY (`admin_created_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `product_ibfk_3` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.product: ~46 rows (approximately)
+-- Dumping data for table shop.product: ~47 rows (approximately)
 INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `product_discount`, `subcategory_id`, `created_time`, `updated_time`, `admin_updated_id`, `admin_created_id`) VALUES
 	(1, 'Áo sơ mi Nút màu trơn Thanh lịch', NULL, 40, 7, '2022-04-16 00:00:00', NULL, NULL, 1),
 	(2, 'Áo sơ mi nữ Nút phía trước Sọc Giải trí', NULL, 0, 7, '2022-04-17 00:00:00', NULL, NULL, 1),
@@ -262,7 +288,7 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `pro
 	(44, 'Dazy-Less Quần nữ Nút Túi Uốn nếp màu trơn Giải trí', NULL, 0, 26, '2022-05-04 13:34:40', '2022-05-04 13:34:40', NULL, 1),
 	(45, 'DAZY Quần nữ Túi màu trơn Giải trí', NULL, 0, 26, '2022-05-04 14:14:53', '2022-05-04 14:14:53', NULL, 1),
 	(46, 'Quần nữ Nút Sọc ca rô Sẵn sàng', NULL, 0, 26, '2022-05-04 14:18:11', '2022-05-04 14:18:11', NULL, 1),
-	(47, 'Quần nữ Thắt lưng Túi Quần paper-bag màu trơn Boho', NULL, 0, 26, '2022-05-04 14:44:50', '2022-05-04 14:44:50', NULL, 1);
+	(47, 'Quần nữ Thắt lưng Túi Quần paper-bag màu trơn Boho', NULL, 50, 26, '2022-05-04 14:44:50', '2022-05-07 16:24:46', 1, 1);
 
 -- Dumping structure for table shop.size
 CREATE TABLE IF NOT EXISTS `size` (
@@ -273,9 +299,9 @@ CREATE TABLE IF NOT EXISTS `size` (
   PRIMARY KEY (`size_id`),
   KEY `color_id` (`color_id`),
   CONSTRAINT `size_ibfk_1` FOREIGN KEY (`color_id`) REFERENCES `color` (`color_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=210 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=246 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.size: ~196 rows (approximately)
+-- Dumping data for table shop.size: ~197 rows (approximately)
 INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(1, 'XS', 10, 1),
 	(2, 'S', 23, 1),
@@ -471,10 +497,10 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(194, 'M', 78, 57),
 	(195, 'L', 87, 57),
 	(196, 'XL', 56, 57),
-	(197, 'S', 64, 58),
-	(198, 'M', 33, 58),
-	(199, 'L', 435, 58),
-	(200, 'XL', 54, 58);
+	(242, 'S', 64, 79),
+	(243, 'M', 33, 79),
+	(244, 'L', 435, 79),
+	(245, 'XL', 54, 79);
 
 -- Dumping structure for table shop.subcategory
 CREATE TABLE IF NOT EXISTS `subcategory` (

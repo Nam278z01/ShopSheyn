@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderStateController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,11 +24,18 @@ use App\Http\Controllers\UploadController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/customer', function (Request $request) {
+        return $request->user();
+    });
+    Route::delete('/logout', [AuthController::class, 'logout']);
 });
 
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/signup', [AuthController::class, 'signup']);
 Route::get('/product/search', [ProductController::class, 'search']);
+
 Route::post('/upload/delete', [UploadController::class, 'deleteFiles']);
 
 Route::resources([

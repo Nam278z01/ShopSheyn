@@ -88,8 +88,8 @@ class CartController extends Controller
         } else {
             $cart[] = $product;
         }
-
-        $cookie = cookie('cart', json_encode($cart), 120);
+        $ONE_MONTH = 60 * 24 * 30;
+        $cookie = cookie('cart', json_encode($cart), $ONE_MONTH);
         return response($cart)->cookie($cookie);
     }
 

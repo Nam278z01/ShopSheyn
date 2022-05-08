@@ -1,6 +1,6 @@
 myApp.controller(
     "ProductController",
-    function ($scope, $rootScope, $http, $routeParams, $location, API_URL) {
+    function ($scope, $rootScope, $http, $routeParams, $location, API_URL, customerService) {
         $scope.filter = {
             page: $routeParams.page || 1,
             page_size: $routeParams.page_size || 20,
@@ -20,7 +20,7 @@ myApp.controller(
         $http({
             method: "GET",
             url: API_URL + "/api/product/search",
-            params: $scope.filter,
+            params: $scope.filter
         }).then((res) => {
             $scope.products = res.data.data;
             $scope.total_row = res.data.total_row;
