@@ -12,9 +12,45 @@
             href="https://fonts.googleapis.com/css2?family=Beau+Rivage&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
             rel="stylesheet"
         />
+        <style>
+            /* Loading */
+            .loading {
+                position: fixed;
+                display: flex;
+                z-index: 1000;
+                background-color: white;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+
+            .loading.hidden {
+                opacity: 0;
+                visibility: hidden;
+                animation: fadeOut 0.5s linear;
+            }
+
+            .loading img {
+                width: 100px;
+                margin: auto;
+            }
+
+            @keyframes fadeOut {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                }
+            }
+        </style>
     </head>
 
     <body>
+        <div class="loading">
+            <img src="/image/product/loading-37.gif" alt="" />
+        </div>
         <div id="root">
             <!-- Header -->
             @include('customer.includes.header')
@@ -25,7 +61,8 @@
             <!-- Footer -->
             @include('customer.includes.footer')
         </div>
-        <section ng-controller="LoginController"
+        <section
+            ng-controller="LoginController"
             ng-if="is_show_modal_login && !is_login"
             class="fixed top-0 bottom-0 left-0 right-0 z-50 flex"
         >
@@ -40,7 +77,7 @@
                             class="py-[16px] px-[12px] flex justify-between items-center"
                         >
                             <h3
-                                class="font-semibold text-[20px] text-[#2dc258]"
+                                class="font-semibold text-[20px] text-[#2563eb]"
                             >
                                 Đăng nhập
                             </h3>
@@ -50,13 +87,13 @@
                                 <div class="relative">
                                     <label
                                         for="EmailLogin"
-                                        class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-[#2dc258]"
+                                        class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-[#2563eb]"
                                         >Email</label
                                     >
                                     <input
                                         ng-model="email"
                                         type="email"
-                                        class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-[#2dc258]"
+                                        class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-[#2563eb]"
                                         name="EmailLogin"
                                         placeholder="Email của bạn"
                                         required
@@ -67,13 +104,13 @@
                                 <div class="relative">
                                     <label
                                         for="EmailLogin"
-                                        class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-[#2dc258]"
+                                        class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-[#2563eb]"
                                         >Mật khẩu</label
                                     >
                                     <input
                                         ng-model="password"
                                         type="password"
-                                        class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-[#2dc258]"
+                                        class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-[#2563eb]"
                                         name="PassLogin"
                                         placeholder="Mật khẩu của bạn"
                                         required
@@ -85,7 +122,7 @@
                             <div class="flex justify-end items-center">
                                 <a
                                     href="#"
-                                    class="text-sm font-medium text-[#2dc258]"
+                                    class="text-sm font-medium text-[#2563eb]"
                                     >Quên mật khẩu</a
                                 >
                                 <span
@@ -109,7 +146,7 @@
                             <button
                                 ng-click="login()"
                                 type="submit"
-                                class="text-[13px] bg-gradient-to-r from-[#2dc258] to-[#6bcd87] text-white rounded-[50px] flex justify-center items-center px-[14px] py-[6px]"
+                                class="text-[13px] bg-gradient-to-r from-[#2563eb] to-[#6bcd87] text-white rounded-[50px] flex justify-center items-center px-[14px] py-[6px]"
                             >
                                 Đăng nhập
                             </button>
@@ -135,5 +172,13 @@
         </section>
         <script src="/js/app.js"></script>
         <script src="/js/customer.js"></script>
+        <script>
+            window.addEventListener("load", function () {
+                let loading = document.querySelector(".loading");
+                setTimeout(function () {
+                    loading.classList.add("hidden");
+                }, 700)
+            });
+        </script>
     </body>
 </html>

@@ -3,8 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\SubCategoryResource;
-use App\Http\Resources\ColorResource;
 
 class ProductResource extends JsonResource
 {
@@ -25,7 +23,7 @@ class ProductResource extends JsonResource
             'updated_time' => $this->updated_time,
             'admin_updated_id' => $this->admin_updated_id,
             'admin_created_id' => $this->admin_created_id,
-            'subcategory' => new SubCategoryResource($this->subcategory),
+            'subcategory' => new CommonResource($this->subcategory),
             'colors' => ColorResource::collection($this->colors)
         ];
     }

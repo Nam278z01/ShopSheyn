@@ -6,6 +6,22 @@ myApp.filter("jsDate", function () {
     };
 });
 
+myApp.filter("cvOrderState", function () {
+    return function (x) {
+        if (x == 0) {
+            return 'Đang xử lý'
+        } else if (x == 1) {
+            return 'Đang giao'
+        } else if (x == 2) {
+            return 'Đã giao'
+        } else if (x == 3) {
+            return 'Đã hủy'
+        } else {
+            return 'Hoàn trả'
+        }
+    };
+});
+
 myApp.factory(
     "customerService",
     function ($http, localStorageService, API_URL) {
@@ -83,7 +99,7 @@ myApp.run(function (
     customerService
 ) {
     $rootScope.title = "Shop Sheyn";
-    console.log(customerService.getCurrentToken())
+
     if (customerService.checkIfLoggedIn()) {
         $http({
             method: "GET",
@@ -107,7 +123,7 @@ myApp.run(function (
             },
         }).then((res) => {
             if (res.data.status_code == 200) {
-                customerService.logout()
+                customerService.logout();
                 $window.location.reload();
             }
         });
@@ -345,6 +361,7 @@ myApp.config(function ($routeProvider, $locationProvider) {
         })
         .when("/cart", {
             templateUrl: "html/cart.html",
+            controller: "OrderController",
         })
         .when("/details", {
             templateUrl: "html/details.html",
@@ -358,6 +375,7 @@ myApp.config(function ($routeProvider, $locationProvider) {
         })
         .when("/orders", {
             templateUrl: "html/orders.html",
+            controller: "OrderController",
         })
         .when("/orderdetails", {
             templateUrl: "html/orderdetails.html",

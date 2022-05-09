@@ -15,4 +15,4 @@ window.myApp = angular.module("myApp", [
 require("./controller/app");
 require("./controller/product.controller");
 require("./controller/productdetails.controller");
-require("./controller/cart.controller");
+require("./controller/order.controller");

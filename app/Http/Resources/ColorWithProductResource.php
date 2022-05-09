@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ColorResource extends JsonResource
+class ColorWithProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,7 +23,7 @@ class ColorResource extends JsonResource
             'product_image3' => $this->product_image3,
             'product_image4' => $this->product_image4,
             'product_image5' => $this->product_image5,
-            'sizes' => CommonResource::collection($this->sizes)
+            'product' => new CommonResource($this->product)
         ];
     }
 }

@@ -11,54 +11,58 @@
                         </div>
                     </div>
                     <div
-                        class="p-[30px] bg-white rounded-[12px] shadow-[0_6px_12px_0_#0000000a]"
+                        class="p-[30px] bg-white shadow-[0_6px_12px_0_#0000000a]"
                     >
                         <div class="py-[15px] relative">
                             <label
                                 for=""
-                                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white rounded-[2px]"
+                                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white"
                                 >Họ tên</label
                             >
                             <input
+                                ng-model="name"
                                 type="text"
                                 placeholder="Họ tên"
-                                class="rounded-md h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+                                class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
                             />
                         </div>
                         <div class="py-[15px] relative">
                             <label
                                 for=""
-                                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white rounded-[2px]"
+                                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white"
                                 >Số điện thoại</label
                             >
                             <input
+                                ng-model="phone"
                                 type="text"
                                 placeholder="Số điện thoại"
-                                class="rounded-md h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+                                class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
                             />
                         </div>
                         <div class="py-[15px] relative">
                             <label
                                 for=""
-                                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white rounded-[2px]"
+                                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white"
                                 >Địa chỉ chi tiết</label
                             >
                             <input
+                                ng-model="address"
                                 type="text"
                                 placeholder="Địa chỉ chi tiết"
-                                class="rounded-md h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+                                class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
                             />
                         </div>
                         <div class="py-[15px] relative">
                             <label
                                 for=""
-                                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white rounded-[2px]"
+                                class="text-[13px] font-medium whitespace-nowrap mr-3 absolute top-0 bg-white"
                                 >Ghi chú</label
                             >
                             <input
+                                ng-model="note"
                                 type="text"
                                 placeholder="Ghi chú"
-                                class="rounded-md h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
+                                class="h-[40px] w-full border border-[rgb(0 0 0 / 10%)] px-3 pt-1 focus:outline-none focus:border-black text-sm"
                             />
                         </div>
                     </div>
@@ -72,14 +76,14 @@
                         </div>
                     </div>
                     <div
-                        class="p-[30px] bg-white rounded-[12px] shadow-[0_6px_12px_0_#0000000a]"
+                        class="p-[30px] bg-white shadow-[0_6px_12px_0_#0000000a]"
                     >
                         <label
                             for="payment-cod"
-                            class="flex items-center px-[20px] py-[15px] border border-[#2dc258] rounded-2xl"
+                            class="flex items-center px-[20px] py-[15px] border border-[#2563eb] rounded-2xl"
                         >
                             <div
-                                class="w-[20px] h-[20px] rounded-full border border-[#2dc258] relative"
+                                class="w-[20px] h-[20px] rounded-full border border-[#2563eb] relative"
                             >
                                 <input
                                     type="radio"
@@ -89,7 +93,7 @@
                                     checked
                                 />
                                 <span
-                                    class="w-[12px] h-[12px] rounded-full bg-[#2dc258] absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 hidden peer-checked:block"
+                                    class="w-[12px] h-[12px] rounded-full bg-[#2563eb] absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 hidden peer-checked:block"
                                 ></span>
                             </div>
                             <div class="mx-[15px]">
@@ -106,6 +110,7 @@
 
                         <div class="mt-[30px]">
                             <button
+                                ng-click="checkout()"
                                 class="h-[54px] w-full text-[18px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
                             >
                                 THANH TOÁN {{ total_price | number: 0 }}₫ (COD)
@@ -120,9 +125,17 @@
             <div>
                 <div class="my-[20px] text-xl font-semibold">Giỏ hàng</div>
             </div>
-            <div
-                class="p-[30px] bg-white rounded-[12px] shadow-[0_6px_12px_0_#0000000a]"
-            >
+            <div class="p-[30px] bg-white shadow-[0_6px_12px_0_#0000000a]">
+                <div ng-if="!cart || cart.length == 0">
+                    <img
+                        class="w-[64px] h-[64px] m-auto"
+                        src="/image/product/cart-empty.png"
+                        alt="Giỏ hàng rỗng"
+                    />
+                    <span class="m-[20px] text-[#666] text-center block text-xs"
+                        >Giỏ hàng rỗng</span
+                    >
+                </div>
                 <!-- Items -->
                 <div
                     ng-repeat="product in cart track by product.cart_id"
@@ -159,11 +172,14 @@
                         </div>
                     </div>
                     <div class="ml-[20px] flex-1">
-                        <div>
+                        <a
+                            href="/details?product_id={{ product.product_id}}"
+                            class="hover:underline"
+                        >
                             <span class="text-sm mb-[5px]"
                                 >{{ product.product_name }}</span
                             >
-                        </div>
+                        </a>
                         <div class="flex pt-[15px] -mx-[10px]">
                             <select
                                 ng-change="changeColorInCart(product, product.picked.color, '{{

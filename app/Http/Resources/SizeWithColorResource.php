@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SubCategoryResource extends JsonResource
+class SizeWithColorResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,11 @@ class SubCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'size_id' => $this->size_id,
+            'size_name' => $this->size_name,
+            'quantity' => $this->quantity,
+            'color' => new ColorWithProductResource($this->color)
+        ];
     }
 }

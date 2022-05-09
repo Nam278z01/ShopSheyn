@@ -40109,6 +40109,21 @@ myApp.filter("jsDate", function () {
     return x.replace("/Date(", "").replace(")/", "");
   };
 });
+myApp.filter("cvOrderState", function () {
+  return function (x) {
+    if (x == 0) {
+      return 'Đang xử lý';
+    } else if (x == 1) {
+      return 'Đang giao';
+    } else if (x == 2) {
+      return 'Đã giao';
+    } else if (x == 3) {
+      return 'Đã hủy';
+    } else {
+      return 'Hoàn trả';
+    }
+  };
+});
 myApp.factory("customerService", function ($http, localStorageService, API_URL) {
   function checkIfLoggedIn() {
     if (localStorageService.get('authTokenCustomer')) return true;else return false;
@@ -40157,7 +40172,6 @@ myApp.controller("LoginController", function ($scope, $rootScope, API_URL, custo
 });
 myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL, customerService) {
   $rootScope.title = "Shop Sheyn";
-  console.log(customerService.getCurrentToken());
 
   if (customerService.checkIfLoggedIn()) {
     $http({
@@ -40388,7 +40402,8 @@ myApp.config(function ($routeProvider, $locationProvider) {
     templateUrl: "html/product.html",
     controller: "ProductController"
   }).when("/cart", {
-    templateUrl: "html/cart.html"
+    templateUrl: "html/cart.html",
+    controller: "OrderController"
   }).when("/details", {
     templateUrl: "html/details.html",
     controller: "ProductDetailsController"
@@ -40397,7 +40412,8 @@ myApp.config(function ($routeProvider, $locationProvider) {
   }).when("/user", {
     templateUrl: "html/user.html"
   }).when("/orders", {
-    templateUrl: "html/orders.html"
+    templateUrl: "html/orders.html",
+    controller: "OrderController"
   }).when("/orderdetails", {
     templateUrl: "html/orderdetails.html"
   }).when("/checkout", {
@@ -40413,13 +40429,53 @@ myApp.config(function ($routeProvider, $locationProvider) {
 
 /***/ }),
 
-/***/ "./resources/js/customer/controller/cart.controller.js":
-/*!*************************************************************!*\
-  !*** ./resources/js/customer/controller/cart.controller.js ***!
-  \*************************************************************/
-/***/ (() => {
+/***/ "./resources/js/customer/controller/order.controller.js":
+/*!**************************************************************!*\
+  !*** ./resources/js/customer/controller/order.controller.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var ng_table_src_core_ngTableDefaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ng-table/src/core/ngTableDefaults */ "./node_modules/ng-table/src/core/ngTableDefaults.js");
 
+myApp.controller('OrderController', function ($scope, $rootScope, $http, $location, $routeParams, API_URL, customerService) {
+  if ($location.path() == '/orders') {
+    $http({
+      method: "GET",
+      url: API_URL + "/api/order",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + customerService.getCurrentToken()
+      }
+    }).then(function (res) {
+      $rootScope.orders = res.data.data;
+    });
+  }
+
+  $scope.name = $rootScope.customer.customer_name;
+  $scope.address = $rootScope.customer.customer_address;
+  $scope.phone = $rootScope.customer.customer_phone;
+
+  $scope.checkout = function () {
+    $http({
+      method: "POST",
+      url: API_URL + "/api/order",
+      data: {
+        customer_name: $scope.name,
+        customer_address: $scope.address,
+        customer_phone: $scope.phone,
+        note: $scope.note
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + customerService.getCurrentToken()
+      }
+    }).then(function (res) {
+      $rootScope.cart = null;
+    });
+  };
+});
 
 /***/ }),
 
@@ -51488,6 +51544,35 @@ return jQuery;
 
 /***/ }),
 
+/***/ "./node_modules/ng-table/src/core/ngTableDefaults.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/ng-table/src/core/ngTableDefaults.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ngTableDefaults": () => (/* binding */ ngTableDefaults)
+/* harmony export */ });
+/**
+ * ngTable: Table + Angular JS
+ *
+ * @author Vitalii Savchuk <esvit666@gmail.com>
+ * @url https://github.com/esvit/ng-table/
+ * @license New BSD License <http://creativecommons.org/licenses/BSD/>
+ */
+/**
+ * Default values for ngTable
+ */
+var ngTableDefaults = {
+    params: {},
+    settings: {}
+};
+//# sourceMappingURL=ngTableDefaults.js.map
+
+/***/ }),
+
 /***/ "./node_modules/slick-carousel/slick/slick.js":
 /*!****************************************************!*\
   !*** ./node_modules/slick-carousel/slick/slick.js ***!
@@ -54609,7 +54694,7 @@ __webpack_require__(/*! ./controller/product.controller */ "./resources/js/custo
 
 __webpack_require__(/*! ./controller/productdetails.controller */ "./resources/js/customer/controller/productdetails.controller.js");
 
-__webpack_require__(/*! ./controller/cart.controller */ "./resources/js/customer/controller/cart.controller.js");
+__webpack_require__(/*! ./controller/order.controller */ "./resources/js/customer/controller/order.controller.js");
 })();
 
 /******/ })()

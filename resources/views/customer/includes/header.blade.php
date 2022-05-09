@@ -230,6 +230,7 @@
                                 @{{ customer.customer_name }}
                             </a>
                             <a
+                                ng-if="is_login"
                                 href="/orders"
                                 class="text-xs leading-[36px] text-[#00000099] hover:text-[#222]"
                             >
@@ -267,7 +268,7 @@
                         <div
                             class="scrollbar overflow-y-scroll pt-[10px] max-h-[300px] min-h-[100px]"
                         >
-                            <div ng-if="cart.length == 0">
+                            <div ng-if="!cart || cart.length == 0">
                                 <img
                                     class="w-[64px] h-[64px] m-auto"
                                     src="/image/product/cart-empty.png"
@@ -322,9 +323,9 @@
                                     </div>
                                 </div>
                                 <div class="ml-[10px] flex-1">
-                                    <div class="text-xs mb-[5px]">
+                                    <a href="/details?product_id=@{{ product.product_id }}" class="text-xs mb-[5px] hover:underline">
                                         <span>@{{ product.product_name }}</span>
-                                    </div>
+                                    </a>
                                     <div class="flex py-1 -mx-[10px]">
                                         <select
                                             ng-change="changeColorInCart(product, product.picked.color, '@{{
@@ -419,7 +420,7 @@
                             </div>
                         </div>
                         <div
-                            ng-if="cart.length != 0"
+                            ng-if="cart && cart.length != 0"
                             class="h-[90px] m-[15px] pt-[15px] text-[13px] border-t border-dashed border-[#e5e5e5]"
                         >
                             <p class="flex justify-end items-center pb-2">

@@ -3,13 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\SubCategoryController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\SizeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderStateController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\AuthController;
 
@@ -29,6 +25,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/customer', function (Request $request) {
         return $request->user();
     });
+    Route::resources([
+        'order' => OrderController::class,
+    ]);
     Route::delete('/logout', [AuthController::class, 'logout']);
 });
 
@@ -40,12 +39,7 @@ Route::post('/upload/delete', [UploadController::class, 'deleteFiles']);
 
 Route::resources([
     'category' => CategoryController::class,
-    'subcategory' => SubCategoryController::class,
     'product' => ProductController::class,
-    'color' => ColorController::class,
-    'size' => SizeController::class,
     'cart' => CartController::class,
-    'order' => OrderController::class,
-    'orderstate' => OrderStateController::class,
     'upload' => UploadController::class,
 ]);
