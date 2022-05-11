@@ -40112,30 +40112,30 @@ myApp.filter("jsDate", function () {
 myApp.filter("cvOrderState", function () {
   return function (x) {
     if (x == 0) {
-      return 'Đang xử lý';
+      return "Đang xử lý";
     } else if (x == 1) {
-      return 'Đang giao';
+      return "Đang giao";
     } else if (x == 2) {
-      return 'Đã giao';
+      return "Đã giao";
     } else if (x == 3) {
-      return 'Đã hủy';
+      return "Đã hủy";
     } else {
-      return 'Hoàn trả';
+      return "Hoàn trả";
     }
   };
 });
 myApp.factory("customerService", function ($http, localStorageService, API_URL) {
   function checkIfLoggedIn() {
-    if (localStorageService.get('authTokenCustomer')) return true;else return false;
+    if (localStorageService.get("authTokenCustomer")) return true;else return false;
   }
 
   function login(email, password, onSuccess, onError) {
     $http({
       method: "POST",
-      url: API_URL + "/api/login",
+      url: API_URL + "/api/login/customer",
       data: {
-        customer_email: email,
-        customer_password: password
+        email: email,
+        password: password
       },
       "Content-Type": "application/json"
     }).then(function (response) {
@@ -40170,7 +40170,7 @@ myApp.controller("LoginController", function ($scope, $rootScope, API_URL, custo
     }, function (err) {});
   };
 });
-myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL, customerService) {
+myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL, customerService, $timeout) {
   $rootScope.title = "Shop Sheyn";
 
   if (customerService.checkIfLoggedIn()) {
@@ -40232,14 +40232,14 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
     method: "GET",
     url: API_URL + "/api/category"
   }).then(function (res) {
-    $rootScope.categories = res.data.data;
+    $rootScope.categories = res.data;
   }); // Cart
 
   $http({
     method: "GET",
     url: API_URL + "/api/cart"
   }).then(function (res) {
-    $rootScope.cart = res.data.data;
+    $rootScope.cart = res.data;
     $rootScope.cart.map(function (product) {
       product.picked = {};
       product.picked.quantity = product.quantity;
@@ -40286,8 +40286,23 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
         return p.picked.size.size_id == product_new.picked.size.size_id;
       });
       index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
+      $rootScope.showCart();
       recalculateTotalPrice();
     });
+  };
+
+  $rootScope.showCartTimeout;
+
+  $rootScope.showCart = function () {
+    if ($rootScope.showCartTimeout) {
+      $timeout.cancel($rootScope.showCartTimeout);
+    }
+
+    $rootScope.isShowCart = true;
+    $rootScope.showCartTimeout = $timeout(function () {
+      $rootScope.isShowCart = false;
+      $rootScope.showCartTimeout = undefined;
+    }, 3000);
   };
 
   $rootScope.addToCartInDetailsPage = function (product) {
@@ -40309,6 +40324,7 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
           return p.picked.size.size_id == product_new.picked.size.size_id;
         });
         index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
+        $rootScope.showCart();
         recalculateTotalPrice();
       });
     }
@@ -40409,15 +40425,11 @@ myApp.config(function ($routeProvider, $locationProvider) {
     controller: "ProductDetailsController"
   }).when("/checkout", {
     templateUrl: "html/checkout.html"
-  }).when("/user", {
-    templateUrl: "html/user.html"
   }).when("/orders", {
     templateUrl: "html/orders.html",
     controller: "OrderController"
   }).when("/orderdetails", {
     templateUrl: "html/orderdetails.html"
-  }).when("/checkout", {
-    templateUrl: "html/checkout.html"
   }).otherwise({
     redirectTo: "/"
   });
@@ -40433,14 +40445,10 @@ myApp.config(function ($routeProvider, $locationProvider) {
 /*!**************************************************************!*\
   !*** ./resources/js/customer/controller/order.controller.js ***!
   \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var ng_table_src_core_ngTableDefaults__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ng-table/src/core/ngTableDefaults */ "./node_modules/ng-table/src/core/ngTableDefaults.js");
-
-myApp.controller('OrderController', function ($scope, $rootScope, $http, $location, $routeParams, API_URL, customerService) {
-  if ($location.path() == '/orders') {
+myApp.controller("OrderController", function ($scope, $rootScope, $http, $location, $routeParams, API_URL, customerService) {
+  if ($location.path() == "/orders") {
     $http({
       method: "GET",
       url: API_URL + "/api/order",
@@ -40449,31 +40457,51 @@ myApp.controller('OrderController', function ($scope, $rootScope, $http, $locati
         Authorization: "Bearer " + customerService.getCurrentToken()
       }
     }).then(function (res) {
-      $rootScope.orders = res.data.data;
+      $rootScope.orders = res.data;
     });
   }
 
   $scope.name = $rootScope.customer.customer_name;
   $scope.address = $rootScope.customer.customer_address;
   $scope.phone = $rootScope.customer.customer_phone;
+  $scope.isPaying = false;
 
   $scope.checkout = function () {
-    $http({
-      method: "POST",
-      url: API_URL + "/api/order",
-      data: {
-        customer_name: $scope.name,
-        customer_address: $scope.address,
-        customer_phone: $scope.phone,
-        note: $scope.note
-      },
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + customerService.getCurrentToken()
-      }
-    }).then(function (res) {
-      $rootScope.cart = null;
-    });
+    if (!$scope.isPaying && $rootScope.cart.length) {
+      $scope.isPaying = true;
+      $http({
+        method: "POST",
+        url: API_URL + "/api/order",
+        data: {
+          customer_name: $scope.name,
+          customer_address: $scope.address,
+          customer_phone: $scope.phone,
+          note: $scope.note
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + customerService.getCurrentToken()
+        }
+      }).then(function (res) {
+        $rootScope.cart = [];
+        $scope.isPaying = false;
+        $rootScope.total_price = 0;
+      });
+    }
+  };
+
+  $scope.order_state = -1;
+
+  $scope.setOrderState = function (type) {
+    $scope.order_state = type;
+  };
+
+  $scope.searchOrderByState = function (row) {
+    if ($scope.order_state == -1) {
+      return true;
+    } else {
+      return row.orderstates[row.orderstates.length - 1].orderstate_name == $scope.order_state;
+    }
   };
 });
 
@@ -40609,9 +40637,9 @@ myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http
   $scope.isLoading = true;
   $http({
     method: "GET",
-    url: API_URL + "/api/product/" + $routeParams.product_id
+    url: API_URL + "/api/product/get-detail/" + $routeParams.product_id
   }).then(function (res) {
-    $scope.product = res.data.data;
+    $scope.product = res.data;
     $rootScope.title = $scope.product.product_name;
     $scope.product.picked = {};
     $scope.product.picked.quantity = 1;
@@ -51541,35 +51569,6 @@ if ( typeof noGlobal === "undefined" ) {
 return jQuery;
 } );
 
-
-/***/ }),
-
-/***/ "./node_modules/ng-table/src/core/ngTableDefaults.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/ng-table/src/core/ngTableDefaults.js ***!
-  \***********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ngTableDefaults": () => (/* binding */ ngTableDefaults)
-/* harmony export */ });
-/**
- * ngTable: Table + Angular JS
- *
- * @author Vitalii Savchuk <esvit666@gmail.com>
- * @url https://github.com/esvit/ng-table/
- * @license New BSD License <http://creativecommons.org/licenses/BSD/>
- */
-/**
- * Default values for ngTable
- */
-var ngTableDefaults = {
-    params: {},
-    settings: {}
-};
-//# sourceMappingURL=ngTableDefaults.js.map
 
 /***/ }),
 

@@ -108,13 +108,21 @@
                             </div>
                         </label>
 
-                        <div class="mt-[30px]">
+                        <div class="mt-[30px] relative">
                             <button
                                 ng-click="checkout()"
                                 class="h-[54px] w-full text-[18px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
                             >
                                 THANH TOÁN {{ total_price | number: 0 }}₫ (COD)
                             </button>
+                            <div
+                                ng-if="isPaying"
+                                class="absolute top-0 left-0 bottom-0 right-0 flex justify-center items-center bg-[#f0f0f0cc]"
+                            >
+                                <i
+                                    class="bx bx-loader-circle bx-spin bx-rotate-90 text-2xl"
+                                ></i>
+                            </div>
                         </div>
                     </div>
                 </div>

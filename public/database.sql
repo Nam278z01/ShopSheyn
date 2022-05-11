@@ -22,17 +22,20 @@ USE `shop`;
 -- Dumping structure for table shop.admin
 CREATE TABLE IF NOT EXISTS `admin` (
   `admin_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã admin',
-  `admin_username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Tên tài khoản',
-  `admin_password` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Mật khẩu',
-  `admin_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên admin',
+  `admin_username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Tên tài khoản',
+  `admin_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Mật khẩu',
+  `admin_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên admin',
   `admin_role` tinyint DEFAULT '1' COMMENT 'Vai trò',
   `admin_state` tinyint NOT NULL DEFAULT '1' COMMENT 'Trạng thái',
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`admin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.admin: ~0 rows (approximately)
-INSERT INTO `admin` (`admin_id`, `admin_username`, `admin_password`, `admin_name`, `admin_role`, `admin_state`) VALUES
-	(1, 'nam278z01@gmail.com', '1234567890', 'Nguyễn Nam', 1, 1);
+INSERT INTO `admin` (`admin_id`, `admin_username`, `admin_password`, `admin_name`, `admin_role`, `admin_state`, `updated_at`, `created_at`, `remember_token`) VALUES
+	(1, 'nam278z01@gmail.com', '1234567890', 'Nguyễn Nam', 1, 1, NULL, NULL, '');
 
 -- Dumping structure for table shop.category
 CREATE TABLE IF NOT EXISTS `category` (
@@ -149,28 +152,48 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `email_verified_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`customer_id`),
   UNIQUE KEY `customer_email` (`customer_email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.customer: ~1 rows (approximately)
+-- Dumping data for table shop.customer: ~3 rows (approximately)
 INSERT INTO `customer` (`customer_id`, `customer_email`, `customer_password`, `customer_name`, `gender`, `birthdate`, `customer_phone`, `customer_address`, `image`, `remember_token`, `updated_at`, `created_at`, `email_verified_at`) VALUES
-	(1, 'nam278z01@gmail.com', '$2y$10$fLic40Gm3i3Uv68l7/iIiew6/TWs4oRCcm2viTV7GX8SDpwGcXAUu', 'Nguyễn Nam', NULL, NULL, NULL, NULL, 'avatar5.png', NULL, '2022-05-08 07:15:52', '2022-05-08 07:15:52', NULL);
+	(1, 'nam278z01@gmail.com', '$2y$10$fLic40Gm3i3Uv68l7/iIiew6/TWs4oRCcm2viTV7GX8SDpwGcXAUu', 'Nguyễn Nam', NULL, NULL, '0328731170', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', 'avatar04.png', NULL, '2022-05-08 07:15:52', '2022-05-08 07:15:52', NULL),
+	(2, 'maihoangthaibao01@gmail.com', '$2y$10$Mi2p30gMxYOp/86IoE35r.vsMykRShbEXOi5CD5Vsfh9nBoN17R2y', 'Mai Hoàng Thái Bảo', NULL, NULL, NULL, NULL, 'avatar5.png', NULL, '2022-05-09 08:09:54', '2022-05-09 08:09:54', NULL),
+	(3, 'binhanvio@gmail.com', '$2y$10$Wu8LXqZmSjCl1E4/wYY91eIcW2WZ9QGg6tM5ymBKt0Odx..LlOO1i', 'Thái Bình An', NULL, NULL, NULL, NULL, 'avatar04.png', NULL, '2022-05-09 08:14:16', '2022-05-09 08:14:16', NULL);
 
 -- Dumping structure for table shop.orderdetails
 CREATE TABLE IF NOT EXISTS `orderdetails` (
-  `orderdetails_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã chi tiết đơn hàng',
+  `orderdetail_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã chi tiết đơn hàng',
   `product_discount` tinyint NOT NULL DEFAULT '0' COMMENT 'Giảm giá (%)',
   `product_quantity` int NOT NULL COMMENT 'Số lượng sản phẩm',
   `price` double NOT NULL COMMENT 'Giá (x1)',
   `size_id` int NOT NULL COMMENT 'Mã size',
   `order_id` int NOT NULL COMMENT 'Mã đơn hàng',
-  PRIMARY KEY (`orderdetails_id`),
+  PRIMARY KEY (`orderdetail_id`) USING BTREE,
   KEY `order_id` (`order_id`),
   KEY `size_id` (`size_id`),
   CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderdetails: ~0 rows (approximately)
+-- Dumping data for table shop.orderdetails: ~11 rows (approximately)
+INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quantity`, `price`, `size_id`, `order_id`) VALUES
+	(1, 0, 1, 135000, 112, 1),
+	(2, 0, 2, 420000, 193, 3),
+	(3, 50, 1, 373000, 242, 3),
+	(10, 0, 1, 497000, 186, 7),
+	(11, 0, 1, 343000, 190, 7),
+	(12, 0, 1, 138000, 121, 8),
+	(15, 0, 1, 395000, 111, 11),
+	(16, 0, 1, 343000, 190, 11),
+	(17, 0, 2, 211000, 23, 12),
+	(18, 20, 4, 223000, 35, 12),
+	(19, 0, 2, 211000, 81, 12),
+	(20, 0, 1, 341000, 97, 13),
+	(21, 0, 1, 357000, 102, 13),
+	(22, 20, 1, 223000, 35, 36),
+	(23, 0, 2, 210000, 87, 36),
+	(24, 0, 2, 287000, 93, 36),
+	(25, 0, 2, 343000, 192, 36);
 
 -- Dumping structure for table shop.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -186,9 +209,18 @@ CREATE TABLE IF NOT EXISTS `orders` (
   PRIMARY KEY (`order_id`),
   KEY `customer_id` (`customer_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orders: ~0 rows (approximately)
+-- Dumping data for table shop.orders: ~6 rows (approximately)
+INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_address`, `customer_phone`, `note`, `delivery_cost`, `total`, `customer_id`) VALUES
+	(1, '2022-05-09 20:36:00', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 135000, 1),
+	(3, '2022-05-09 23:06:14', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1026500, 1),
+	(7, '2022-05-09 23:30:10', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 840000, 1),
+	(8, '2022-05-09 23:34:05', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 138000, 1),
+	(11, '2022-05-10 16:35:58', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 738000, 1),
+	(12, '2022-05-10 16:37:05', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1557600, 1),
+	(13, '2022-05-10 16:50:56', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 698000, 1),
+	(36, '2022-05-10 22:33:23', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1858400, 1);
 
 -- Dumping structure for table shop.orderstate
 CREATE TABLE IF NOT EXISTS `orderstate` (
@@ -199,9 +231,19 @@ CREATE TABLE IF NOT EXISTS `orderstate` (
   PRIMARY KEY (`orderstate_id`),
   KEY `order_id` (`order_id`),
   CONSTRAINT `orderstate_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderstate: ~0 rows (approximately)
+-- Dumping data for table shop.orderstate: ~7 rows (approximately)
+INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`, `order_id`) VALUES
+	(1, 0, '2022-05-09 20:37:33', 1),
+	(2, 1, '2022-05-09 20:49:49', 1),
+	(4, 0, '2022-05-09 23:06:14', 3),
+	(8, 0, '2022-05-09 23:30:10', 7),
+	(9, 0, '2022-05-09 23:34:05', 8),
+	(12, 0, '2022-05-10 16:35:58', 11),
+	(13, 0, '2022-05-10 16:37:05', 12),
+	(14, 0, '2022-05-10 16:50:56', 13),
+	(37, 0, '2022-05-10 22:33:23', 36);
 
 -- Dumping structure for table shop.personal_access_tokens
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
@@ -217,11 +259,12 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.personal_access_tokens: ~0 rows (approximately)
+-- Dumping data for table shop.personal_access_tokens: ~2 rows (approximately)
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `created_at`, `updated_at`) VALUES
-	(18, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'c68a6e31cf9dcf56b9ac79eb1e626e5b847cbb6a9c89b4bf565b19ffda59a2d2', '["*"]', '2022-05-08 10:08:19', '2022-05-08 10:03:38', '2022-05-08 10:08:19');
+	(27, 'App\\Models\\Customer', 2, 'authTokenCustomer', 'c3e25f4879bc67565ca9dd16269aeced7be2bb974bf0420f28e9d1a5db7cdcec', '["*"]', '2022-05-09 08:30:03', '2022-05-09 08:10:32', '2022-05-09 08:30:03'),
+	(33, 'App\\Models\\Customer', 1, 'authTokenCustomer', '6e02ed4950b40cc384391d42fd66b542be5ffc9ac18323aafaf2f2ca5ba8de9f', '["*"]', '2022-05-10 08:33:29', '2022-05-10 03:56:12', '2022-05-10 08:33:29');
 
 -- Dumping structure for table shop.product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -302,7 +345,7 @@ CREATE TABLE IF NOT EXISTS `size` (
   CONSTRAINT `size_ibfk_1` FOREIGN KEY (`color_id`) REFERENCES `color` (`color_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=246 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.size: ~198 rows (approximately)
+-- Dumping data for table shop.size: ~195 rows (approximately)
 INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(1, 'XS', 10, 1),
 	(2, 'S', 23, 1),

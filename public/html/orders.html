@@ -30,7 +30,7 @@
                 </div>
                 <div class="my-[30px]">
                     <a
-                        href="/user"
+                        href="#"
                         class="flex items-center mb-[15px] hover:text-[#fa6338]"
                     >
                         <i class="bx bx-user text-xl"></i>
@@ -58,31 +58,43 @@
                 class="mb-[12px] flex w-full bg-white font-medium text-[15px] sticky top-[54px] z-30"
             >
                 <div
-                    class="cursor-pointer border-b-[2px] border-[#ee4d2d] flex flex-1 justify-center items-center py-[16px] text-[#ee4d2d]"
+                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == -1, 'border-[#00000017]': order_state != -1}"
+                    ng-click="setOrderState(-1)"
+                    class="cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Tất cả
                 </div>
                 <div
-                    class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 0, 'border-[#00000017]': order_state != 0}"
+                    ng-click="setOrderState(0)"
+                    class="cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Đang xử lý
                 </div>
                 <div
+                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 1, 'border-[#00000017]': order_state != 1}"
+                    ng-click="setOrderState(1)"
                     class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Đang giao
                 </div>
                 <div
+                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 2, 'border-[#00000017]': order_state != 2}"
+                    ng-click="setOrderState(2)"
                     class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Đã giao
                 </div>
                 <div
+                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 3, 'border-[#00000017]': order_state != 3}"
+                    ng-click="setOrderState(3)"
                     class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Đã hủy
                 </div>
                 <div
+                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 4, 'border-[#00000017]': order_state != 4}"
+                    ng-click="setOrderState(4)"
                     class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Hoàn trả
@@ -90,7 +102,7 @@
             </div>
             <div class="my-[12px] w-full relative h-[44px]">
                 <input
-                    ng-model="search_order"
+                    ng-model="text_search_order"
                     class="peer text-[13px] w-full h-full py-[12px] pl-[50px] pr-[15px] bg-[#eaeaea] rounded-[2px] outline-none"
                     type="text"
                     placeholder="Tìm kiếm theo ID đơn hàng, tên sản phẩm"
@@ -111,12 +123,12 @@
                     >Rỗng</span
                 >
             </div>
-            <div ng-repeat="o in orders | filter:search_order" class="mt-[12px]">
+            <div ng-repeat="o in orders | filter:text_search_order | filter:searchOrderByState" class="mt-[12px]">
                 <div class="pt-[24px] px-[24px] pb-[12px] bg-white">
                     <div class="text-[15px] pb-[12px] flex justify-between">
                         <span
                             class="text-transparent bg-clip-text bg-gradient-to-r from-[#2563eb] to-[#6bcd87] font-semibold"
-                            >ID đơn hàng: {{ o.order_id }}</span
+                            >Mã đơn hàng: {{ o.order_id }}</span
                         >
                         <span
                             class="text-transparent bg-clip-text bg-gradient-to-r from-[#2563eb] to-[#6bcd87] font-medium"
@@ -138,7 +150,7 @@
                                 >
                                     <img
                                         class="w-full h-full"
-                                        src="/image/product/{{ od.size.color.product_image1 }}"
+                                        ng-src="/image/product/{{ od.size.color.product_image1 }}"
                                         alt="{{ od.size.color.product.product_name }}"
                                     />
                                     <img
@@ -178,7 +190,7 @@
                                     ng-if="od.product_discount == 0"
                                     class="font-semibold text-xl text-black"
                                 >
-                                    {{od.size.color.product_price | number:0}}₫
+                                    {{od.price * od.product_quantity | number:0}}₫
                                 </span>
 
                                 <!-- Discount -->
@@ -186,15 +198,15 @@
                                     ng-if="od.product_discount != 0"
                                     class="text-[#fa6338] text-lg block font-semibold mr-2"
                                 >
-                                    {{od.size.color.product_price -
-                                    od.size.color.product_price *
-                                    od.product_discount / 100 | number:0}}₫
+                                    {{(od.price -
+                                    od.price *
+                                    od.product_discount / 100) * od.product_quantity | number:0}}₫
                                 </span>
                                 <del
                                     ng-if="od.product_discount != 0"
                                     class="text-[#999] text-sm"
                                 >
-                                    {{od.size.color.product_price | number:0}}₫
+                                    {{od.price * od.product_quantity | number:0}}₫
                                 </del>
                                 <div
                                     ng-if="od.product_discount != 0"
@@ -209,7 +221,7 @@
                         class="mt-[12px] py-[16px] border-t border-[#eaeaea] flex justify-between items-center"
                     >
                         <a
-                            href="/product"
+                            href="/orderdetails?order_id={{ o.order_id }}"
                             class="flex justify-center items-center h-[36px] text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
                         >
                             Xem chi tiết

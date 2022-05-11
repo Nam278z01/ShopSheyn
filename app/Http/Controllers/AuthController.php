@@ -7,32 +7,49 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Customer;
+use App\Models\Admin;
 
 class AuthController extends Controller
 {
     //
-    public function login(Request $request)
+    public function login(Request $request, $type)
     {
         try {
-            $request->validate([
-                'customer_email' => 'email|required',
-                'customer_password' => 'required'
-            ]);
+            $tokenResult = "";
 
-            $customer = Customer::where('customer_email', $request->customer_email)->first();
+            if ($type == 'admin') {
+                $request->validate([
+                    'accountname' => 'required',
+                    'password' => 'required'
+                ]);
 
-            if (!$customer && !Hash::check($request->customer_password, $customer->customer_password, [])) {
-                throw new \Exception('Error in Login');
+                $admin = Admin::where('admin_accountname', $request->accountname)->first();
+
+                if (!$admin && !Hash::check($request->password, $admin->admin_password, [])) {
+                    throw new \Exception('Error in Login');
+                }
+
+                $tokenResult = $admin->createToken('authTokenAdmin', ['admin'])->plainTextToken;
+            } else {
+                $request->validate([
+                    'email' => 'email|required',
+                    'password' => 'required'
+                ]);
+
+                $customer = Customer::where('customer_email', $request->email)->first();
+
+                if (!$customer && !Hash::check($request->password, $customer->customer_password, [])) {
+                    throw new \Exception('Error in Login');
+                }
+
+                $tokenResult = $customer->createToken('authTokenCustomer', ['customer'])->plainTextToken;
             }
-
-            $tokenResult = $customer->createToken('authTokenCustomer')->plainTextToken;
 
             return response()->json([
                 'status_code' => 200,
                 'access_token' => $tokenResult,
                 'token_type' => 'Bearer',
             ]);
-
         } catch (\Exception $error) {
             return response()->json([
                 'status_code' => 500,

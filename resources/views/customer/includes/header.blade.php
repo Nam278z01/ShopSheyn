@@ -200,7 +200,7 @@
                 <div class="h-[54px] group">
                     <a
                         ng-class="{ 'bg-white': activeNavigation('/cart') }"
-                        href="/user"
+                        href="#"
                         class="relative h-[54px] flex justify-center items-center text-3xl ml-1 px-1 cursor-pointer group-hover:bg-white hover:bg-white"
                     >
                         <i ng-if="!is_login" class="bx bx-user"></i>
@@ -223,7 +223,7 @@
                                 Đăng nhập / Đăng ký
                             </div>
                             <a
-                                href="/user"
+                                href="#"
                                 ng-if="is_login"
                                 class="block border-b border-[#0000001a] text-xs leading-[45px] text-[#000000cc] font-bold cursor-pointer hover:text-black"
                             >
@@ -263,7 +263,8 @@
                         >
                     </a>
                     <div
-                        class="absolute top-[54px] right-0 w-[400px] bg-white shadow-[0_6px_6px_0_#00000014] invisible group-hover:visible"
+                        ng-class="{'invisible' : !isShowCart}"
+                        class="absolute top-[54px] right-0 w-[400px] bg-white shadow-[0_6px_6px_0_#00000014] group-hover:visible"
                     >
                         <div
                             class="scrollbar overflow-y-scroll pt-[10px] max-h-[300px] min-h-[100px]"

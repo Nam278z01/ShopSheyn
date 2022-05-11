@@ -9,15 +9,15 @@ myApp.filter("jsDate", function () {
 myApp.filter("cvOrderState", function () {
     return function (x) {
         if (x == 0) {
-            return 'Đang xử lý'
+            return "Đang xử lý";
         } else if (x == 1) {
-            return 'Đang giao'
+            return "Đang giao";
         } else if (x == 2) {
-            return 'Đã giao'
+            return "Đã giao";
         } else if (x == 3) {
-            return 'Đã hủy'
+            return "Đã hủy";
         } else {
-            return 'Hoàn trả'
+            return "Hoàn trả";
         }
     };
 });
@@ -26,18 +26,16 @@ myApp.factory(
     "customerService",
     function ($http, localStorageService, API_URL) {
         function checkIfLoggedIn() {
-            if(localStorageService.get('authTokenCustomer'))
-                return true;
-            else
-                return false;
+            if (localStorageService.get("authTokenCustomer")) return true;
+            else return false;
         }
         function login(email, password, onSuccess, onError) {
             $http({
                 method: "POST",
-                url: API_URL + "/api/login",
+                url: API_URL + "/api/login/customer",
                 data: {
-                    customer_email: email,
-                    customer_password: password,
+                    email: email,
+                    password: password,
                 },
                 "Content-Type": "application/json",
             }).then(
@@ -96,7 +94,8 @@ myApp.run(function (
     $location,
     $window,
     API_URL,
-    customerService
+    customerService,
+    $timeout
 ) {
     $rootScope.title = "Shop Sheyn";
 
@@ -127,7 +126,7 @@ myApp.run(function (
                 $window.location.reload();
             }
         });
-    }
+    };
 
     $rootScope.search = function () {
         $rootScope.text_search = $rootScope.text_search
@@ -161,7 +160,7 @@ myApp.run(function (
         method: "GET",
         url: API_URL + "/api/category",
     }).then((res) => {
-        $rootScope.categories = res.data.data;
+        $rootScope.categories = res.data;
     });
 
     // Cart
@@ -169,7 +168,7 @@ myApp.run(function (
         method: "GET",
         url: API_URL + "/api/cart",
     }).then((res) => {
-        $rootScope.cart = res.data.data;
+        $rootScope.cart = res.data;
         $rootScope.cart.map((product) => {
             product.picked = {};
             product.picked.quantity = product.quantity;
@@ -228,9 +227,21 @@ myApp.run(function (
                 ? ($rootScope.cart[index].picked.quantity +=
                       product_new.picked.quantity)
                 : $rootScope.cart.unshift(product_new);
-
+            $rootScope.showCart();
             recalculateTotalPrice();
         });
+    };
+
+    $rootScope.showCartTimeout;
+    $rootScope.showCart = function () {
+        if ($rootScope.showCartTimeout) {
+            $timeout.cancel($rootScope.showCartTimeout);
+        }
+        $rootScope.isShowCart = true;
+        $rootScope.showCartTimeout = $timeout(function () {
+            $rootScope.isShowCart = false;
+            $rootScope.showCartTimeout = undefined;
+        }, 3000);
     };
 
     $rootScope.addToCartInDetailsPage = function (product) {
@@ -256,6 +267,7 @@ myApp.run(function (
                           product_new.picked.quantity)
                     : $rootScope.cart.unshift(product_new);
 
+                $rootScope.showCart();
                 recalculateTotalPrice();
             });
         }
@@ -370,18 +382,12 @@ myApp.config(function ($routeProvider, $locationProvider) {
         .when("/checkout", {
             templateUrl: "html/checkout.html",
         })
-        .when("/user", {
-            templateUrl: "html/user.html",
-        })
         .when("/orders", {
             templateUrl: "html/orders.html",
             controller: "OrderController",
         })
         .when("/orderdetails", {
             templateUrl: "html/orderdetails.html",
-        })
-        .when("/checkout", {
-            templateUrl: "html/checkout.html",
         })
         .otherwise({
             redirectTo: "/",

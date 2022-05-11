@@ -4,9 +4,9 @@ myApp.controller(
         $scope.isLoading = true;
         $http({
             method: "GET",
-            url: API_URL + "/api/product/" + $routeParams.product_id,
+            url: API_URL + "/api/product/get-detail/" + $routeParams.product_id,
         }).then((res) => {
-            $scope.product = res.data.data;
+            $scope.product = res.data;
             $rootScope.title = $scope.product.product_name;
             $scope.product.picked = {};
             $scope.product.picked.quantity = 1;

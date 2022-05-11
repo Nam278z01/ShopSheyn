@@ -31,30 +31,29 @@
                         data-toggle="dropdown"
                     >
                         <img
-                            src="~/assets/img/admin/@{{
-                                admin.Image
+                            ng-src="/image/img/@{{
+                                admin.image
                             }}"
                             class="user-image"
-                            alt="@{{ admin.PersonName }}"
+                            alt="@{{ admin.admin_name }}"
                         />
                         <span class="hidden-xs">@{{
-                            admin.PersonName
+                            admin.admin_name
                         }}</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
                             <img
-                                src="/admin2/dist/img/user2-160x160.jpg"
+                                ng-src="/image/img/@{{
+                                    admin.image
+                                }}"
                                 class="img-circle"
-                                alt="User Image"
+                                alt="@{{ admin.admin_name }}"
                             />
 
                             <p>
-                                Alexander Pierce
-                                <small
-                                    >Member since Nov. 2012</small
-                                >
+                                @{{ admin.admin_name }}
                             </p>
                         </li>
                         <!-- Menu Footer-->
@@ -70,7 +69,7 @@
                                 <a
                                     href="#"
                                     class="btn btn-default btn-flat"
-                                    ng-click="Logout()"
+                                    ng-click="logout()"
                                     >Đăng xuất</a
                                 >
                             </div>

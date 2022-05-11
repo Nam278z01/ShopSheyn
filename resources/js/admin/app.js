@@ -10,6 +10,7 @@ require("angular-aria");
 require("angular-messages");
 require("angular-material");
 require("ng-file-upload");
+require("angular-local-storage");
 require("ng-table/bundles/ng-table.min");
 require("ui-select");
 require('@gruposinternet/angular-ckeditor')
@@ -23,7 +24,9 @@ window.myApp = angular.module("myApp", [
     "ngMaterial",
     "ngMessages",
     "ngFileUpload",
-    'ckeditor'
+    'ckeditor',
+    'LocalStorageModule'
 ]);
 require("./controller/app.management");
 require("./controller/product.management.controller");
+require("./controller/order.management.controller");

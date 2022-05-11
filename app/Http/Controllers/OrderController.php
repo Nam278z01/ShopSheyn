@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\OrderResource;
-use App\Http\Resources\SizeWithColorResource;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderState;
@@ -22,7 +20,16 @@ class OrderController extends Controller
     {
         //
         $customer = request()->user();
-        return OrderResource::collection(Order::where('customer_id', $customer->customer_id)->get());
+        return Order::with(['orderdetails', 'orderdetails.size', 'orderdetails.size.color', 'orderdetails.size.color.product', 'orderstates'])
+            ->where('customer_id', $customer->customer_id)
+            ->orderByDesc('order_id')->get();
+    }
+
+    public function getAllOrder()
+    {
+        //
+        return Order::with(['orderdetails', 'orderdetails.size', 'orderdetails.size.color', 'orderdetails.size.color.product', 'orderstates'])
+            ->orderByDesc('order_id')->get();
     }
 
     /**
@@ -48,11 +55,11 @@ class OrderController extends Controller
             $customer = $request->user();
             $cart = json_decode(Cookie::get('cart'));
             $size_ids = array_column($cart, 'size_id');
-            $products = SizeWithColorResource::collection(Size::whereIn("size_id", $size_ids)->get());
+            $products = Size::with(['color', 'color.product'])->whereIn("size_id", $size_ids)->get();
             $products_to_array = json_decode($products->toJson());
             foreach ($cart as $c) {
                 foreach ($products_to_array as $p) {
-                    if($p->size_id == $c->size_id){
+                    if ($p->size_id == $c->size_id) {
                         $p->quantity = $c->quantity;
                         break;
                     }
@@ -86,8 +93,6 @@ class OrderController extends Controller
                 $orderdetail->save();
             }
 
-            Cookie::forget('cart');
-
             return response()->json([
                 'status_code' => 200,
                 'message' => 'Order successfully',
@@ -111,7 +116,9 @@ class OrderController extends Controller
     {
         //
         $customer = request()->user();
-        return new OrderResource(Order::where('customer_id', $customer->customer_id)->where('order_id', $id)->first());
+        return Order::with(['orderdetails', 'orderdetails.size', 'orderdetails.size.color', 'orderdetails.size.color.product', 'orderstates'])
+            ->where('customer_id', $customer->customer_id)
+            ->where('order_id', $id)->first();
     }
 
     /**

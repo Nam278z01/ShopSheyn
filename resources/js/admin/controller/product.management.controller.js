@@ -8,7 +8,8 @@ myApp.controller(
         $mdDialog,
         NgTableParams,
         Upload,
-        $timeout
+        $timeout,
+        customerService
     ) {
         $rootScope.currentIndex = 1;
         $rootScope.currentSubIndex = 1;
@@ -16,8 +17,12 @@ myApp.controller(
         $http({
             method: "GET",
             url: API_URL + "/api/product",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + customerService.getCurrentToken(),
+            },
         }).then((res) => {
-            $scope.products = res.data.data;
+            $scope.products = res.data;
 
             $scope.tableParams = new NgTableParams(
                 {
@@ -35,7 +40,7 @@ myApp.controller(
             method: "GET",
             url: API_URL + "/api/category",
         }).then((res) => {
-            $scope.categories = res.data.data;
+            $scope.categories = res.data;
         });
 
         // File upload
@@ -216,6 +221,11 @@ myApp.controller(
                         data: {
                             files: files,
                         },
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization:
+                                "Bearer " + customerService.getCurrentToken(),
+                        },
                     }).then(
                         function (response) {
                             $timeout(function () {
@@ -249,9 +259,15 @@ myApp.controller(
                                         url: API_URL + "/api/product",
                                         data: product_new,
                                         "Content-Type": "application/json",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            Authorization:
+                                                "Bearer " +
+                                                customerService.getCurrentToken(),
+                                        },
                                     }).then((res) => {
                                         $scope.progress = 100;
-                                        $scope.products.unshift(res.data.data);
+                                        $scope.products.unshift(res.data);
                                         $scope.tableParams.reload();
 
                                         $scope.showModalEditAndCreate(
@@ -286,15 +302,28 @@ myApp.controller(
                                             ],
                                         },
                                         "Content-Type": "application/json",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                            Authorization:
+                                                "Bearer " +
+                                                customerService.getCurrentToken(),
+                                        },
                                     }).then((res) => {
                                         $http({
                                             method: "PUT",
                                             url:
                                                 API_URL +
-                                                "/api/product/" +
+                                                "/api/product/get-detail/" +
                                                 product_new.product_id,
                                             data: product_new,
                                             "Content-Type": "application/json",
+                                            headers: {
+                                                "Content-Type":
+                                                    "application/json",
+                                                Authorization:
+                                                    "Bearer " +
+                                                    customerService.getCurrentToken(),
+                                            },
                                         }).then((res) => {
                                             $scope.progress = 100;
                                             let index =
@@ -303,13 +332,12 @@ myApp.controller(
                                                         p.product_id ==
                                                         product_new.product_id
                                                 );
-                                            $scope.products[index] =
-                                                res.data.data;
+                                            $scope.products[index] = res.data;
                                             $scope.tableParams.reload();
 
                                             $scope.showModalEditAndCreate(
                                                 "SỬA THÔNG TIN SẢN PHẨM",
-                                                res.data.data
+                                                res.data
                                             );
                                             $rootScope.showSimpleToast(
                                                 "Sửa thông tin sản phẩm thành công!",
@@ -360,6 +388,11 @@ myApp.controller(
                 url: API_URL + "/api/upload/delete",
                 data: { paths: paths },
                 "Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization:
+                        "Bearer " + customerService.getCurrentToken(),
+                },
             }).then((res) => {
                 $http({
                     method: "DELETE",
@@ -367,6 +400,11 @@ myApp.controller(
                         API_URL +
                         "/api/product/" +
                         $scope.product_for_delete.product_id,
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization:
+                            "Bearer " + customerService.getCurrentToken(),
+                    },
                 }).then((res) => {
                     $rootScope.showSimpleToast(
                         "Xóa sản phẩm thành công!",

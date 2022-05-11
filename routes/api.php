@@ -19,27 +19,37 @@ use App\Http\Controllers\AuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/login/{type}', [AuthController::class, 'login']);
+Route::post('/signup', [AuthController::class, 'signup']);
+Route::get('/product/search', [ProductController::class, 'search']);
+Route::get('/product/get-detail/{id}', [ProductController::class, 'getProduct']);
 
+Route::middleware(['auth:sanctum', 'ability:customer,admin'])->group(function () {
+    Route::delete('/logout', [AuthController::class, 'logout']);
+});
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
+    Route::get('/admin', function (Request $request) {
+        return $request->user();
+    });
+    Route::get('/order/get-all', [OrderController::class, 'getAllOrder']);
+    Route::post('/upload/delete', [UploadController::class, 'deleteFiles']);
+    Route::resources([
+        'upload' => UploadController::class,
+        'product' => ProductController::class,
+    ]);
+});
+
+Route::middleware(['auth:sanctum', 'ability:customer'])->group(function () {
     Route::get('/customer', function (Request $request) {
         return $request->user();
     });
     Route::resources([
         'order' => OrderController::class,
     ]);
-    Route::delete('/logout', [AuthController::class, 'logout']);
 });
-
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/signup', [AuthController::class, 'signup']);
-Route::get('/product/search', [ProductController::class, 'search']);
-
-Route::post('/upload/delete', [UploadController::class, 'deleteFiles']);
 
 Route::resources([
     'category' => CategoryController::class,
-    'product' => ProductController::class,
     'cart' => CartController::class,
-    'upload' => UploadController::class,
 ]);

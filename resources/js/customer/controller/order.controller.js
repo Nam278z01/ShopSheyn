@@ -1,41 +1,72 @@
-import { ngTableDefaults } from "ng-table/src/core/ngTableDefaults";
+myApp.controller(
+    "OrderController",
+    function (
+        $scope,
+        $rootScope,
+        $http,
+        $location,
+        $routeParams,
+        API_URL,
+        customerService
+    ) {
+        if ($location.path() == "/orders") {
+            $http({
+                method: "GET",
+                url: API_URL + "/api/order",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization:
+                        "Bearer " + customerService.getCurrentToken(),
+                },
+            }).then((res) => {
+                $rootScope.orders = res.data;
+            });
+        }
 
-myApp.controller('OrderController', function ($scope, $rootScope, $http, $location, $routeParams, API_URL, customerService) {
+        $scope.name = $rootScope.customer.customer_name;
+        $scope.address = $rootScope.customer.customer_address;
+        $scope.phone = $rootScope.customer.customer_phone;
 
+        $scope.isPaying = false;
+        $scope.checkout = function () {
+            if (!$scope.isPaying && $rootScope.cart.length) {
+                $scope.isPaying = true;
+                $http({
+                    method: "POST",
+                    url: API_URL + "/api/order",
+                    data: {
+                        customer_name: $scope.name,
+                        customer_address: $scope.address,
+                        customer_phone: $scope.phone,
+                        note: $scope.note,
+                    },
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization:
+                            "Bearer " + customerService.getCurrentToken(),
+                    },
+                }).then((res) => {
+                    $rootScope.cart = [];
+                    $scope.isPaying = false;
+                    $rootScope.total_price = 0;
+                });
+            }
+        };
 
-    if ($location.path() == '/orders') {
-        $http({
-            method: "GET",
-            url: API_URL + "/api/order",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + customerService.getCurrentToken(),
-            },
-        }).then((res) => {
-            $rootScope.orders = res.data.data;
-        });
+        $scope.order_state = -1;
+        $scope.setOrderState = function (type) {
+            $scope.order_state = type;
+        };
+
+        $scope.searchOrderByState = function (row) {
+            if ($scope.order_state == -1) {
+                return true;
+            } else {
+                return (
+                    row.orderstates[row.orderstates.length - 1]
+                        .orderstate_name == $scope.order_state
+                );
+            }
+        };
     }
-
-    $scope.name = $rootScope.customer.customer_name
-    $scope.address = $rootScope.customer.customer_address
-    $scope.phone = $rootScope.customer.customer_phone
-    $scope.checkout = function () {
-        $http({
-            method: "POST",
-            url: API_URL + "/api/order",
-            data: {
-                customer_name: $scope.name,
-                customer_address: $scope.address,
-                customer_phone: $scope.phone,
-                note: $scope.note,
-            },
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + customerService.getCurrentToken(),
-            },
-        }).then((res) => {
-            $rootScope.cart = null;
-        });
-    }
-
-})
+);

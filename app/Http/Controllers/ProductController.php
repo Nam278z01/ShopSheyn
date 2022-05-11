@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Color;
 use App\Models\Size;
-use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
@@ -35,7 +34,7 @@ class ProductController extends Controller
     public function index()
     {
         //
-        return ProductResource::collection(Product::orderByDesc('created_time')->get());
+        return Product::with(['subcategory', 'colors', 'colors.sizes'])->orderByDesc('created_time')->get();
     }
 
     /**
@@ -91,7 +90,7 @@ class ProductController extends Controller
                 $size_new->save();
             }
         }
-        return new ProductResource(Product::findOrFail($product->product_id));
+        return Product::with(['subcategory', 'colors', 'colors.sizes'])->findOrFail($product->product_id);
     }
 
     /**
@@ -100,10 +99,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function getProduct($id)
     {
         //
-        return new ProductResource(Product::findOrFail($id));
+        return Product::with(['subcategory', 'colors', 'colors.sizes'])->findOrFail($id);
     }
 
     /**
@@ -165,7 +164,7 @@ class ProductController extends Controller
                 $size_new->save();
             }
         }
-        return new ProductResource(Product::findOrFail($id));
+        return Product::with(['subcategory', 'colors', 'colors.sizes'])->findOrFail($id);
     }
 
     /**

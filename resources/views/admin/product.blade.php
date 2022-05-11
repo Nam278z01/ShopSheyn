@@ -239,7 +239,7 @@
                         @{{
                             row.created_time
                                 | jsDate
-                                | date: "dd-MM-yyyy HH:mm:ss"
+                                | date: "yyyy-MM-dd HH:mm:ss"
                         }}
                     </td>
                     <td title="'Thao tác'" align="right">

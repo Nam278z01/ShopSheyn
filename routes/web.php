@@ -30,14 +30,6 @@ Route::get('/cart', function () {
     return view('customer.index');
 });
 
-Route::get('/checkout', function () {
-    return view('customer.index');
-});
-
-Route::get('/user', function () {
-    return view('customer.index');
-});
-
 Route::get('/orders', function () {
     return view('customer.index');
 });
@@ -49,6 +41,10 @@ Route::get('/orderdetails', function () {
 Route::prefix('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.index');
+    });
+
+    Route::get('/login', function () {
+        return view('admin.login');
     });
 
     Route::get('/product', function () {

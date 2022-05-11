@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Product;
-use App\Http\Resources\ProductResource;
 
 class CartController extends Controller
 {
@@ -21,7 +20,7 @@ class CartController extends Controller
             $cart = json_decode(Cookie::get('cart'));
             $product_ids = array_column($cart, 'product_id');
 
-            $products = ProductResource::collection(Product::whereIn("product_id", $product_ids)->get());
+            $products = Product::with(['subcategory', 'colors', 'colors.sizes'])->whereIn("product_id", $product_ids)->get();
             $products_to_array = json_decode($products->toJson());
 
             $products_in_cart = [];
@@ -39,9 +38,9 @@ class CartController extends Controller
                 }
             }
 
-            return ["data" => $products_in_cart];
+            return $products_in_cart;
         } else {
-            return ["data" => []];
+            return [];
         }
     }
 
