@@ -30,7 +30,7 @@
                             ng-model="accountname"
                             type="text"
                             class="form-control"
-                            placeholder="Email"
+                            placeholder="Account Name"
                         />
                         <span
                             class="glyphicon glyphicon-envelope form-control-feedback"

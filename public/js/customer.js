@@ -40423,8 +40423,6 @@ myApp.config(function ($routeProvider, $locationProvider) {
   }).when("/details", {
     templateUrl: "html/details.html",
     controller: "ProductDetailsController"
-  }).when("/checkout", {
-    templateUrl: "html/checkout.html"
   }).when("/orders", {
     templateUrl: "html/orders.html",
     controller: "OrderController"

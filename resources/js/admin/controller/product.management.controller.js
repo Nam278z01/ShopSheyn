@@ -152,6 +152,7 @@ myApp.controller(
         };
 
         $scope.showModalEditAndCreate = function (form_name, product) {
+            $scope.progress = 0;
             $scope.form_name = form_name;
             if (form_name == "THÊM SẢN PHẨM") {
                 $scope.category_picked = null;
@@ -309,11 +310,11 @@ myApp.controller(
                                                 customerService.getCurrentToken(),
                                         },
                                     }).then((res) => {
-                                        $http({
+                                        return $http({
                                             method: "PUT",
                                             url:
                                                 API_URL +
-                                                "/api/product/get-detail/" +
+                                                "/api/product/" +
                                                 product_new.product_id,
                                             data: product_new,
                                             "Content-Type": "application/json",
@@ -324,30 +325,30 @@ myApp.controller(
                                                     "Bearer " +
                                                     customerService.getCurrentToken(),
                                             },
-                                        }).then((res) => {
-                                            $scope.progress = 100;
-                                            let index =
-                                                $scope.products.findIndex(
-                                                    (p) =>
-                                                        p.product_id ==
-                                                        product_new.product_id
-                                                );
-                                            $scope.products[index] = res.data;
-                                            $scope.tableParams.reload();
+                                        })
+                                    }).then((res) => {
+                                        $scope.progress = 100;
+                                        let index =
+                                            $scope.products.findIndex(
+                                                (p) =>
+                                                    p.product_id ==
+                                                    product_new.product_id
+                                            );
+                                        $scope.products[index] = res.data;
+                                        $scope.tableParams.reload();
 
-                                            $scope.showModalEditAndCreate(
-                                                "SỬA THÔNG TIN SẢN PHẨM",
-                                                res.data
-                                            );
-                                            $rootScope.showSimpleToast(
-                                                "Sửa thông tin sản phẩm thành công!",
-                                                "success"
-                                            );
-                                            $timeout(function () {
-                                                $scope.progress = 0;
-                                            }, 500);
-                                        });
-                                    });
+                                        $scope.showModalEditAndCreate(
+                                            "SỬA THÔNG TIN SẢN PHẨM",
+                                            res.data
+                                        );
+                                        $rootScope.showSimpleToast(
+                                            "Sửa thông tin sản phẩm thành công!",
+                                            "success"
+                                        );
+                                        $timeout(function () {
+                                            $scope.progress = 0;
+                                        }, 500);
+                                    });;
                                 }
                             });
                         },
@@ -394,7 +395,7 @@ myApp.controller(
                         "Bearer " + customerService.getCurrentToken(),
                 },
             }).then((res) => {
-                $http({
+                return $http({
                     method: "DELETE",
                     url:
                         API_URL +
@@ -405,18 +406,18 @@ myApp.controller(
                         Authorization:
                             "Bearer " + customerService.getCurrentToken(),
                     },
-                }).then((res) => {
-                    $rootScope.showSimpleToast(
-                        "Xóa sản phẩm thành công!",
-                        "success"
-                    );
-                    let index = $scope.products.findIndex(
-                        (p) =>
-                            p.product_id == $scope.product_for_delete.product_id
-                    );
-                    $scope.products.splice(index, 1);
-                    $scope.tableParams.reload();
-                });
+                })
+            }).then((res) => {
+                $rootScope.showSimpleToast(
+                    "Xóa sản phẩm thành công!",
+                    "success"
+                );
+                let index = $scope.products.findIndex(
+                    (p) =>
+                        p.product_id == $scope.product_for_delete.product_id
+                );
+                $scope.products.splice(index, 1);
+                $scope.tableParams.reload();
             });
         };
     }

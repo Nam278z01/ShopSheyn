@@ -56,12 +56,13 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //...
+        $admin = $request->user();
         $product = new Product();
         $product->product_name = $request->product_name;
         $product->product_description = $request->product_description;
         $product->product_discount = $request->product_discount;
         $product->subcategory_id = $request->subcategory_id;
-        $product->admin_created_id = 1;
+        $product->admin_created_id = $admin->admin_id;
         $product->save();
         foreach ($request->colors as $color) {
             $color_new = new Color();
@@ -127,12 +128,13 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $admin = $request->user();
         $product = Product::findOrFail($id);
         $product->product_name = $request->product_name;
         $product->product_description = $request->product_description;
         $product->product_discount = $request->product_discount;
         $product->subcategory_id = $request->subcategory_id;
-        $product->admin_updated_id = 1;
+        $product->admin_updated_id = $admin->admin_id;
         $product->save();
 
         Color::where('product_id', $id)->delete();
