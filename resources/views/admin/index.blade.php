@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <link rel="shortcut icon" href="/image/product/icon.png" />
-        <title>Shop Sheyn</title>
+        <link rel="shortcut icon" href="/image/product/adidas-favicon.ico" />
+        <title>Adidas</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta
             content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -92,7 +92,7 @@
     </head>
     <body
         ng-app="myApp"
-        class="hold-transition skin-black-light sidebar-mini fixed"
+        class="hold-transition skin-blue sidebar-mini fixed"
     >
         <div id="toaster"></div>
         <!-- Site wrapper -->

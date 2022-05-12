@@ -7,7 +7,6 @@ myApp.controller(
             url: API_URL + "/api/product/get-detail/" + $routeParams.product_id,
         }).then((res) => {
             $scope.product = res.data;
-            $rootScope.title = $scope.product.product_name;
             $scope.product.picked = {};
             $scope.product.picked.quantity = 1;
             $scope.changeColor($scope.product, $scope.product.colors[0]);

@@ -33,53 +33,53 @@
                             slick-slider
                         >
                             <div
-                                class="w-2/4 px-1 flex-shrink-0"
-                                ng-class="{'skeleton h-[480px]': isLoading}"
+                                class="w-2/4 h-[480px] px-1 flex-shrink-0"
+                                ng-class="{'skeleton': isLoading}"
                             >
                                 <img
                                     ng-src="/image/product/{{ product.picked.color.product_image1 }}"
                                     alt="{{ p.product_name }}"
-                                    class="w-full"
+                                    class="w-full h-full object-cover"
                                 />
                             </div>
                             <div
-                                class="w-2/4 px-1 flex-shrink-0"
-                                ng-class="{'skeleton h-[480px]': isLoading}"
+                                class="w-2/4 h-[480px] px-1 flex-shrink-0"
+                                ng-class="{'skeleton': isLoading}"
                             >
                                 <img
                                     ng-src="/image/product/{{ product.picked.color.product_image2 }}"
                                     alt="{{ p.product_name }}"
-                                    class="w-full"
+                                    class="w-full h-full object-cover"
                                 />
                             </div>
                             <div
                                 ng-if="product.picked.color.product_image3"
-                                class="w-2/4 px-1 flex-shrink-0"
+                                class="w-2/4  h-[480px] px-1 flex-shrink-0"
                             >
                                 <img
                                     ng-src="/image/product/{{ product.picked.color.product_image3 }}"
                                     alt="{{ p.product_name }}"
-                                    class="w-full"
+                                    class="w-full h-full object-cover"
                                 />
                             </div>
                             <div
                                 ng-if="product.picked.color.product_image4"
-                                class="w-2/4 px-1 flex-shrink-0"
+                                class="w-2/4 h-[480px] px-1 flex-shrink-0"
                             >
                                 <img
                                     ng-src="/image/product/{{ product.picked.color.product_image4 }}"
                                     alt="{{ p.product_name }}"
-                                    class="w-full"
+                                    class="w-full h-full object-cover"
                                 />
                             </div>
                             <div
                                 ng-if="product.picked.color.product_image5"
-                                class="w-2/4 px-1 flex-shrink-0"
+                                class="w-2/4 h-[480px] px-1 flex-shrink-0"
                             >
                                 <img
                                     ng-src="/image/product/{{ product.picked.color.product_image5 }}"
                                     alt="{{ p.product_name }}"
-                                    class="w-full"
+                                    class="w-full h-full object-cover"
                                 />
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                             <img
                                 ng-src="/image/product/{{ product.picked.color.product_image1 }}"
                                 alt="{{ p.product_name }}"
-                                class="w-full"
+                                class="w-full h-full object-cover"
                             />
                         </div>
                         <div
@@ -114,7 +114,7 @@
                             <img
                                 ng-src="/image/product/{{ product.picked.color.product_image2 }}"
                                 alt="{{ p.product_name }}"
-                                class="w-full"
+                                class="w-full h-full object-cover"
                             />
                         </div>
                         <div
@@ -125,7 +125,7 @@
                             <img
                                 ng-src="/image/product/{{ product.picked.color.product_image3 }}"
                                 alt="{{ p.product_name }}"
-                                class="w-full"
+                                class="w-full h-full object-cover"
                             />
                         </div>
                         <div
@@ -136,7 +136,7 @@
                             <img
                                 ng-src="/image/product/{{ product.picked.color.product_image4 }}"
                                 alt="{{ p.product_name }}"
-                                class="w-full"
+                                class="w-full h-full object-cover"
                             />
                         </div>
                         <div
@@ -147,7 +147,7 @@
                             <img
                                 ng-src="/image/product/{{ product.picked.color.product_image5 }}"
                                 alt="{{ p.product_name }}"
-                                class="w-full"
+                                class="w-full h-full object-cover"
                             />
                         </div>
                     </div>
@@ -179,7 +179,7 @@
                             <!-- Discount -->
                             <span
                                 ng-if="product.product_discount != 0 && !isLoading"
-                                class="text-[#fa6338] text-2xl block font-bold mr-2"
+                                class="text-black text-2xl block font-bold mr-2"
                             >
                                 {{product.picked.color.product_price -
                                 product.picked.color.product_price *

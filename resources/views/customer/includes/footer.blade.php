@@ -8,7 +8,7 @@
                         <ul class="mt-2">
                             <li class="leading-6 capitalize">
                                 <a href="#" class="text-[#666] hover:text-black"
-                                    >Giới thiệu Sheyn</a
+                                    >Giới thiệu Adidas</a
                                 >
                             </li>
                             <li class="leading-6 capitalize">
@@ -58,7 +58,7 @@
                             </li>
                             <li class="leading-6 capitalize">
                                 <a href="#" class="text-[#666] hover:text-black"
-                                    >SHEYN VIP</a
+                                    >ADIDAS VIP</a
                                 >
                             </li>
                         </ul>
@@ -176,7 +176,7 @@
                     </div>
                     <div class="w-full px-[10px] text-xs">
                         <h6 class="text-[#222] font-bold mb-[16px]">
-                            ĐĂNG KÝ NHẬN TIN TỪ SHEYN
+                            ĐĂNG KÝ NHẬN TIN TỪ ADIDAS
                         </h6>
                         <form class="w-full h-[40px] relative">
                             <input
@@ -238,7 +238,7 @@
             </div>
         </div>
         <div class="mt-[20px] text-xs text-[#666]">
-            <span> ©2009-2022 SHEYN bảo lưu tất cả các quyền </span>
+            <span> ©2009-2022 ADIDAS bảo lưu tất cả các quyền </span>
             <ul class="-mx-[10px] mt-[8px] flex">
                 <li class="mb-[10px] px-[10px] border-r border-[#ccc]">
                     <a href="#" class="underline">Trung tâm bảo mật</a>

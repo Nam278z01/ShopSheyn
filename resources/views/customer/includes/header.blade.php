@@ -14,14 +14,14 @@
                             class="h-[54px]"
                             style="font-family: 'Beau Rivage', cursive"
                         >
-                            Sheyn
+                            Adidas
                         </div>
                     </a>
                 </div>
                 <div class="group">
                     <a
                         href="/"
-                        class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
+                        class="relative inline-block h-[54px] px-[15px] hover:text-black text-[13px] font-semibold text-[#8e8e8e] leading-[54px]"
                     >
                         <div
                             ng-class="{
@@ -36,7 +36,7 @@
                 <div class="group">
                     <a
                         href="#"
-                        class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
+                        class="relative inline-block h-[54px] px-[15px] hover:text-black text-[13px] font-semibold text-[#8e8e8e] leading-[54px]"
                     >
                         <div class="h-[54px]">Hàng Mới</div>
                     </a>
@@ -44,7 +44,7 @@
                 <div class="group">
                     <a
                         href="#"
-                        class="relative inline-block h-[54px] px-[15px] text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px] text-[#ed354b]"
+                        class="relative inline-block h-[54px] px-[15px] text-[13px] font-semibold text-[#8e8e8e] leading-[54px] hover:text-black"
                     >
                         <div class="h-[54px]">SALE</div>
                     </a>
@@ -52,7 +52,7 @@
                 <div class="group">
                     <a
                         href="#"
-                        class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
+                        class="relative inline-block h-[54px] px-[15px] hover:text-black text-[13px] font-semibold text-[#8e8e8e] leading-[54px]"
                     >
                         <div class="h-[54px]">Xu Hướng</div>
                     </a>
@@ -60,11 +60,11 @@
                 <div class="group pointer-events-none">
                     <a
                         href="/product"
-                        class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px] pointer-events-auto"
+                        class="relative inline-block h-[54px] px-[15px] hover:text-black text-[13px] font-semibold text-[#8e8e8e] leading-[54px] pointer-events-auto"
                     >
                         <div
                             ng-class="{
-                                'text-[#8e8e8e]': activeNavigation('/product')
+                                'text-black': activeNavigation('/product')
                             }"
                             class="h-[54px]"
                         >
@@ -86,13 +86,17 @@
                                         <a
                                             href="/product"
                                             ng-class="{
-                                                'text-[#fa6338]':
-                                                    changeCategory(
+                                                'text-black': changeCategory(
+                                                    undefined,
+                                                    true
+                                                ),
+                                                'text-[#8e8e8e] ':
+                                                    !changeCategory(
                                                         undefined,
                                                         true
                                                     )
                                             }"
-                                            class="text-black font-bold hover:text-[#fa6338]"
+                                            class="font-bold hover:text-black"
                                             >Tất cả</a
                                         >
                                     </li>
@@ -105,13 +109,17 @@
                                                 c.category_id
                                             }}"
                                             ng-class="{
-                                                'text-[#fa6338]':
-                                                    changeCategory(
+                                                'text-black': changeCategory(
+                                                    c.category_id,
+                                                    true
+                                                ),
+                                                'text-[#8e8e8e]':
+                                                    !changeCategory(
                                                         c.category_id,
                                                         true
                                                     )
                                             }"
-                                            class="text-black font-bold hover:text-[#fa6338]"
+                                            class="hover:text-black font-bold"
                                             >@{{ c.category_name }}</a
                                         >
                                     </li>
@@ -125,39 +133,51 @@
                                     <li class="leading-7 capitalize">
                                         <a
                                             ng-class="{
-                                                'text-[#fa6338]': changeSort(
+                                                'text-black': changeSort(
+                                                    true,
+                                                    1
+                                                ),
+                                                'text-[#8e8e8e]': !changeSort(
                                                     true,
                                                     1
                                                 )
                                             }"
                                             href="/product?sort=1"
-                                            class="text-black font-bold hover:text-[#fa6338]"
+                                            class="hover:text-black font-bold"
                                             >Hàng mới nhất</a
                                         >
                                     </li>
                                     <li class="leading-7 capitalize">
                                         <a
                                             ng-class="{
-                                                'text-[#fa6338]': changeSort(
+                                                'text-black': changeSort(
+                                                    true,
+                                                    2
+                                                ),
+                                                'text-[#8e8e8e]': !changeSort(
                                                     true,
                                                     2
                                                 )
                                             }"
                                             href="/product?sort=2"
-                                            class="text-black font-bold hover:text-[#fa6338]"
+                                            class="hover:text-black font-bold"
                                             >Bán chạy nhất</a
                                         >
                                     </li>
                                     <li class="leading-7 capitalize">
                                         <a
                                             ng-class="{
-                                                'text-[#fa6338]': changeSort(
+                                                'text-black': changeSort(
+                                                    true,
+                                                    3
+                                                ),
+                                                'text-[#8e8e8e]': !changeSort(
                                                     true,
                                                     3
                                                 )
                                             }"
                                             href="/product?sort=3"
-                                            class="text-black font-bold hover:text-[#fa6338]"
+                                            class="hover:text-black font-bold"
                                             >Giảm giá nhiều nhất</a
                                         >
                                     </li>
@@ -172,7 +192,7 @@
                 <div class="group">
                     <a
                         href="#"
-                        class="relative inline-block h-[54px] px-[15px] text-black text-[13px] font-semibold hover:text-[#8e8e8e] leading-[54px]"
+                        class="relative inline-block h-[54px] px-[15px] hover:text-black text-[13px] font-semibold text-[#8e8e8e] leading-[54px]"
                     >
                         <div class="h-[54px]">Giới Thiệu</div>
                     </a>
@@ -258,12 +278,12 @@
                         ></i>
                         <span
                             ng-if="cart.length > 0"
-                            class="text-[#fa6338] text-sm font-bold ml-1 absolute left-1/2 top-[10px] bg-[rgba(255,255,255,0.9)] min-w-[15px] min-h-[15px] text-center block rounded-full"
+                            class="text-black text-sm font-bold ml-1 absolute left-1/2 top-[10px] bg-[rgba(255,255,255,0.9)] min-w-[15px] min-h-[15px] text-center block rounded-full"
                             >@{{ cart.length }}</span
                         >
                     </a>
                     <div
-                        ng-class="{'invisible' : !isShowCart}"
+                        ng-class="{ invisible: !isShowCart }"
                         class="absolute top-[54px] right-0 w-[400px] bg-white shadow-[0_6px_6px_0_#00000014] group-hover:visible"
                     >
                         <div
@@ -284,13 +304,13 @@
                                 ng-repeat="product in cart track by product.cart_id"
                                 class="flex my-[10px] mx-[20px]"
                             >
-                                <div class="w-[90px] relative group-scope">
+                                <div class="w-[90px] h-[118px] relative group-scope">
                                     <img
                                         ng-src="/image/product/@{{
                                             product.picked.color.product_image1
                                         }}"
                                         alt="@{{ product.product_name }}"
-                                        class="w-full"
+                                        class="w-full h-full object-cover"
                                     />
                                     <img
                                         ng-src="/image/product/@{{
@@ -304,7 +324,7 @@
                                                     .product_image5
                                         }}"
                                         alt="@{{ product.product_name }}"
-                                        class="absolute top-0 left-0 w-full opacity-0 group-scope-hover:opacity-100 transition-all duration-500"
+                                        class="absolute top-0 left-0 w-full h-full object-cover opacity-0 group-scope-hover:opacity-100 transition-all duration-500"
                                     />
                                     <div
                                         ng-click="removeProductFromCart(product.cart_id)"
@@ -324,7 +344,12 @@
                                     </div>
                                 </div>
                                 <div class="ml-[10px] flex-1">
-                                    <a href="/details?product_id=@{{ product.product_id }}" class="text-xs mb-[5px] hover:underline">
+                                    <a
+                                        href="/details?product_id=@{{
+                                            product.product_id
+                                        }}"
+                                        class="text-xs mb-[5px] hover:underline"
+                                    >
                                         <span>@{{ product.product_name }}</span>
                                     </a>
                                     <div class="flex py-1 -mx-[10px]">
@@ -394,7 +419,7 @@
                                             class="flex flex-col text-sm"
                                         >
                                             <span
-                                                class="text-[#fa6338] font-bold text-[13px]"
+                                                class="text-black font-bold text-[13px]"
                                             >
                                                 @{{
                                                     (product.picked.color
@@ -427,7 +452,7 @@
                             <p class="flex justify-end items-center pb-2">
                                 <span> Tổng cộng: </span>
                                 <span
-                                    class="text-[#fa6338] text-[18px] font-bold ml-1"
+                                    class="text-black text-[18px] font-bold ml-1"
                                     >@{{ total_price | number: 0 }}₫</span
                                 >
                             </p>

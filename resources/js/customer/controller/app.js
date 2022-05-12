@@ -97,7 +97,6 @@ myApp.run(function (
     customerService,
     $timeout
 ) {
-    $rootScope.title = "Shop Sheyn";
 
     if (customerService.checkIfLoggedIn()) {
         $http({

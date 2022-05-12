@@ -80,10 +80,10 @@
                     >
                         <label
                             for="payment-cod"
-                            class="flex items-center px-[20px] py-[15px] border border-[#2563eb] rounded-2xl"
+                            class="flex items-center px-[20px] py-[15px] border border-black rounded-2xl"
                         >
                             <div
-                                class="w-[20px] h-[20px] rounded-full border border-[#2563eb] relative"
+                                class="w-[20px] h-[20px] rounded-full border border-black relative"
                             >
                                 <input
                                     type="radio"
@@ -93,7 +93,7 @@
                                     checked
                                 />
                                 <span
-                                    class="w-[12px] h-[12px] rounded-full bg-[#2563eb] absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 hidden peer-checked:block"
+                                    class="w-[12px] h-[12px] rounded-full bg-black absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 hidden peer-checked:block"
                                 ></span>
                             </div>
                             <div class="mx-[15px]">
@@ -149,13 +149,13 @@
                     ng-repeat="product in cart track by product.cart_id"
                     class="flex mb-3"
                 >
-                    <div class="w-[126px] relative group">
+                    <div class="w-[126px] h-[168px] relative group">
                         <img
                             ng-src="/image/product/{{
                             product.picked.color.product_image1
                         }}"
                             alt="{{ product.product_name }}"
-                            class="w-full"
+                            class="w-full h-full object-cover"
                         />
                         <img
                             ng-src="/image/product/{{
@@ -240,7 +240,7 @@
                                 ng-if="product.product_discount != 0"
                                 class="flex flex-col text-sm"
                             >
-                                <span class="text-[#fa6338] font-bold">
+                                <span class="text-black font-bold">
                                     {{ (product.picked.color .product_price -
                                     (product.picked.color .product_price *
                                     product.product_discount) / 100) *
@@ -263,7 +263,7 @@
                         class="h-full w-full border border-[rgb(0 0 0 / 10%)] pl-3 pr-14 focus:outline-none focus:border-black text-sm"
                     />
                     <button
-                        class="absolute top-0 right-0 h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[rgba(34,34,34,.8)]"
+                        class="absolute top-0 right-0 h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-black hover:bg-[rgba(34,34,34,.8)]"
                     >
                         Áp dụng
                     </button>
@@ -289,7 +289,7 @@
                 <div class="my-[20px]">
                     <div class="flex justify-between text-sm mb-[15px]">
                         <p>Tổng cộng</p>
-                        <p class="text-2xl font-bold text-[#fa6338]">
+                        <p class="text-2xl font-bold text-black">
                             {{ total_price | number: 0 }}₫
                         </p>
                     </div>

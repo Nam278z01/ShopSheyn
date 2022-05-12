@@ -40171,8 +40171,6 @@ myApp.controller("LoginController", function ($scope, $rootScope, API_URL, custo
   };
 });
 myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL, customerService, $timeout) {
-  $rootScope.title = "Shop Sheyn";
-
   if (customerService.checkIfLoggedIn()) {
     $http({
       method: "GET",
@@ -40423,8 +40421,6 @@ myApp.config(function ($routeProvider, $locationProvider) {
   }).when("/details", {
     templateUrl: "html/details.html",
     controller: "ProductDetailsController"
-  }).when("/checkout", {
-    templateUrl: "html/checkout.html"
   }).when("/orders", {
     templateUrl: "html/orders.html",
     controller: "OrderController"
@@ -40640,7 +40636,6 @@ myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http
     url: API_URL + "/api/product/get-detail/" + $routeParams.product_id
   }).then(function (res) {
     $scope.product = res.data;
-    $rootScope.title = $scope.product.product_name;
     $scope.product.picked = {};
     $scope.product.picked.quantity = 1;
     $scope.changeColor($scope.product, $scope.product.colors[0]);
