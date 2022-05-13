@@ -83586,8 +83586,12 @@ myApp.controller("LoginManagementController", function ($scope, $rootScope, $htt
       }
     }, function (err) {});
   };
+
+  if (customerService.checkIfLoggedIn()) {
+    document.location.href = '/admin';
+  }
 });
-myApp.run(function ($rootScope, $http, API_URL, $mdToast, customerService, $window) {
+myApp.run(function ($rootScope, $http, API_URL, $mdToast, customerService, $window, $location) {
   if (customerService.checkIfLoggedIn()) {
     $http({
       method: "GET",
@@ -83600,6 +83604,12 @@ myApp.run(function ($rootScope, $http, API_URL, $mdToast, customerService, $wind
       $rootScope.is_login = true;
       $rootScope.admin = res.data;
     });
+  } else {
+    var restrictedPage = $.inArray(document.location.pathname, ['/admin', '/admin/order', '/admin/product']) != -1;
+
+    if (restrictedPage) {
+      document.location.href = '/admin/login';
+    }
   }
 
   $rootScope.logout = function () {

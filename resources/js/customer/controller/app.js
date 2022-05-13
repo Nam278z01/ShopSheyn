@@ -110,8 +110,23 @@ myApp.run(function (
         }).then((res) => {
             $rootScope.is_login = true;
             $rootScope.customer = res.data;
+            console.log($rootScope.customer)
+
         });
+    } else {
+        var restrictedPage = $.inArray($location.path(), ['/orders', '/orderdetails']) != -1;
+        if (restrictedPage) {
+            $location.path('/').search({})
+        }
+        $rootScope.$on('$routeChangeStart', function (event, next, current) {
+            var restrictedPage = $.inArray($location.path(), ['/orders', '/orderdetails']) != -1;
+            if (restrictedPage) {
+                event.preventDefault()
+                $location.path('/').search({})
+            }
+        })
     }
+
     $rootScope.logout = function () {
         $http({
             method: "DELETE",

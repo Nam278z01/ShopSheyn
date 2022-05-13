@@ -19,5 +19,7 @@ class Customer extends Authenticatable
         'customer_password',
         'remember_token',
     ];
-
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 }

@@ -40184,6 +40184,22 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
     }).then(function (res) {
       $rootScope.is_login = true;
       $rootScope.customer = res.data;
+      console.log($rootScope.customer);
+    });
+  } else {
+    var restrictedPage = $.inArray($location.path(), ['/orders', '/orderdetails']) != -1;
+
+    if (restrictedPage) {
+      $location.path('/').search({});
+    }
+
+    $rootScope.$on('$routeChangeStart', function (event, next, current) {
+      var restrictedPage = $.inArray($location.path(), ['/orders', '/orderdetails']) != -1;
+
+      if (restrictedPage) {
+        event.preventDefault();
+        $location.path('/').search({});
+      }
     });
   }
 
@@ -40459,9 +40475,12 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
     });
   }
 
-  $scope.name = $rootScope.customer.customer_name;
-  $scope.address = $rootScope.customer.customer_address;
-  $scope.phone = $rootScope.customer.customer_phone;
+  if ($rootScope.customer) {
+    $scope.name = $rootScope.customer.customer_name;
+    $scope.address = $rootScope.customer.customer_address;
+    $scope.phone = $rootScope.customer.customer_phone;
+  }
+
   $scope.isPaying = false;
 
   $scope.checkout = function () {

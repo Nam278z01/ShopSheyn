@@ -22,20 +22,21 @@ USE `shop`;
 -- Dumping structure for table shop.admin
 CREATE TABLE IF NOT EXISTS `admin` (
   `admin_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã admin',
-  `admin_username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Tên tài khoản',
+  `admin_accountname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Tên tài khoản',
   `admin_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Mật khẩu',
   `admin_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên admin',
   `admin_role` tinyint DEFAULT '1' COMMENT 'Vai trò',
   `admin_state` tinyint NOT NULL DEFAULT '1' COMMENT 'Trạng thái',
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`admin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.admin: ~0 rows (approximately)
-INSERT INTO `admin` (`admin_id`, `admin_username`, `admin_password`, `admin_name`, `admin_role`, `admin_state`, `updated_at`, `created_at`, `remember_token`) VALUES
-	(1, 'nam278z01@gmail.com', '1234567890', 'Nguyễn Nam', 1, 1, NULL, NULL, '');
+-- Dumping data for table shop.admin: ~1 rows (approximately)
+INSERT INTO `admin` (`admin_id`, `admin_accountname`, `admin_password`, `admin_name`, `admin_role`, `admin_state`, `image`, `updated_at`, `created_at`, `remember_token`) VALUES
+	(1, 'nam278z01', '1234567890', 'Nguyễn Nam', 1, 1, 'avatar04.png', NULL, NULL, '');
 
 -- Dumping structure for table shop.category
 CREATE TABLE IF NOT EXISTS `category` (
@@ -72,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `color` (
   PRIMARY KEY (`color_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `color_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.color: ~57 rows (approximately)
 INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`, `product_image2`, `product_image3`, `product_image4`, `product_image5`, `product_id`) VALUES
@@ -83,7 +84,6 @@ INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`
 	(5, 'Bụi hồng', 212000, '1649313585f9122376541fc5bebb42d02f751dfcb2_thumbnail_900x.webp', '1649313587e2857ae575b1bbbaa708304a33f82d86_thumbnail_900x.webp', '1649313589aecf462147b15f1c06fa8b14dcb99996_thumbnail_900x.webp', '1649313591cd494a031e025b164c489798fb1bffc7_thumbnail_900x.webp', '16493135971e3fa57e0f6f53e27fb17ff21b759d12_thumbnail_900x.webp', 4),
 	(6, 'Trắng', 216000, '1648450658b948882cf65aa3f0086e7989fbc9e7fd_thumbnail_900x.webp', '1648450661235cabc1104f54b32afedf8094bbe7d7_thumbnail_900x.webp', '164845066326a16b50f07a9159996868ebb72c22ca_thumbnail_900x.webp', '164845066520964b5f0abce253b6d569119824f335_thumbnail_900x.webp', '16484506694e16bc04657ef28707d8b29de8dcc49e_thumbnail_900x.webp', 4),
 	(7, 'Xanh lá', 211000, '16493136081a5ef0c748eb63af52cc624fc388c6a7_thumbnail_900x.webp', '16493136413af016974d7011e50566ac38492de680_thumbnail_900x.webp', '164931368054500f5c377f92b902da5348e1f68a0a_thumbnail_900x.webp', '164931371618a2dbbd32883ec90db99e72f30d58e8_thumbnail_900x.webp', '164931376462b7c2bad488c03533d9540a63bb9aa9_thumbnail_900x.webp', 4),
-	(8, 'Xám', 334000, '1635996842069a094265a3ffff0450594b2430ffaa_thumbnail_900x.webp', '16359968461b4c6bd60781a9a7b4cdaf2f21061fd2_thumbnail_900x.webp', '1635996850b5de0fabc8b9fe6110e0d62b2b039474_thumbnail_900x.webp', '1635996856d99ebf3909c44e3b2ea2f00370b63692_thumbnail_900x.webp', NULL, 5),
 	(9, 'Trắng', 371000, '16464650625b0643019be992b87ea960019513c4eb_thumbnail_900x.webp', '1646465064465e152e1327d339c980a1410752448b_thumbnail_900x.webp', '1646465065a5f896b17836aacfe042103462d74910_thumbnail_900x.webp', NULL, NULL, 6),
 	(10, 'Cam nhạt', 252000, '1648815101a614d76d128ceff55e355e80a56771a8_thumbnail_900x.webp', '1648815103910afbfb8917a0e0cc785f5fb82a23d4_thumbnail_900x.webp', '1648815104739f6a49e3619371541776bedb195b52_thumbnail_900x.webp', '1648815105e3f6826346f61b8d087bf8abb1788ce0_thumbnail_900x.webp', NULL, 8),
 	(11, 'Đen', 223000, '16500932437393e3a83194a3792af9be96b430348a_thumbnail_900x.webp', '1650093245ae4ad8d68ae23d2295ce22fea24a5540_thumbnail_900x.webp', '1650093247fd6ea84b12d1b73cd2c913560d37726d_thumbnail_900x.webp', '1650093249335ee2f2971667060dda3bc4e2edafaa_thumbnail_900x.webp', '1650093251f7db9a8184d555cba5780e5412ac19bf_thumbnail_900x.webp', 9),
@@ -114,9 +114,6 @@ INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`
 	(36, 'Be', 138000, '1648522026d49d66304bde090bada6f82b14207859_thumbnail_900x.webp', '1645669357db3a9507f5716327ac1340e8aa78bc2a_thumbnail_900x.webp', '16485220285be2c9893f8f943e566a4ebc1ac78086_thumbnail_900x.webp', NULL, NULL, 33),
 	(37, 'Xanh nhạt', 138000, '164852204133c01467872270aabfb8719edad98588_thumbnail_900x.webp', '164852200467ad2105eed96ddcd762b82fc2a55f4f_thumbnail_900x.webp', '16485220438bf09355c66242680c43f32de3d257af_thumbnail_900x.webp', NULL, NULL, 33),
 	(38, 'Đen', 137000, '164515438993317affb164c8fdfbec9d1118628afa_thumbnail_900x.webp', '16450921340da6f61e3d8110d550ab54a94adbd955_thumbnail_900x.webp', '1645154392181535cb4f6451df27135fa138920819_thumbnail_900x.webp', NULL, NULL, 33),
-	(39, 'Đen', 74000, '1639722804f5a58357021b5e3ea3cccf23abb1ddda_thumbnail_900x.webp', '16394462649b2e1ad754d92a862d0e47301a182467_thumbnail_900x.webp', '1639446267f95cbc794843401b2e38d2ede75fb1ff_thumbnail_900x.webp', '1639446269c93d91e624754fcbc7fef364f305e108_thumbnail_900x.webp', '163972280606a856647d3abaf9af933ec4dad4516d_thumbnail_900x.webp', 34),
-	(40, 'Trắng', 132000, '163972281364523299626bd89672bb8b747292ac53_thumbnail_900x.webp', '16394462760753834240383d361bcfad56a0da7d30_thumbnail_900x.webp', '163944628171a768cf7cfb14d277b1827d27adc113_thumbnail_900x.webp', '16394462848cf290353bb1f09d9d71293d2ff6cb2c_thumbnail_900x.webp', '16397228151cbac3ef43b7be10242ad104c6f35cbe_thumbnail_900x.webp', 34),
-	(41, 'Xanh quân đội', 136000, '16417868388f2ce9e60531f2497c13be30f9f89585_thumbnail_900x.webp', '164178685179aad6860923811a282ce119f22bae1e_thumbnail_900x.webp', '1641786861bde5d2936dbada6ea6887e0ba2b91e1f_thumbnail_900x.webp', '16417868811249ca617dd7d39d4ae644cd06686ee6_thumbnail_900x.webp', NULL, 34),
 	(42, 'Đen', 129000, '16467345859f5ab3e13ee8ae4b372e63052d642b8c_thumbnail_900x.webp', '1646734587d06c1e102cc1aa2bc204209e46491e44_thumbnail_900x.webp', '1646734589e5674189e88547e50643bf39ce660e78_thumbnail_900x.webp', '1646734590675a987be4b358a684faed76ada049a8_thumbnail_900x.webp', NULL, 35),
 	(43, 'Đỏ sâu', 129000, '16467347576cb5068b5c7afe6980669ea9bebafbae_thumbnail_900x.webp', '1646734759ff0b93c6eab3588f9498cb439174afd4_thumbnail_900x.webp', '164673476183b9cad054afe44ede7b912205cc9c5e_thumbnail_900x.webp', '1646734763ca62ae1841396047d091e3ca3436910a_thumbnail_900x.webp', NULL, 35),
 	(44, 'Xám đen', 129000, '1646734633c37f04357761f501eaa55b64a5965d16_thumbnail_900x.webp', '16467346350924470604347766a235beb30aecb8dd_thumbnail_900x.webp', '164673463763ce60b7f032bd078cbdf4619bb29585_thumbnail_900x.webp', '16467346407be74415816f2cd6e75c613e8742fa34_thumbnail_900x.webp', NULL, 35),
@@ -128,12 +125,16 @@ INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`
 	(50, 'Đen', 150000, '164670543625c6b79029d2e8ed0a09908e1b1841a3_thumbnail_900x.webp', '163464202207bdbc9c8d85c9028d95899b3c5f1e64_thumbnail_900x.webp', '164670543804dba17cd2592b6c93a3bbdf9febf96b_thumbnail_900x.webp', '16353053841578f2ce53fea0590a635d8f452bb96b_thumbnail_900x.webp', '16353049002f10fe69f7673ee5c5324f47fcb3332e_thumbnail_900x.webp', 40),
 	(51, 'Xanh biển', 201000, '16502464128b69050d080c8cff002915dd21718ac0_thumbnail_900x.webp', '16502464133a8c27a167103f088c5d8ca84587a335_thumbnail_900x.webp', '16502464150dd0c47afe04e0ec81b625e25cbb504e_thumbnail_900x.webp', '1650246417207a39d4d22bbc53bb0ed35a635b8edd_thumbnail_900x.webp', '1650246418e68980516f9f336489bd247e390bbdcf_thumbnail_900x.webp', 41),
 	(52, 'Trắng', 215000, '1649308829343dedac17eda39992b6d25e36cbc496_thumbnail_900x.webp', '1649308825555b86f4a2a4685ad1acb6d1eee062f5_thumbnail_900x.webp', '1649308827b7b33f3bf54e64db937d1445949b2091_thumbnail_900x.webp', '16493088314ad1b0d6cfa36691ebad6772dcecd814_thumbnail_900x.webp', '1649308823de44f16ad4ea952f9a209b130ac31b52_thumbnail_900x.webp', 42),
-	(53, 'Đen', 405000, '62727da5d37951635328428e5b8778498fd991150eeb3e570dddd0a_thumbnail_900x.webp', '62727da5d4f8a1635328439ce48aa47a741a7013297a683e130c05d_thumbnail_900x.webp', '62727da5d5fdc1635328476f1247ced91f61062b6bbbf0eff7ca608_thumbnail_900x.webp', '62727da5d64cd16353284501aef2fd52b47b6112b8efbef09de461c_thumbnail_900x.webp', '62727da5d696e16353284548081c79c4afe466cc0979e2625cf04b5_thumbnail_900x.webp', 43),
-	(54, 'Nâu', 397000, '62727da5d6d861650519559b838ec39ef10c7f238660e60ac36e7b3_thumbnail_900x.webp', '62727da5d73bd1650519562ac13a272c8fdccfe8c2058db166d767a_thumbnail_900x.webp', '62727da5d772c1650519567e33a68056711184c86841e5d949fe7cc_thumbnail_900x.webp', '62727da5d7eab16505195701eb579ffe7bf6bca7d09be8f262a533a_thumbnail_900x.webp', '62727da5d9576165051956503101d28f212069074613ed481b6a8d7_thumbnail_900x.webp', 43),
 	(55, 'Xám', 497000, '627280efdce2c1636527285cbf8c9de7dedc59b241bb01a98a779a3_thumbnail_900x.webp', '627280efdd48f1636527287ac7d25371c8bdbaf2f2b4f199eb5e416_thumbnail_900x.webp', '627280efdd91b1636527291e04950049717d12d1f61a71359736c69_thumbnail_900x.webp', '627280efdde3e16365272819250e48e87dca996131fbfc48650850c_thumbnail_900x.webp', '627280efdeed41636607288630425494be09e3a9b3c3ff34040a01d_thumbnail_900x.webp', 44),
 	(56, 'Be', 343000, '62728a5d07be51636527069c09f9b943991e827b05546c9dd6b3108_thumbnail_900x.webp', '62728a5d08b591636527071b02ded15934bbe7481a7d94b88bb259e_thumbnail_900x.webp', '62728a5d0903c16365270739e60e50130bcbe8fece665124070db27_thumbnail_900x.webp', '62728a5d0964716365270833b846794335f2b571e7525921b056a0c_thumbnail_900x.webp', '62728a5d09b81163652708648c2f38991d37b7216c769c3ba69ddb1_thumbnail_900x.webp', 45),
 	(57, 'Trắng Đen', 420000, '62728b238f2771648019467ff7329436b38a6287f1fd1e17c269efb_thumbnail_900x.webp', '62728b238f8901648019455ad048550e08341929a51f3043046dc75_thumbnail_900x.webp', '62728b238fde01648019462a092205a2c9291515def578f3f7f4bc6_thumbnail_900x.webp', '62728b239016016480194513f322f1aa8386f15a6a5223b99838435_thumbnail_900x.webp', '62728b239049a16480194593117ce8cfcd57a1ce0f1979eb6a96cc3_thumbnail_900x.webp', 46),
-	(79, 'Đỏ cam', 373000, '62729162152f416508512886f609cbc2323b538755baac77a92a26b_thumbnail_900x.webp', '627291621607016508512967ab4ccdc375acad11eb23891ea9a9498_thumbnail_900x.webp', '62729162169e516508513201b2d0cad84d2696fb6f71bf9a9af5c6a_thumbnail_900x.webp', '6272916217400165085129157b6a88dc63906d312886303faedbdd4_thumbnail_900x.webp', '627291621791b165085129494e92323e4eadcdf8bc33795ef28323d_thumbnail_900x.webp', 47);
+	(79, 'Đỏ cam', 373000, '62729162152f416508512886f609cbc2323b538755baac77a92a26b_thumbnail_900x.webp', '627291621607016508512967ab4ccdc375acad11eb23891ea9a9498_thumbnail_900x.webp', '62729162169e516508513201b2d0cad84d2696fb6f71bf9a9af5c6a_thumbnail_900x.webp', '6272916217400165085129157b6a88dc63906d312886303faedbdd4_thumbnail_900x.webp', '627291621791b165085129494e92323e4eadcdf8bc33795ef28323d_thumbnail_900x.webp', 47),
+	(85, 'Xám', 334000, '1635996842069a094265a3ffff0450594b2430ffaa_thumbnail_900x.webp', '16359968461b4c6bd60781a9a7b4cdaf2f21061fd2_thumbnail_900x.webp', '1635996850b5de0fabc8b9fe6110e0d62b2b039474_thumbnail_900x.webp', '1635996856d99ebf3909c44e3b2ea2f00370b63692_thumbnail_900x.webp', NULL, 5),
+	(86, 'Đen', 405000, '62727da5d37951635328428e5b8778498fd991150eeb3e570dddd0a_thumbnail_900x.webp', '62727da5d4f8a1635328439ce48aa47a741a7013297a683e130c05d_thumbnail_900x.webp', '62727da5d5fdc1635328476f1247ced91f61062b6bbbf0eff7ca608_thumbnail_900x.webp', '62727da5d64cd16353284501aef2fd52b47b6112b8efbef09de461c_thumbnail_900x.webp', '62727da5d696e16353284548081c79c4afe466cc0979e2625cf04b5_thumbnail_900x.webp', 43),
+	(87, 'Nâu', 397000, '62727da5d6d861650519559b838ec39ef10c7f238660e60ac36e7b3_thumbnail_900x.webp', '62727da5d73bd1650519562ac13a272c8fdccfe8c2058db166d767a_thumbnail_900x.webp', '62727da5d772c1650519567e33a68056711184c86841e5d949fe7cc_thumbnail_900x.webp', '62727da5d7eab16505195701eb579ffe7bf6bca7d09be8f262a533a_thumbnail_900x.webp', '62727da5d9576165051956503101d28f212069074613ed481b6a8d7_thumbnail_900x.webp', 43),
+	(97, 'Đen', 74000, '1639722804f5a58357021b5e3ea3cccf23abb1ddda_thumbnail_900x.webp', '16394462649b2e1ad754d92a862d0e47301a182467_thumbnail_900x.webp', '1639446267f95cbc794843401b2e38d2ede75fb1ff_thumbnail_900x.webp', '1639446269c93d91e624754fcbc7fef364f305e108_thumbnail_900x.webp', '163972280606a856647d3abaf9af933ec4dad4516d_thumbnail_900x.webp', 34),
+	(98, 'Trắng', 132000, '163972281364523299626bd89672bb8b747292ac53_thumbnail_900x.webp', '16394462760753834240383d361bcfad56a0da7d30_thumbnail_900x.webp', '163944628171a768cf7cfb14d277b1827d27adc113_thumbnail_900x.webp', '16394462848cf290353bb1f09d9d71293d2ff6cb2c_thumbnail_900x.webp', '16397228151cbac3ef43b7be10242ad104c6f35cbe_thumbnail_900x.webp', 34),
+	(99, 'Xanh quân đội', 136000, '16417868388f2ce9e60531f2497c13be30f9f89585_thumbnail_900x.webp', '164178685179aad6860923811a282ce119f22bae1e_thumbnail_900x.webp', '1641786861bde5d2936dbada6ea6887e0ba2b91e1f_thumbnail_900x.webp', '16417868811249ca617dd7d39d4ae644cd06686ee6_thumbnail_900x.webp', NULL, 34);
 
 -- Dumping structure for table shop.customer
 CREATE TABLE IF NOT EXISTS `customer` (
@@ -173,9 +174,9 @@ CREATE TABLE IF NOT EXISTS `orderdetails` (
   KEY `size_id` (`size_id`),
   CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderdetails: ~11 rows (approximately)
+-- Dumping data for table shop.orderdetails: ~17 rows (approximately)
 INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quantity`, `price`, `size_id`, `order_id`) VALUES
 	(1, 0, 1, 135000, 112, 1),
 	(2, 0, 2, 420000, 193, 3),
@@ -193,7 +194,8 @@ INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quant
 	(22, 20, 1, 223000, 35, 36),
 	(23, 0, 2, 210000, 87, 36),
 	(24, 0, 2, 287000, 93, 36),
-	(25, 0, 2, 343000, 192, 36);
+	(25, 0, 2, 343000, 192, 36),
+	(26, 0, 2, 420000, 193, 37);
 
 -- Dumping structure for table shop.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -209,9 +211,9 @@ CREATE TABLE IF NOT EXISTS `orders` (
   PRIMARY KEY (`order_id`),
   KEY `customer_id` (`customer_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orders: ~6 rows (approximately)
+-- Dumping data for table shop.orders: ~7 rows (approximately)
 INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_address`, `customer_phone`, `note`, `delivery_cost`, `total`, `customer_id`) VALUES
 	(1, '2022-05-09 20:36:00', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 135000, 1),
 	(3, '2022-05-09 23:06:14', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1026500, 1),
@@ -220,7 +222,8 @@ INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_addre
 	(11, '2022-05-10 16:35:58', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 738000, 1),
 	(12, '2022-05-10 16:37:05', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1557600, 1),
 	(13, '2022-05-10 16:50:56', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 698000, 1),
-	(36, '2022-05-10 22:33:23', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1858400, 1);
+	(36, '2022-05-10 22:33:23', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1858400, 1),
+	(37, '2022-05-11 16:51:12', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 840000, 1);
 
 -- Dumping structure for table shop.orderstate
 CREATE TABLE IF NOT EXISTS `orderstate` (
@@ -231,9 +234,9 @@ CREATE TABLE IF NOT EXISTS `orderstate` (
   PRIMARY KEY (`orderstate_id`),
   KEY `order_id` (`order_id`),
   CONSTRAINT `orderstate_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderstate: ~7 rows (approximately)
+-- Dumping data for table shop.orderstate: ~8 rows (approximately)
 INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`, `order_id`) VALUES
 	(1, 0, '2022-05-09 20:37:33', 1),
 	(2, 1, '2022-05-09 20:49:49', 1),
@@ -243,7 +246,8 @@ INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`,
 	(12, 0, '2022-05-10 16:35:58', 11),
 	(13, 0, '2022-05-10 16:37:05', 12),
 	(14, 0, '2022-05-10 16:50:56', 13),
-	(37, 0, '2022-05-10 22:33:23', 36);
+	(37, 0, '2022-05-10 22:33:23', 36),
+	(38, 0, '2022-05-11 16:51:12', 37);
 
 -- Dumping structure for table shop.personal_access_tokens
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
@@ -259,12 +263,12 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.personal_access_tokens: ~2 rows (approximately)
+-- Dumping data for table shop.personal_access_tokens: ~0 rows (approximately)
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `created_at`, `updated_at`) VALUES
-	(27, 'App\\Models\\Customer', 2, 'authTokenCustomer', 'c3e25f4879bc67565ca9dd16269aeced7be2bb974bf0420f28e9d1a5db7cdcec', '["*"]', '2022-05-09 08:30:03', '2022-05-09 08:10:32', '2022-05-09 08:30:03'),
-	(33, 'App\\Models\\Customer', 1, 'authTokenCustomer', '6e02ed4950b40cc384391d42fd66b542be5ffc9ac18323aafaf2f2ca5ba8de9f', '["*"]', '2022-05-10 08:33:29', '2022-05-10 03:56:12', '2022-05-10 08:33:29');
+	(47, 'App\\Models\\Customer', 1, 'authTokenCustomer', '62e9650c05deaec308927a8fc86bbfe8c1336b638029d9300e04eaaf7859e548', '["customer"]', '2022-05-11 20:56:16', '2022-05-11 20:05:19', '2022-05-11 20:56:16'),
+	(48, 'App\\Models\\Admin', 1, 'authTokenAdmin', '443905e8e08a3caaa9f7398c2477dd31314c2332b29336148b51a1c5f31b9f35', '["admin"]', '2022-05-11 21:39:45', '2022-05-11 21:03:58', '2022-05-11 21:39:45');
 
 -- Dumping structure for table shop.product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -284,7 +288,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`admin_updated_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `product_ibfk_2` FOREIGN KEY (`admin_created_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `product_ibfk_3` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.product: ~45 rows (approximately)
 INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `product_discount`, `subcategory_id`, `created_time`, `updated_time`, `admin_updated_id`, `admin_created_id`) VALUES
@@ -292,7 +296,7 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `pro
 	(2, 'Áo sơ mi nữ Nút phía trước Sọc Giải trí', NULL, 0, 7, '2022-04-17 00:00:00', NULL, NULL, 1),
 	(3, 'Áo sơ mi màu trơn Giải trí', NULL, 0, 7, '2022-04-15 00:00:00', NULL, NULL, 1),
 	(4, 'Áo sơ mi nữ Thắt lưng Viên lá sen Trọn gói màu trơn Thanh lịch', NULL, 0, 7, '2022-04-22 00:00:00', NULL, NULL, 1),
-	(5, 'Áo sơ mi nữ Nút phía trước màu trơn Giải trí', NULL, 0, 7, '2022-04-23 00:00:00', NULL, NULL, 1),
+	(5, 'Áo sơ mi nữ Nút phía trước màu trơn Giải trí', NULL, 0, 7, '2022-04-23 00:00:00', '2022-05-12 04:11:34', 1, 1),
 	(6, 'Áo sơ mi nữ Nút màu trơn Giải trí', NULL, 0, 7, '2022-04-21 00:00:00', NULL, NULL, 1),
 	(8, 'Áo sơ mi nữ Nút phía trước Rau quả Tất cả trên in Giải trí', NULL, 0, 7, '2022-04-20 00:00:00', NULL, NULL, 1),
 	(9, 'Áo sơ mi nữ Nút Ngọc trai màu trơn Thanh lịch', NULL, 20, 7, '2022-04-22 00:00:00', NULL, NULL, 1),
@@ -318,8 +322,8 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `pro
 	(30, 'Áo sơ mi nữ Túi Nút phía trước màu trơn Giải trí', NULL, 0, 7, '2022-04-20 09:00:00', NULL, NULL, 1),
 	(31, 'Áo sơ mi nữ Dây kéo Nếp gấp Phần Ngực màu trơn Giải trí', NULL, 0, 7, '2022-04-20 08:00:00', NULL, NULL, 1),
 	(32, 'Áo sơ mi nữ Tương phản ren Cao thấp Sò điệp Nút phía trước màu trơn Thanh lịch', NULL, 0, 7, '2022-04-20 07:00:00', NULL, NULL, 1),
-	(33, 'Áo thun nữ Con số Slogan Giải trí', NULL, 0, 3, '2022-04-23 07:00:00', NULL, NULL, 1),
-	(34, 'Áo thun nữ Đồ họa Lá thư Giải trí', NULL, 0, 3, '2022-04-23 06:00:00', NULL, NULL, 1),
+	(33, 'Áo thun nữ Con số Slogan Giải trí', NULL, 0, 3, '2022-04-23 07:00:00', '2022-05-12 04:10:11', 1, 1),
+	(34, 'Áo thun nữ Đồ họa Lá thư Giải trí', NULL, 0, 3, '2022-04-23 06:00:00', '2022-05-12 04:15:48', 1, 1),
 	(35, 'Áo thun nữ màu trơn Cơ bản', NULL, 0, 3, '2022-04-23 05:00:00', NULL, NULL, 1),
 	(36, 'Áo nữ Rib-Knit màu trơn màu đen Sexy', NULL, 0, 3, '2022-04-23 04:00:00', NULL, NULL, 1),
 	(37, 'Áo thun nữ Nút phía trước màu trơn Giải trí', NULL, 0, 3, '2022-04-16 09:00:00', NULL, NULL, 1),
@@ -328,7 +332,7 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `pro
 	(40, 'Áo thun nữ Đồ họa Lá thư Giải trí', NULL, 32, 3, '2022-04-16 06:00:00', NULL, NULL, 1),
 	(41, 'Áo thun nữ Dây kéo màu trơn Giải trí', NULL, 15, 3, '2022-04-16 05:00:00', NULL, NULL, 1),
 	(42, 'Áo thun nữ Hoa Lá thư Giải trí', NULL, 0, 3, '2022-04-16 04:00:00', NULL, NULL, 1),
-	(43, 'DAZY Quần nữ Xếp li màu trơn Thanh lịch', NULL, 0, 26, '2022-05-04 13:20:38', '2022-05-04 13:20:38', NULL, 1),
+	(43, 'DAZY Quần nữ Xếp li màu trơn Thanh lịch', NULL, 0, 26, '2022-05-04 13:20:38', '2022-05-12 04:13:49', 1, 1),
 	(44, 'Dazy-Less Quần nữ Nút Túi Uốn nếp màu trơn Giải trí', NULL, 0, 26, '2022-05-04 13:34:40', '2022-05-04 13:34:40', NULL, 1),
 	(45, 'DAZY Quần nữ Túi màu trơn Giải trí', NULL, 0, 26, '2022-05-04 14:14:53', '2022-05-04 14:14:53', NULL, 1),
 	(46, 'Quần nữ Nút Sọc ca rô Sẵn sàng', NULL, 0, 26, '2022-05-04 14:18:11', '2022-05-04 14:18:11', NULL, 1),
@@ -343,7 +347,7 @@ CREATE TABLE IF NOT EXISTS `size` (
   PRIMARY KEY (`size_id`),
   KEY `color_id` (`color_id`),
   CONSTRAINT `size_ibfk_1` FOREIGN KEY (`color_id`) REFERENCES `color` (`color_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=246 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=312 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.size: ~195 rows (approximately)
 INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
@@ -370,9 +374,6 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(21, 'M', 34, 7),
 	(22, 'L', 55, 7),
 	(23, 'XL', 12, 7),
-	(24, 'M', 23, 8),
-	(25, 'L', 11, 8),
-	(26, 'XL', 76, 8),
 	(27, 'M', 11, 9),
 	(28, 'L', 23, 9),
 	(29, 'XL', 43, 9),
@@ -472,18 +473,6 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(125, 'M', 54, 38),
 	(126, 'X', 56, 38),
 	(127, 'XL', 43, 38),
-	(128, 'S', 34, 39),
-	(129, 'M', 43, 39),
-	(130, 'X', 22, 39),
-	(131, 'XL', 645, 39),
-	(132, 'S', 56, 40),
-	(133, 'M', 78, 40),
-	(134, 'X', 34, 40),
-	(135, 'XL', 56, 40),
-	(136, 'S', 54, 41),
-	(137, 'M', 54, 41),
-	(138, 'X', 65, 41),
-	(139, 'XL', 76, 41),
 	(140, 'S', 65, 42),
 	(141, 'M', 87, 42),
 	(142, 'X', 34, 42),
@@ -521,14 +510,6 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(174, 'M', 45, 52),
 	(175, 'X', 54, 52),
 	(176, 'XL', 64, 52),
-	(177, 'S', 23, 53),
-	(178, 'M', 554, 53),
-	(179, 'L', 45, 53),
-	(180, 'XL', 324, 53),
-	(181, 'S', 12, 54),
-	(182, 'M', 5, 54),
-	(183, 'L', 56, 54),
-	(184, 'XL', 657, 54),
 	(185, 'S', 234, 55),
 	(186, 'L', 54, 55),
 	(187, 'X', 23, 55),
@@ -544,7 +525,30 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(242, 'S', 64, 79),
 	(243, 'M', 33, 79),
 	(244, 'L', 435, 79),
-	(245, 'XL', 54, 79);
+	(245, 'XL', 54, 79),
+	(253, 'M', 23, 85),
+	(254, 'L', 11, 85),
+	(255, 'XL', 76, 85),
+	(256, 'S', 23, 86),
+	(257, 'M', 554, 86),
+	(258, 'L', 45, 86),
+	(259, 'XL', 324, 86),
+	(260, 'S', 12, 87),
+	(261, 'M', 5, 87),
+	(262, 'L', 56, 87),
+	(263, 'XL', 654, 87),
+	(300, 'S', 34, 97),
+	(301, 'M', 43, 97),
+	(302, 'X', 22, 97),
+	(303, 'XL', 645, 97),
+	(304, 'S', 56, 98),
+	(305, 'M', 78, 98),
+	(306, 'X', 34, 98),
+	(307, 'XL', 56, 98),
+	(308, 'S', 54, 99),
+	(309, 'M', 54, 99),
+	(310, 'X', 65, 99),
+	(311, 'XL', 43, 99);
 
 -- Dumping structure for table shop.subcategory
 CREATE TABLE IF NOT EXISTS `subcategory` (
@@ -606,112 +610,6 @@ INSERT INTO `subcategory` (`subcategory_id`, `subcategory_name`, `category_id`) 
 	(62, 'Váy', 21),
 	(63, 'Váy cưới', 21),
 	(64, 'Khác', 21);
-
--- Dumping structure for procedure shop.getProductsSearch
-DELIMITER //
-CREATE PROCEDURE `getProductsSearch`(IN `page_index` INT, IN `page_size` INT, IN `category_id` INT, IN `list_subcategory_id` VARCHAR(4000) CHARACTER SET UTF8MB4, IN `text_search` VARCHAR(200) CHARACTER SET UTF8MB4, IN `min_price1` INT, IN `max_price1` INT, IN `sort` INT, OUT `OUT_TOTAL_ROW` INT)
-BEGIN
-    CREATE TEMPORARY TABLE Result1
-    AS (
-        SELECT p.product_id,
-            p.product_name,
-            p.product_description,
-            p.product_discount,
-            p.created_time,
-            MIN(cl.product_price - cl.product_price * p.product_discount / 100) as min_price,
-            MAX(cl.product_price - cl.product_price * p.product_discount / 100) as max_price,
-            SUM(IFNULL(od.product_quantity, 0)) as quantity_sold
-        FROM product AS p
-            INNER JOIN subcategory AS sc ON p.subcategory_id = sc.subcategory_id
-            INNER JOIN category AS c ON sc.category_id = c.category_id
-            INNER JOIN color AS cl ON cl.product_id = p.product_id
-            INNER JOIN size s ON s.color_id = cl.color_id
-            LEFT JOIN orderdetails od ON od.size_id = s.size_id
-        WHERE (category_id IS NULL OR c.category_id = category_id)
-            AND (text_search IS NULL OR p.product_name LIKE CONCAT('%', text_search, '%'))
-            AND (list_subcategory_id IS NULL OR sc.subcategory_id IN (SELECT *
-                                                                    FROM JSON_TABLE(
-                                                                            list_subcategory_id,
-                                                                            "$[*]" COLUMNS(
-                                                                            subcategory_id INT PATH "$")) as data))
-        GROUP BY p.product_id, p.product_name, p.product_description, p.product_discount
-        HAVING (min_price1 IS NULL OR min_price >= min_price1)
-                AND (max_price1 IS NULL OR min_price <= max_price1)
-    );
-    SELECT COUNT(*)
-    INTO OUT_TOTAL_ROW
-    FROM Result1;
-
-    SET @page1 = (page_index - 1) * page_size;
-    SET @page_size1 = (page_index * page_size);
-    IF(sort = '1') THEN
-        SET @sort_query = 'ORDER BY r.created_time DESC ';
-    ELSEIF(sort = '2') THEN
-        SET @sort_query = 'ORDER BY r.quantity_sold DESC ';
-    ELSEIF(sort = '3') THEN
-        SET @sort_query = 'ORDER BY r.product_discount DESC';
-    ELSEIF(sort = '4') THEN
-        SET @sort_query = 'ORDER BY r.min_price ASC ';
-    ELSE
-        SET @sort_query = 'ORDER BY r.min_price DESC ';
-    END IF;
-    SET @queryString = (
-            CONCAT('
-                CREATE TEMPORARY TABLE Result2
-                    AS (
-                        SELECT r.product_id,
-                                r.product_name,
-                                r.product_description,
-                                r.product_discount,
-                                r.min_price,
-                                r.max_price,
-                                r.quantity_sold
-                        FROM Result1 AS r ',
-                        @sort_query,'
-                        LIMIT ?, ?
-                    )
-            ')
-        );
-
-    PREPARE myquery FROM @queryString;
-    EXECUTE myquery USING @page1, @page_size1;
-    DROP TEMPORARY TABLE Result1;
-
-    SELECT JSON_ARRAYAGG(
-        JSON_OBJECT(
-        'product_id', p.product_id,
-        'product_name', p.product_name,
-        'product_description', p.product_description,
-        'product_discount', p.product_discount,
-        'min_price', p.min_price,
-        'max_price', p.max_price,
-        'quantity_sold', p.quantity_sold,
-        'colors', (SELECT JSON_ARRAYAGG(
-                            JSON_OBJECT(
-                                'color_id', c.color_id,
-                                'color_name', c.color_name,
-                                'product_price', c.product_price,
-                                'product_image1', c.product_image1,
-                                'product_image2', c.product_image2,
-                                'product_image3', c.product_image3,
-                                'product_image4', c.product_image4,
-                                'product_image5', c.product_image5,
-                                'sizes', (SELECT JSON_ARRAYAGG(
-                                                    JSON_OBJECT(
-                                                    'size_id', s.size_id,
-                                                    'size_name', s.size_name,
-                                                    'quantity', s.quantity
-                                                ))
-                                        FROM size s
-                                        WHERE s.color_id = c.color_id)
-                            ))
-                    FROM color c
-                    WHERE c.product_id = p.product_id)
-    )) AS data
-    FROM Result2 AS p;
-    DROP TEMPORARY TABLE Result2;
-END//
-DELIMITER ;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
