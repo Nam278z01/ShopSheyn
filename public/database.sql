@@ -150,16 +150,15 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `email_verified_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`customer_id`),
   UNIQUE KEY `customer_email` (`customer_email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.customer: ~3 rows (approximately)
-INSERT INTO `customer` (`customer_id`, `customer_email`, `customer_password`, `customer_name`, `gender`, `birthdate`, `customer_phone`, `customer_address`, `image`, `remember_token`, `updated_at`, `created_at`, `email_verified_at`) VALUES
-	(1, 'nam278z01@gmail.com', '$2y$10$fLic40Gm3i3Uv68l7/iIiew6/TWs4oRCcm2viTV7GX8SDpwGcXAUu', 'Nguyễn Nam', NULL, NULL, '0328731170', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', 'avatar04.png', NULL, '2022-05-08 07:15:52', '2022-05-08 07:15:52', NULL),
-	(2, 'maihoangthaibao01@gmail.com', '$2y$10$Mi2p30gMxYOp/86IoE35r.vsMykRShbEXOi5CD5Vsfh9nBoN17R2y', 'Mai Hoàng Thái Bảo', NULL, NULL, NULL, NULL, 'avatar5.png', NULL, '2022-05-09 08:09:54', '2022-05-09 08:09:54', NULL),
-	(3, 'binhanvio@gmail.com', '$2y$10$Wu8LXqZmSjCl1E4/wYY91eIcW2WZ9QGg6tM5ymBKt0Odx..LlOO1i', 'Thái Bình An', NULL, NULL, NULL, NULL, 'avatar04.png', NULL, '2022-05-09 08:14:16', '2022-05-09 08:14:16', NULL);
+INSERT INTO `customer` (`customer_id`, `customer_email`, `customer_password`, `customer_name`, `gender`, `birthdate`, `customer_phone`, `customer_address`, `image`, `remember_token`, `updated_at`, `created_at`) VALUES
+	(1, 'nam278z01@gmail.com', '$2y$10$fLic40Gm3i3Uv68l7/iIiew6/TWs4oRCcm2viTV7GX8SDpwGcXAUu', 'Nguyễn Nam', NULL, NULL, '0328731170', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', 'avatar04.png', NULL, '2022-05-08 07:15:52', '2022-05-08 07:15:52'),
+	(2, 'maihoangthaibao01@gmail.com', '$2y$10$Mi2p30gMxYOp/86IoE35r.vsMykRShbEXOi5CD5Vsfh9nBoN17R2y', 'Mai Hoàng Thái Bảo', NULL, NULL, NULL, NULL, 'avatar5.png', NULL, '2022-05-09 08:09:54', '2022-05-09 08:09:54'),
+	(3, 'binhanvio@gmail.com', '$2y$10$Wu8LXqZmSjCl1E4/wYY91eIcW2WZ9QGg6tM5ymBKt0Odx..LlOO1i', 'Thái Bình An', NULL, NULL, NULL, NULL, 'avatar04.png', NULL, '2022-05-09 08:14:16', '2022-05-09 08:14:16');
 
 -- Dumping structure for table shop.orderdetails
 CREATE TABLE IF NOT EXISTS `orderdetails` (
@@ -176,26 +175,13 @@ CREATE TABLE IF NOT EXISTS `orderdetails` (
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderdetails: ~17 rows (approximately)
+-- Dumping data for table shop.orderdetails: ~5 rows (approximately)
 INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quantity`, `price`, `size_id`, `order_id`) VALUES
 	(1, 0, 1, 135000, 112, 1),
 	(2, 0, 2, 420000, 193, 3),
 	(3, 50, 1, 373000, 242, 3),
 	(10, 0, 1, 497000, 186, 7),
-	(11, 0, 1, 343000, 190, 7),
-	(12, 0, 1, 138000, 121, 8),
-	(15, 0, 1, 395000, 111, 11),
-	(16, 0, 1, 343000, 190, 11),
-	(17, 0, 2, 211000, 23, 12),
-	(18, 20, 4, 223000, 35, 12),
-	(19, 0, 2, 211000, 81, 12),
-	(20, 0, 1, 341000, 97, 13),
-	(21, 0, 1, 357000, 102, 13),
-	(22, 20, 1, 223000, 35, 36),
-	(23, 0, 2, 210000, 87, 36),
-	(24, 0, 2, 287000, 93, 36),
-	(25, 0, 2, 343000, 192, 36),
-	(26, 0, 2, 420000, 193, 37);
+	(11, 0, 1, 343000, 190, 7);
 
 -- Dumping structure for table shop.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -213,17 +199,11 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orders: ~7 rows (approximately)
+-- Dumping data for table shop.orders: ~4 rows (approximately)
 INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_address`, `customer_phone`, `note`, `delivery_cost`, `total`, `customer_id`) VALUES
 	(1, '2022-05-09 20:36:00', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 135000, 1),
 	(3, '2022-05-09 23:06:14', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1026500, 1),
-	(7, '2022-05-09 23:30:10', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 840000, 1),
-	(8, '2022-05-09 23:34:05', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 138000, 1),
-	(11, '2022-05-10 16:35:58', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 738000, 1),
-	(12, '2022-05-10 16:37:05', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1557600, 1),
-	(13, '2022-05-10 16:50:56', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 698000, 1),
-	(36, '2022-05-10 22:33:23', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1858400, 1),
-	(37, '2022-05-11 16:51:12', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 840000, 1);
+	(7, '2022-05-09 23:30:10', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 840000, 1);
 
 -- Dumping structure for table shop.orderstate
 CREATE TABLE IF NOT EXISTS `orderstate` (
@@ -236,18 +216,12 @@ CREATE TABLE IF NOT EXISTS `orderstate` (
   CONSTRAINT `orderstate_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderstate: ~8 rows (approximately)
+-- Dumping data for table shop.orderstate: ~4 rows (approximately)
 INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`, `order_id`) VALUES
 	(1, 0, '2022-05-09 20:37:33', 1),
 	(2, 1, '2022-05-09 20:49:49', 1),
 	(4, 0, '2022-05-09 23:06:14', 3),
-	(8, 0, '2022-05-09 23:30:10', 7),
-	(9, 0, '2022-05-09 23:34:05', 8),
-	(12, 0, '2022-05-10 16:35:58', 11),
-	(13, 0, '2022-05-10 16:37:05', 12),
-	(14, 0, '2022-05-10 16:50:56', 13),
-	(37, 0, '2022-05-10 22:33:23', 36),
-	(38, 0, '2022-05-11 16:51:12', 37);
+	(8, 0, '2022-05-09 23:30:10', 7);
 
 -- Dumping structure for table shop.personal_access_tokens
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
@@ -263,12 +237,12 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.personal_access_tokens: ~0 rows (approximately)
+-- Dumping data for table shop.personal_access_tokens: ~2 rows (approximately)
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `created_at`, `updated_at`) VALUES
-	(47, 'App\\Models\\Customer', 1, 'authTokenCustomer', '62e9650c05deaec308927a8fc86bbfe8c1336b638029d9300e04eaaf7859e548', '["customer"]', '2022-05-11 20:56:16', '2022-05-11 20:05:19', '2022-05-11 20:56:16'),
-	(48, 'App\\Models\\Admin', 1, 'authTokenAdmin', '443905e8e08a3caaa9f7398c2477dd31314c2332b29336148b51a1c5f31b9f35', '["admin"]', '2022-05-11 21:39:45', '2022-05-11 21:03:58', '2022-05-11 21:39:45');
+	(55, 'App\\Models\\Admin', 1, 'authTokenAdmin', '0f2aae62b54f4389264fe823a96627b2f42a95d3f701f39075009905d74d8fc9', '["admin"]', '2022-05-13 06:15:47', '2022-05-13 05:53:22', '2022-05-13 06:15:47'),
+	(56, 'App\\Models\\Customer', 1, 'authTokenCustomer', '06115cfc9e7d9e0d1c72d9f09a26b339d02bbbe4e6e9938d119c081cc0394b98', '["customer"]', '2022-05-13 06:05:49', '2022-05-13 06:05:28', '2022-05-13 06:05:49');
 
 -- Dumping structure for table shop.product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -349,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `size` (
   CONSTRAINT `size_ibfk_1` FOREIGN KEY (`color_id`) REFERENCES `color` (`color_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=312 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.size: ~195 rows (approximately)
+-- Dumping data for table shop.size: ~198 rows (approximately)
 INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(1, 'XS', 10, 1),
 	(2, 'S', 23, 1),
@@ -610,6 +584,112 @@ INSERT INTO `subcategory` (`subcategory_id`, `subcategory_name`, `category_id`) 
 	(62, 'Váy', 21),
 	(63, 'Váy cưới', 21),
 	(64, 'Khác', 21);
+
+-- Dumping structure for procedure shop.getProductsSearch
+DELIMITER //
+CREATE PROCEDURE `getProductsSearch`(IN `page_index` INT, IN `page_size` INT, IN `category_id` INT, IN `list_subcategory_id` VARCHAR(4000) CHARACTER SET UTF8MB4, IN `text_search` VARCHAR(200) CHARACTER SET UTF8MB4, IN `min_price1` INT, IN `max_price1` INT, IN `sort` INT, OUT `OUT_TOTAL_ROW` INT)
+BEGIN
+    CREATE TEMPORARY TABLE Result1
+    AS (
+        SELECT p.product_id,
+            p.product_name,
+            p.product_description,
+            p.product_discount,
+            p.created_time,
+            MIN(cl.product_price - cl.product_price * p.product_discount / 100) as min_price,
+            MAX(cl.product_price - cl.product_price * p.product_discount / 100) as max_price,
+            SUM(IFNULL(od.product_quantity, 0)) as quantity_sold
+        FROM product AS p
+            INNER JOIN subcategory AS sc ON p.subcategory_id = sc.subcategory_id
+            INNER JOIN category AS c ON sc.category_id = c.category_id
+            INNER JOIN color AS cl ON cl.product_id = p.product_id
+            INNER JOIN size s ON s.color_id = cl.color_id
+            LEFT JOIN orderdetails od ON od.size_id = s.size_id
+        WHERE (category_id IS NULL OR c.category_id = category_id)
+            AND (text_search IS NULL OR p.product_name LIKE CONCAT('%', text_search, '%'))
+            AND (list_subcategory_id IS NULL OR sc.subcategory_id IN (SELECT *
+                                                                    FROM JSON_TABLE(
+                                                                            list_subcategory_id,
+                                                                            "$[*]" COLUMNS(
+                                                                            subcategory_id INT PATH "$")) as data))
+        GROUP BY p.product_id, p.product_name, p.product_description, p.product_discount
+        HAVING (min_price1 IS NULL OR min_price >= min_price1)
+                AND (max_price1 IS NULL OR min_price <= max_price1)
+    );
+    SELECT COUNT(*)
+    INTO OUT_TOTAL_ROW
+    FROM Result1;
+
+    SET @page1 = (page_index - 1) * page_size;
+    SET @page_size1 = (page_index * page_size);
+    IF(sort = '1') THEN
+        SET @sort_query = 'ORDER BY r.created_time DESC ';
+    ELSEIF(sort = '2') THEN
+        SET @sort_query = 'ORDER BY r.quantity_sold DESC ';
+    ELSEIF(sort = '3') THEN
+        SET @sort_query = 'ORDER BY r.product_discount DESC';
+    ELSEIF(sort = '4') THEN
+        SET @sort_query = 'ORDER BY r.min_price ASC ';
+    ELSE
+        SET @sort_query = 'ORDER BY r.min_price DESC ';
+    END IF;
+    SET @queryString = (
+            CONCAT('
+                CREATE TEMPORARY TABLE Result2
+                    AS (
+                        SELECT r.product_id,
+                                r.product_name,
+                                r.product_description,
+                                r.product_discount,
+                                r.min_price,
+                                r.max_price,
+                                r.quantity_sold
+                        FROM Result1 AS r ',
+                        @sort_query,'
+                        LIMIT ?, ?
+                    )
+            ')
+        );
+
+    PREPARE myquery FROM @queryString;
+    EXECUTE myquery USING @page1, @page_size1;
+    DROP TEMPORARY TABLE Result1;
+
+    SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
+        'product_id', p.product_id,
+        'product_name', p.product_name,
+        'product_description', p.product_description,
+        'product_discount', p.product_discount,
+        'min_price', p.min_price,
+        'max_price', p.max_price,
+        'quantity_sold', p.quantity_sold,
+        'colors', (SELECT JSON_ARRAYAGG(
+                            JSON_OBJECT(
+                                'color_id', c.color_id,
+                                'color_name', c.color_name,
+                                'product_price', c.product_price,
+                                'product_image1', c.product_image1,
+                                'product_image2', c.product_image2,
+                                'product_image3', c.product_image3,
+                                'product_image4', c.product_image4,
+                                'product_image5', c.product_image5,
+                                'sizes', (SELECT JSON_ARRAYAGG(
+                                                    JSON_OBJECT(
+                                                    'size_id', s.size_id,
+                                                    'size_name', s.size_name,
+                                                    'quantity', s.quantity
+                                                ))
+                                        FROM size s
+                                        WHERE s.color_id = c.color_id)
+                            ))
+                    FROM color c
+                    WHERE c.product_id = p.product_id)
+    )) AS data
+    FROM Result2 AS p;
+    DROP TEMPORARY TABLE Result2;
+END//
+DELIMITER ;
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -9,7 +9,10 @@
                     class="img-circle"
                     alt="@{{ admin.admin_name }}"
                 />
-                <span style="font-size: 16px; margin-left: 15px; font-weight: 500">@{{ admin.admin_name }}</span>
+            </div>
+            <div class="pull-left info">
+                <p>@{{admin.admin_name}}</p>
+                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->

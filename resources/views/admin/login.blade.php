@@ -20,7 +20,7 @@
     <body ng-app="myApp" ng-controller="LoginManagementController">
         <div class="login-box">
             <div class="login-logo">
-                <a href="/admin/"><b>Shop</b>Sheyn</a>
+                <a href="/admin"><b>Shop</b>Sheyn</a>
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
@@ -30,7 +30,7 @@
                             ng-model="accountname"
                             type="text"
                             class="form-control"
-                            placeholder="Account Name"
+                            placeholder="Tên tài khoản"
                         />
                         <span
                             class="glyphicon glyphicon-envelope form-control-feedback"
@@ -41,7 +41,7 @@
                             ng-model="password"
                             type="password"
                             class="form-control"
-                            placeholder="Password"
+                            placeholder="Mật khẩu"
                         />
                         <span
                             class="glyphicon glyphicon-lock form-control-feedback"
@@ -49,6 +49,11 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-8">
+                            <div class="col-xs-8">
+                                <label>
+                                    <a href="#">Quên mật khẩu?</a><br>
+                                </label>
+                            </div>
                         </div>
                         <!-- /.col -->
                         <div class="col-xs-4">
@@ -57,12 +62,13 @@
                                 type="submit"
                                 class="btn btn-primary btn-block btn-flat"
                             >
-                                Sign In
+                                Đăng nhập
                             </button>
                         </div>
                         <!-- /.col -->
                     </div>
                 </form>
+
             </div>
             <!-- /.login-box-body -->
         </div>

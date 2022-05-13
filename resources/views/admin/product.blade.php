@@ -223,6 +223,12 @@
                     >
                         @{{ row.product_name }}
                     </td>
+                    <td title="'Phân loại'">
+                        @{{ row.colors.length }} Màu
+                        (<span ng-repeat="cl in row.colors"
+                            >@{{ cl.color_name }}</span
+                        >), @{{ row.colors[0].sizes.length }} Size
+                    </td>
                     <td
                         title="'Giảm giá (%)'"
                         filter="{'product_discount': 'text'}"
@@ -535,13 +541,22 @@
                                                 />
                                                 <img
                                                     class="product-color-img"
-                                                    ng-if="cl.product_image1 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
-                                                    ng-src="/image/product/@{{ cl.product_image1 }}"
+                                                    ng-if="
+                                                        cl.product_image1 &&
+                                                        form_name ==
+                                                            'SỬA THÔNG TIN SẢN PHẨM'
+                                                    "
+                                                    ng-src="/image/product/@{{
+                                                        cl.product_image1
+                                                    }}"
                                                 />
                                                 <div
                                                     ng-click="removeFile(cl, 0)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[0] || cl.product_image1"
+                                                    ng-if="
+                                                        cl.files[0] ||
+                                                        cl.product_image1
+                                                    "
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -553,7 +568,10 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[0] && !cl.product_image1"
+                                                    ng-if="
+                                                        !cl.files[0] &&
+                                                        !cl.product_image1
+                                                    "
                                                     ngf-select="uploadFiles($files, cl, 0)"
                                                     multiple
                                                     accept="image/*"
@@ -582,13 +600,22 @@
                                                 />
                                                 <img
                                                     class="product-color-img"
-                                                    ng-if="cl.product_image2 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
-                                                    ng-src="/image/product/@{{ cl.product_image2 }}"
+                                                    ng-if="
+                                                        cl.product_image2 &&
+                                                        form_name ==
+                                                            'SỬA THÔNG TIN SẢN PHẨM'
+                                                    "
+                                                    ng-src="/image/product/@{{
+                                                        cl.product_image2
+                                                    }}"
                                                 />
                                                 <div
                                                     ng-click="removeFile(cl, 1)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[1] || cl.product_image2"
+                                                    ng-if="
+                                                        cl.files[1] ||
+                                                        cl.product_image2
+                                                    "
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -600,7 +627,10 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[1] && !cl.product_image2"
+                                                    ng-if="
+                                                        !cl.files[1] &&
+                                                        !cl.product_image2
+                                                    "
                                                     ngf-select="uploadFiles($files, cl, 1)"
                                                     multiple
                                                     accept="image/*"
@@ -629,13 +659,22 @@
                                                 />
                                                 <img
                                                     class="product-color-img"
-                                                    ng-if="cl.product_image3 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
-                                                    ng-src="/image/product/@{{ cl.product_image3 }}"
+                                                    ng-if="
+                                                        cl.product_image3 &&
+                                                        form_name ==
+                                                            'SỬA THÔNG TIN SẢN PHẨM'
+                                                    "
+                                                    ng-src="/image/product/@{{
+                                                        cl.product_image3
+                                                    }}"
                                                 />
                                                 <div
                                                     ng-click="removeFile(cl, 2)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[2] || cl.product_image3"
+                                                    ng-if="
+                                                        cl.files[2] ||
+                                                        cl.product_image3
+                                                    "
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -647,7 +686,10 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[2] && !cl.product_image3"
+                                                    ng-if="
+                                                        !cl.files[2] &&
+                                                        !cl.product_image3
+                                                    "
                                                     ngf-select="uploadFiles($files, cl, 2)"
                                                     multiple
                                                     accept="image/*"
@@ -676,13 +718,22 @@
                                                 />
                                                 <img
                                                     class="product-color-img"
-                                                    ng-if="cl.product_image4 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
-                                                    ng-src="/image/product/@{{ cl.product_image4 }}"
+                                                    ng-if="
+                                                        cl.product_image4 &&
+                                                        form_name ==
+                                                            'SỬA THÔNG TIN SẢN PHẨM'
+                                                    "
+                                                    ng-src="/image/product/@{{
+                                                        cl.product_image4
+                                                    }}"
                                                 />
                                                 <div
                                                     ng-click="removeFile(cl, 3)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[3] || cl.product_image4"
+                                                    ng-if="
+                                                        cl.files[3] ||
+                                                        cl.product_image4
+                                                    "
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -694,7 +745,10 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[3] && !cl.product_image4"
+                                                    ng-if="
+                                                        !cl.files[3] &&
+                                                        !cl.product_image4
+                                                    "
                                                     ngf-select="uploadFiles($files, cl, 3)"
                                                     multiple
                                                     accept="image/*"
@@ -723,13 +777,22 @@
                                                 />
                                                 <img
                                                     class="product-color-img"
-                                                    ng-if="cl.product_image5 && form_name=='SỬA THÔNG TIN SẢN PHẨM'"
-                                                    ng-src="/image/product/@{{ cl.product_image5 }}"
+                                                    ng-if="
+                                                        cl.product_image5 &&
+                                                        form_name ==
+                                                            'SỬA THÔNG TIN SẢN PHẨM'
+                                                    "
+                                                    ng-src="/image/product/@{{
+                                                        cl.product_image5
+                                                    }}"
                                                 />
                                                 <div
                                                     ng-click="removeFile(cl, 4)"
                                                     class="product-color-remove"
-                                                    ng-if="cl.files[4] || cl.product_image5"
+                                                    ng-if="
+                                                        cl.files[4] ||
+                                                        cl.product_image5
+                                                    "
                                                 >
                                                     <i
                                                         class="ion-ios-trash-outline"
@@ -741,7 +804,10 @@
                                                 </div>
                                                 <div
                                                     class="product-color-file"
-                                                    ng-if="!cl.files[4] && !cl.product_image5"
+                                                    ng-if="
+                                                        !cl.files[4] &&
+                                                        !cl.product_image5
+                                                    "
                                                     ngf-select="uploadFiles($files, cl, 4)"
                                                     multiple
                                                     accept="image/*"
