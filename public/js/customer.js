@@ -40457,9 +40457,12 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
     });
   }
 
-  $scope.name = $rootScope.customer.customer_name;
-  $scope.address = $rootScope.customer.customer_address;
-  $scope.phone = $rootScope.customer.customer_phone;
+  if ($rootScope.customer) {
+    $scope.name = $rootScope.customer.customer_name;
+    $scope.address = $rootScope.customer.customer_address;
+    $scope.phone = $rootScope.customer.customer_phone;
+  }
+
   $scope.isPaying = false;
 
   $scope.checkout = function () {
