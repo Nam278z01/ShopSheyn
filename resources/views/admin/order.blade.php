@@ -67,7 +67,7 @@
                         }}
                     </td>
                     <td
-                        title="'Tổng thành tiền'"
+                        title="'Tổng số tiền'"
                         filter="{'total': 'text'}"
                         sortable="'total'"
                         align="right"

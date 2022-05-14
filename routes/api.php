@@ -21,8 +21,10 @@ use App\Http\Controllers\AuthController;
 */
 Route::post('/login/{type}', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
+Route::post('/signup-for-admin', [AuthController::class, 'signupForAdmin']);
 Route::get('/product/search', [ProductController::class, 'search']);
 Route::get('/product/get-detail/{id}', [ProductController::class, 'getProduct']);
+Route::get('/product/get-by-subcategory/{id}', [ProductController::class, 'getProductBySubcategory']);
 
 Route::middleware(['auth:sanctum', 'ability:customer,admin'])->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);

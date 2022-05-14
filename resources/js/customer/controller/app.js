@@ -110,21 +110,21 @@ myApp.run(function (
         }).then((res) => {
             $rootScope.is_login = true;
             $rootScope.customer = res.data;
-            console.log($rootScope.customer)
-
         });
     } else {
-        var restrictedPage = $.inArray($location.path(), ['/orders', '/orderdetails']) != -1;
+        var restrictedPage =
+            $.inArray($location.path(), ["/orders", "/orderdetails"]) != -1;
         if (restrictedPage) {
-            $location.path('/').search({})
+            $location.path("/").search({});
         }
-        $rootScope.$on('$routeChangeStart', function (event, next, current) {
-            var restrictedPage = $.inArray($location.path(), ['/orders', '/orderdetails']) != -1;
+        $rootScope.$on("$routeChangeStart", function (event, next, current) {
+            var restrictedPage =
+                $.inArray($location.path(), ["/orders", "/orderdetails"]) != -1;
             if (restrictedPage) {
-                event.preventDefault()
-                $location.path('/').search({})
+                event.preventDefault();
+                $location.path("/").search({});
             }
-        })
+        });
     }
 
     $rootScope.logout = function () {
@@ -196,10 +196,10 @@ myApp.run(function (
                 });
             });
         });
-        recalculateTotalPrice();
+        $rootScope.recalculateTotalPrice();
     });
 
-    function recalculateTotalPrice() {
+    $rootScope.recalculateTotalPrice = function () {
         $rootScope.total_price = $rootScope.cart.reduce(function (
             total,
             current
@@ -243,7 +243,7 @@ myApp.run(function (
                       product_new.picked.quantity)
                 : $rootScope.cart.unshift(product_new);
             $rootScope.showCart();
-            recalculateTotalPrice();
+            $rootScope.recalculateTotalPrice();
         });
     };
 
@@ -259,37 +259,9 @@ myApp.run(function (
         }, 3000);
     };
 
-    $rootScope.addToCartInDetailsPage = function (product) {
-        let product_new = JSON.parse(JSON.stringify(product));
-        product_new.cart_id = Math.floor(Date.now() * Math.random());
-        if (product_new.picked.size) {
-            $http({
-                method: "POST",
-                url: API_URL + "/api/cart",
-                data: {
-                    cart_id: product_new.cart_id,
-                    product_id: product_new.product_id,
-                    size_id: product_new.picked.size.size_id,
-                    quantity: product_new.picked.quantity,
-                },
-            }).then((res) => {
-                let index = $rootScope.cart.findIndex(
-                    (p) =>
-                        p.picked.size.size_id == product_new.picked.size.size_id
-                );
-                index != -1
-                    ? ($rootScope.cart[index].picked.quantity +=
-                          product_new.picked.quantity)
-                    : $rootScope.cart.unshift(product_new);
-
-                $rootScope.showCart();
-                recalculateTotalPrice();
-            });
-        }
-    };
-
     //  EditCart
     $rootScope.editCart = function (product) {
+        product.picked.quantity = 1
         $http({
             method: "PUT",
             url: API_URL + "/api/cart/" + product.cart_id,
@@ -299,7 +271,7 @@ myApp.run(function (
                 quantity: product.picked.quantity,
             },
         }).then((res) => {
-            recalculateTotalPrice();
+            $rootScope.recalculateTotalPrice();
         });
     };
     // Remove product in cart
@@ -312,7 +284,7 @@ myApp.run(function (
                 return product.cart_id != cart_id;
             });
 
-            recalculateTotalPrice();
+            $rootScope.recalculateTotalPrice();
         });
     };
 
@@ -377,6 +349,39 @@ myApp.directive("slickSlider", function ($timeout) {
     };
 });
 
+myApp.directive("slickSlider2", function ($timeout) {
+    function link(scope, element, attrs) {
+        $(document).ready(function () {
+            $timeout(function () {
+                $(".image-slider2").slick({
+                    slidesToShow: 5,
+                    slidesToScroll: 5,
+                    infinite: true,
+                    arrows: true,
+                    draggable: true,
+                    prevArrow: `<button
+                                    class="absolute left-[-15px] top-[40%] -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center flex z-10 hover:bg-white"
+                                >
+                                    <i class="bx bx-chevron-left"></i>
+                                </button>`,
+                    nextArrow: `<button
+                                    class="absolute right-[-15px] top-[40%] -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center flex z-10 hover:bg-white"
+                                >
+                                    <i class="bx bx-chevron-right"></i>
+                                </button>`,
+                    dots: false,
+                    // autoplay: false,
+                    // autoplaySpeed: 1000,
+                });
+            }, 1000);
+        });
+    }
+
+    return {
+        link: link,
+    };
+});
+
 myApp.config(function ($routeProvider, $locationProvider) {
     $routeProvider
         .when("/", {
@@ -400,6 +405,7 @@ myApp.config(function ($routeProvider, $locationProvider) {
         })
         .when("/orderdetails", {
             templateUrl: "html/orderdetails.html",
+            controller: "OrderController",
         })
         .otherwise({
             redirectTo: "/",

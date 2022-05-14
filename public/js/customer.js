@@ -40184,21 +40184,20 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
     }).then(function (res) {
       $rootScope.is_login = true;
       $rootScope.customer = res.data;
-      console.log($rootScope.customer);
     });
   } else {
-    var restrictedPage = $.inArray($location.path(), ['/orders', '/orderdetails']) != -1;
+    var restrictedPage = $.inArray($location.path(), ["/orders", "/orderdetails"]) != -1;
 
     if (restrictedPage) {
-      $location.path('/').search({});
+      $location.path("/").search({});
     }
 
-    $rootScope.$on('$routeChangeStart', function (event, next, current) {
-      var restrictedPage = $.inArray($location.path(), ['/orders', '/orderdetails']) != -1;
+    $rootScope.$on("$routeChangeStart", function (event, next, current) {
+      var restrictedPage = $.inArray($location.path(), ["/orders", "/orderdetails"]) != -1;
 
       if (restrictedPage) {
         event.preventDefault();
-        $location.path('/').search({});
+        $location.path("/").search({});
       }
     });
   }
@@ -40268,14 +40267,14 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
         });
       });
     });
-    recalculateTotalPrice();
+    $rootScope.recalculateTotalPrice();
   });
 
-  function recalculateTotalPrice() {
+  $rootScope.recalculateTotalPrice = function () {
     $rootScope.total_price = $rootScope.cart.reduce(function (total, current) {
       return total + (current.picked.color.product_price - current.picked.color.product_price * current.product_discount / 100) * current.picked.quantity;
     }, 0);
-  } // Add Cart
+  }; // Add Cart
 
 
   $rootScope.addToCartInProductPage = function (product, size) {
@@ -40303,7 +40302,7 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
       });
       index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
       $rootScope.showCart();
-      recalculateTotalPrice();
+      $rootScope.recalculateTotalPrice();
     });
   };
 
@@ -40319,35 +40318,11 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
       $rootScope.isShowCart = false;
       $rootScope.showCartTimeout = undefined;
     }, 3000);
-  };
-
-  $rootScope.addToCartInDetailsPage = function (product) {
-    var product_new = JSON.parse(JSON.stringify(product));
-    product_new.cart_id = Math.floor(Date.now() * Math.random());
-
-    if (product_new.picked.size) {
-      $http({
-        method: "POST",
-        url: API_URL + "/api/cart",
-        data: {
-          cart_id: product_new.cart_id,
-          product_id: product_new.product_id,
-          size_id: product_new.picked.size.size_id,
-          quantity: product_new.picked.quantity
-        }
-      }).then(function (res) {
-        var index = $rootScope.cart.findIndex(function (p) {
-          return p.picked.size.size_id == product_new.picked.size.size_id;
-        });
-        index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
-        $rootScope.showCart();
-        recalculateTotalPrice();
-      });
-    }
   }; //  EditCart
 
 
   $rootScope.editCart = function (product) {
+    product.picked.quantity = 1;
     $http({
       method: "PUT",
       url: API_URL + "/api/cart/" + product.cart_id,
@@ -40357,7 +40332,7 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
         quantity: product.picked.quantity
       }
     }).then(function (res) {
-      recalculateTotalPrice();
+      $rootScope.recalculateTotalPrice();
     });
   }; // Remove product in cart
 
@@ -40370,7 +40345,7 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
       $rootScope.cart = $rootScope.cart.filter(function (product) {
         return product.cart_id != cart_id;
       });
-      recalculateTotalPrice();
+      $rootScope.recalculateTotalPrice();
     });
   }; //Cart
 
@@ -40427,6 +40402,30 @@ myApp.directive("slickSlider", function ($timeout) {
     link: link
   };
 });
+myApp.directive("slickSlider2", function ($timeout) {
+  function link(scope, element, attrs) {
+    $(document).ready(function () {
+      $timeout(function () {
+        $(".image-slider2").slick({
+          slidesToShow: 5,
+          slidesToScroll: 5,
+          infinite: true,
+          arrows: true,
+          draggable: true,
+          prevArrow: "<button\n                                    class=\"absolute left-[-15px] top-[40%] -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center flex z-10 hover:bg-white\"\n                                >\n                                    <i class=\"bx bx-chevron-left\"></i>\n                                </button>",
+          nextArrow: "<button\n                                    class=\"absolute right-[-15px] top-[40%] -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center flex z-10 hover:bg-white\"\n                                >\n                                    <i class=\"bx bx-chevron-right\"></i>\n                                </button>",
+          dots: false // autoplay: false,
+          // autoplaySpeed: 1000,
+
+        });
+      }, 1000);
+    });
+  }
+
+  return {
+    link: link
+  };
+});
 myApp.config(function ($routeProvider, $locationProvider) {
   $routeProvider.when("/", {
     templateUrl: "html/home.html"
@@ -40443,7 +40442,8 @@ myApp.config(function ($routeProvider, $locationProvider) {
     templateUrl: "html/orders.html",
     controller: "OrderController"
   }).when("/orderdetails", {
-    templateUrl: "html/orderdetails.html"
+    templateUrl: "html/orderdetails.html",
+    controller: "OrderController"
   }).otherwise({
     redirectTo: "/"
   });
@@ -40475,6 +40475,19 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
     });
   }
 
+  if ($location.path() == "/orderdetails") {
+    $http({
+      method: "GET",
+      url: API_URL + "/api/order/" + $routeParams.order_id,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + customerService.getCurrentToken()
+      }
+    }).then(function (res) {
+      $rootScope.order = res.data;
+    });
+  }
+
   if ($rootScope.customer) {
     $scope.name = $rootScope.customer.customer_name;
     $scope.address = $rootScope.customer.customer_address;
@@ -40484,6 +40497,11 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
   $scope.isPaying = false;
 
   $scope.checkout = function () {
+    if (!$rootScope.is_login) {
+      $rootScope.showModalLogin();
+      return false;
+    }
+
     if (!$scope.isPaying && $rootScope.cart.length) {
       $scope.isPaying = true;
       $http({
@@ -40652,6 +40670,10 @@ myApp.controller("ProductController", function ($scope, $rootScope, $http, $rout
 
 myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http, $routeParams, API_URL) {
   $scope.isLoading = true;
+  $scope.isLoadingSub = true;
+  $scope.show_warning = {
+    size: false
+  };
   $http({
     method: "GET",
     url: API_URL + "/api/product/get-detail/" + $routeParams.product_id
@@ -40662,33 +40684,88 @@ myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http
     $scope.product.picked.quantity = 1;
     $scope.changeColor($scope.product, $scope.product.colors[0]);
     $scope.isLoading = false;
+    return $http({
+      method: "GET",
+      url: API_URL + "/api/product/get-by-subcategory/" + $scope.product.subcategory_id
+    });
+  }).then(function (res) {
+    $scope.products = res.data; //Khởi tạo màu
+
+    if ($scope.products) {
+      $scope.products.map(function (product) {
+        product.picked = {};
+        product.picked.color = product.colors[0];
+        return product;
+      });
+    }
+
+    $scope.isLoadingSub = false;
   });
 
+  $scope.addToCartInDetailsPage = function (product) {
+    var product_new = JSON.parse(JSON.stringify(product));
+    product_new.cart_id = Math.floor(Date.now() * Math.random());
+
+    if (product_new.picked.size) {
+      $http({
+        method: "POST",
+        url: API_URL + "/api/cart",
+        data: {
+          cart_id: product_new.cart_id,
+          product_id: product_new.product_id,
+          size_id: product_new.picked.size.size_id,
+          quantity: product_new.picked.quantity
+        }
+      }).then(function (res) {
+        var index = $rootScope.cart.findIndex(function (p) {
+          return p.picked.size.size_id == product_new.picked.size.size_id;
+        });
+        index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
+        $rootScope.showCart();
+        $rootScope.recalculateTotalPrice();
+      });
+    } else {
+      $scope.show_warning.size = true;
+    }
+  };
+
   $scope.changeColor = function (product, color) {
-    //Giữ size
+    product.picked.quantity = 1; //Giữ size
+
     var index;
 
     if (product.picked.size) {
       index = product.picked.color.sizes.findIndex(function (size) {
         return size.size_id == product.picked.size.size_id;
       });
-      product.picked.size = color.sizes[index];
+      $scope.changeSize(product, color.sizes[index]);
     }
 
     product.picked.color = color;
   };
 
   $scope.changeSize = function (product, size) {
+    product.picked.quantity = 1;
     product.picked.size = size;
   };
 
   $scope.increase = function () {
+    if (!$scope.product.picked.size) {
+      $scope.show_warning.size = true;
+      return false;
+    }
+
     if ($scope.product.picked.quantity < $scope.product.picked.size.quantity) {
       $scope.product.picked.quantity++;
-    }
+    } else {}
   };
 
   $scope.decrease = function () {
+    if (!$scope.product.picked.size) {
+      $scope.show_warning.size = true;
+      return false;
+    }
+
     if ($scope.product.picked.quantity > 1) {
       $scope.product.picked.quantity--;
     }

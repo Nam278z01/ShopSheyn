@@ -23,6 +23,20 @@ myApp.controller(
             });
         }
 
+        if ($location.path() == "/orderdetails") {
+            $http({
+                method: "GET",
+                url: API_URL + "/api/order/" + $routeParams.order_id,
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization:
+                        "Bearer " + customerService.getCurrentToken(),
+                },
+            }).then((res) => {
+                $rootScope.order = res.data;
+            });
+        }
+
         if ($rootScope.customer) {
             $scope.name = $rootScope.customer.customer_name;
             $scope.address = $rootScope.customer.customer_address;
@@ -31,6 +45,10 @@ myApp.controller(
 
         $scope.isPaying = false;
         $scope.checkout = function () {
+            if (!$rootScope.is_login) {
+                $rootScope.showModalLogin();
+                return false;
+            }
             if (!$scope.isPaying && $rootScope.cart.length) {
                 $scope.isPaying = true;
                 $http({

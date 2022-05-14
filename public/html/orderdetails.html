@@ -1,0 +1,184 @@
+<div class="bg-[#fafafc] py-[30px]">
+    <div class="w-[1200px] mx-auto flex relative">
+        <div class="w-[180px] flex-shrink-0">
+            <div class="sticky top-[84px] bg-[#fafafc]">
+                <div class="py-[15px] border-b border-[#efefef] flex">
+                    <a class="block w-[50px] h-[50px]">
+                        <img
+                            class="w-full h-full rounded-full"
+                            src="/image/img/{{ customer.image }}"
+                            alt="Avatar"
+                        />
+                    </a>
+                    <div
+                        class="text-sm pl-[15px] flex flex-col flex-1 overflow-hidden justify-center"
+                    >
+                        <div
+                            class="text-[#333] font-bold text-ellipsis whitespace-nowrap overflow-hidden mb-[5px]"
+                        >
+                            {{ customer.customer_name }}
+                        </div>
+                        <div
+                            class="text-[#888] cursor-pointer flex items-center"
+                        >
+                            <i class="bx bx-edit-alt text-lg"></i>
+                            <span class="ml-[5px] font-semibold"
+                                >Sửa hồ sơ</span
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="my-[30px]">
+                    <a
+                        href="#"
+                        class="flex items-center mb-[15px] hover:text-[#fa6338]"
+                    >
+                        <i class="bx bx-user text-xl"></i>
+                        <span class="text-sm font-semibold ml-[10px]"
+                            >Tài Khoản Của Tôi</span
+                        >
+                    </a>
+                    <a
+                        href="/orders"
+                        class="flex items-center mb-[15px] hover:text-[#fa6338]"
+                    >
+                        <i class="bx bx-food-menu text-xl"></i>
+                        <span class="text-sm font-semibold ml-[10px]"
+                            >Đơn Hàng Của Tôi</span
+                        >
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="w-[980px] flex-shrink-0 flex-grow ml-[40px] shadow-[0_6px_12px_0_#0000000a]"
+        >
+            <div
+                class="mb-[12px] flex w-full bg-white font-medium text-[15px] sticky top-[54px] z-30"
+            >
+
+            </div>
+
+            <div
+                class="mt-[12px]"
+            >
+                <div class="pt-[24px] px-[24px] pb-[12px] bg-white">
+                    <div class="text-[15px] pb-[12px] flex justify-between">
+
+                    </div>
+                    <div
+                        class="border-t border-[#eaeaea] rounded-br rounded-bl"
+                    >
+                        <a
+                            ng-repeat="od in order.orderdetails"
+                            href="/details?product_id={{ od.size.color.product.product_id }}"
+                            class="flex pt-[12px] justify-between"
+                        >
+                            <div class="flex">
+                                <div
+                                    class="w-[90px] border border-[#e1e1e1] relative group"
+                                >
+                                    <img
+                                        class="w-full h-full"
+                                        ng-src="/image/product/{{ od.size.color.product_image1 }}"
+                                        alt="{{ od.size.color.product.product_name }}"
+                                    />
+                                    <img
+                                        ng-src="/image/product/{{
+                                    od.size.color
+                                    .product_image2 ||
+                                    od.size.color
+                                        .product_image3 ||
+                                        od.size.color
+                                        .product_image4 ||
+                                        od.size.color
+                                        .product_image5
+                            }}"
+                                        alt="{{ od.size.color.product.product_name }}"
+                                        class="absolute top-0 left-0 w-full opacity-0 group-hover:opacity-100 transition-all duration-500"
+                                    />
+                                </div>
+                                <div class="pl-[12px]">
+                                    <div
+                                        class="text-sm mb-[5px] hover:underline"
+                                    >
+                                        {{ od.size.color.product.product_name }}
+                                    </div>
+                                    <div
+                                        class="text-[#0000008a] text-[13px] mb-[5px]"
+                                    >
+                                        Phân loại hàng: Màu {{
+                                        od.size.color.color_name }}, Size {{
+                                        od.size.size_name }}
+                                    </div>
+                                    <div class="text-sm mb-[5px]">
+                                        x{{ od.product_quantity }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <!-- Normal -->
+                                <span
+                                    ng-if="od.product_discount == 0"
+                                    class="font-semibold text-xl text-black"
+                                >
+                                    {{od.price * od.product_quantity |
+                                    number:0}}₫
+                                </span>
+
+                                <!-- Discount -->
+                                <span
+                                    ng-if="od.product_discount != 0"
+                                    class="text-[#fa6338] text-lg block font-semibold mr-2"
+                                >
+                                    {{(od.price - od.price * od.product_discount
+                                    / 100) * od.product_quantity | number:0}}₫
+                                </span>
+                                <del
+                                    ng-if="od.product_discount != 0"
+                                    class="text-[#999] text-sm"
+                                >
+                                    {{od.price * od.product_quantity |
+                                    number:0}}₫
+                                </del>
+                                <div
+                                    ng-if="od.product_discount != 0"
+                                    class="w-[50px] text-center text-xs leading-[20px] bg-[#222] text-white ml-3"
+                                >
+                                    -{{ od.product_discount }}%
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div
+                        class="mt-[12px] py-[16px] border-t border-[#eaeaea] flex justify-between items-center"
+                    >
+                        <div class="flex">
+                            <a
+                                href="/orderdetails?order_id={{ o.order_id }}"
+                                class="flex justify-center items-center h-[36px] text-[13px] px-[30px] font-extrabold bg-[#fa6338] text-white hover:bg-[#d73211]"
+                            >
+                                Xem chi tiết
+                            </a>
+                            <button
+                                ng-if="o.orderstates.length == 1"
+                                class="ml-[15px] flex justify-center items-center h-[36px] text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
+                            >
+                                Hủy đơn hàng
+                            </button>
+                        </div>
+                        <div class="flex justify-end items-center">
+                            <span class="text-sm text-[#000000cc] mr-[5px]"
+                                >Tổng số tiền:</span
+                            >
+                            <span class="text-2xl text-[#fa6338] font-bold"
+                                >{{ o.total | number:0 }}đ</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

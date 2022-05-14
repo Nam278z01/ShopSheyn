@@ -103,7 +103,17 @@ class ProductController extends Controller
     public function getProduct($id)
     {
         //
-        return Product::with(['subcategory', 'colors', 'colors.sizes'])->findOrFail($id);
+        return Product::with(['subcategory', 'subcategory.category', 'colors', 'colors.sizes'])->findOrFail($id);
+    }
+
+    public function getProductBySubcategory($id)
+    {
+        //
+        return Product::with(['subcategory', 'subcategory.category', 'colors', 'colors.sizes'])
+            ->where('subcategory_id', $id)
+            ->inRandomOrder()
+            ->limit(10)
+            ->get();
     }
 
     /**

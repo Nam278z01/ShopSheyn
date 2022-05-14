@@ -6,7 +6,7 @@
                 <div class="py-4">
                     <div class="inline-block">
                         <a
-                            href="#"
+                            href="/"
                             class="text-[#999] hover:underline hover:text-black"
                             >Trang chủ</a
                         >
@@ -15,9 +15,34 @@
                         class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
                     >
                         <a
-                            href="#"
+                            href="/product"
                             class="text-[#999] hover:underline hover:text-black"
                             >Quần áo nữ</a
+                        >
+                    </div>
+                    <div
+                        class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
+                    >
+                        <a
+                            href="/product?category_id={{ product.subcategory.category.category_id }}"
+                            class="text-[#999] hover:underline hover:text-black"
+                            >{{ product.subcategory.category.category_name }}</a
+                        >
+                    </div>
+                    <div
+                        class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
+                    >
+                        <a
+                            href="/product?category_id={{ product.subcategory.category.category_id }}&subcategory_id={{ subcategory.subcategory.category_id }}"
+                            class="text-[#999] hover:underline hover:text-black"
+                            >{{ product.subcategory.subcategory_name }}</a
+                        >
+                    </div>
+                    <div
+                        class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
+                    >
+                        <a href="#" class="text-black"
+                            >{{ product.product_name }}</a
                         >
                     </div>
                 </div>
@@ -240,12 +265,14 @@
                     <!-- Size -->
                     <div>
                         <div class="mt-[15px]">
-                            <div class="text-xs font-normal">
-                                Kích thước:
+                            <div class="text-xs font-normal flex items-center">
+                                <span>Kích thước:</span>
                                 <span
-                                    class="pl-[8px] font-bold text-[#222] text-sm"
+                                    class="px-[8px] font-bold text-[#222] text-sm"
                                     >{{product.picked.size.size_name}}</span
                                 >
+                                <span ng-if="product.picked.size">(Còn {{ product.picked.size.quantity | number:0 }} sản phẩm)</span>
+                                <span ng-if="product.picked.size && product.picked.size.quantity == 0">(Đã hết sản phẩm)</span>
                             </div>
                             <div class="mt-[15px] -mx-1 flex flex-wrap">
                                 <div
@@ -265,6 +292,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div ng-if="!product.picked.size && show_warning.size" class="text-xs font-normal text-red-500">
+                            Vui lòng chọn size
+                        </div>
                     </div>
 
                     <!-- Quantity -->
@@ -274,7 +304,7 @@
                             <div class="flex mt-[15px] h-[30px] items-center">
                                 <button
                                     ng-click="decrease()"
-                                    class="w-[30px] h-[35px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default"
+                                    class="w-[30px] h-[35px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] focus:border-black"
                                 >
                                     <i class="bx bx-minus"></i>
                                 </button>
@@ -291,6 +321,9 @@
                                 </button>
                             </div>
                         </div>
+                        <span ng-if="product.picked.quantity == product.picked.size.quantity" class="text-xs font-normal text-red-500">
+                            Số lượng bạn chọn đã đạt mức tối đa của sản phẩm này
+                        </span>
                     </div>
 
                     <div class="mt-[25px]">
@@ -302,6 +335,153 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="px-[50px]">
+        <!-- You may also like -->
+        <div class="pb-[30px] pt-[100px] px-[10px]">
+            <span
+                class="font-semibold text-2xl text-black"
+            >
+                Có Thể Bạn Cũng Thích
+            </span>
+        </div>
+        <div class="w-full relative">
+            <div class="w-full flex image-slider2" slick-slider2>
+                <!-- Normal -->
+                <div
+                    ng-repeat="x in [].constructor(5) track by $index"
+                    ng-if="isLoadingSub"
+                    class="card w-1/5 px-[10px] flex-shrink-0"
+                >
+                    <div class="cover skeleton w-full pb-[132%]"></div>
+                    <div class="min-h-[116px]">
+                        <p class="mt-2 h-4 w-4/5 skeleton"></p>
+                        <p class="mt-[6px] w-3/4 h-5 skeleton"></p>
+                        <div class="flex mt-[6px]">
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
+                            <p
+                                class="w-[25px] h-[25px] mr-2 rounded-full skeleton"
+                            ></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    ng-repeat="p in products"
+                    ng-if="!isLoadingSub"
+                    class="w-1/5 px-[10px] flex-shrink-0"
+                >
+                    <div
+                        class="w-full pb-[132%] h-0 relative overflow-hidden bg-[#f7f7f7] group"
+                    >
+                        <a
+                            href="/details?product_id={{ p.product_id }}"
+                            class="w-full inline-block"
+                        >
+                            <img
+                                ng-src="/image/product/{{p.picked.color.product_image1}}"
+                                alt="{{ p.product_name }}"
+                                class="w-full"
+                            />
+                            <img
+                                ng-src="/image/product/{{p.picked.color.product_image2 || p.picked.color.product_image3 || p.picked.color.product_image4 || p.picked.color.product_image5}}"
+                                alt="{{ p.product_name }}"
+                                class="w-full absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500"
+                            />
+                        </a>
+                        <div
+                            class="absolute bottom-0 left-0 right-0 px-[15px] py-[15px] transition-all group-hover:flex flex-wrap hidden"
+                        >
+                            <div
+                                ng-repeat="s in p.picked.color.sizes"
+                                ng-click="addToCartInProductPage(p, s)"
+                                title="Còn {{ s.quantity }} sản phẩm"
+                                class="flex justify-center items-center w-[48px] h-[43px] m-1 text-sm font-bold rounded-2xl bg-white cursor-pointer transition-all hover:bg-black hover:text-white"
+                            >
+                                {{ s.size_name }}
+                            </div>
+                        </div>
+                        <!-- IF Discount -->
+                        <div
+                            ng-if="p.product_discount != 0"
+                            class="absolute top-[6px] left-0 w-[50px] text-center text-xs leading-[20px] bg-[#222] text-white"
+                        >
+                            -{{ p.product_discount }}%
+                        </div>
+                    </div>
+                    <div class="min-h-[116px]">
+                        <div class="mt-2 text-xs">
+                            <a
+                                href="/details?product_id={{ p.product_id }}"
+                                class="block w-full text-[#767676] overflow-hidden whitespace-nowrap text-ellipsis hover:text-black hover:underline"
+                            >
+                                {{ p.product_name }}
+                            </a>
+                        </div>
+                        <div class="mt-[6px] flex items-center">
+                            <span
+                                ng-if="p.product_discount == 0"
+                                class="text-black text-sm block font-bold"
+                            >
+                                {{p.picked.color.product_price | number:0}}₫
+                            </span>
+                            <!-- IF Discount -->
+                            <span
+                                ng-if="p.product_discount != 0"
+                                class="text-[#fa6338] text-sm block font-bold mr-1"
+                            >
+                                {{p.picked.color.product_price -
+                                p.picked.color.product_price *
+                                p.product_discount / 100 | number:0}}₫
+                            </span>
+                            <del
+                                ng-if="p.product_discount != 0"
+                                class="text-[#999] text-xs"
+                            >
+                                {{p.picked.color.product_price | number:0}}₫
+                            </del>
+                        </div>
+                        <div ng-if="p.colors.length > 1" class="mt-[6px] flex">
+                            <div
+                                ng-repeat="cl in p.colors"
+                                ng-class="{'border-black p-[2px]' : p.picked.color.color_id == cl.color_id}"
+                                ng-mouseenter="changeColor(p, cl)"
+                                title="{{ cl.color_name }}"
+                                class="w-[25px] h-[25px] rounded-full border mr-2 cursor-pointer"
+                            >
+                                <img
+                                    ng-src="/image/product/{{ cl.product_image1 }}"
+                                    alt="{{ cl.color_name }}"
+                                    class="w-full h-full object-cover rounded-full"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <button
+                    class="absolute left-[15px] top-[40%] -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center flex hover:bg-white"
+                >
+                    <i class="bx bx-chevron-left"></i>
+                </button>
+                <button
+                    class="absolute right-[15px] top-[40%] -translate-y-2/4 bg-[#f3f4f1] text-3xl rounded-full w-10 h-10 justify-center items-center flex hover:bg-white"
+                >
+                    <i class="bx bx-chevron-right"></i>
+                </button> -->
             </div>
         </div>
     </div>
