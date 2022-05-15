@@ -94,6 +94,7 @@ class OrderController extends Controller
             }
 
             return response()->json([
+                'order_id' => $order->order_id,
                 'status_code' => 200,
                 'message' => 'Order successfully',
             ])->withCookie(cookie('cart', json_encode([]), 0));

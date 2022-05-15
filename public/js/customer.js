@@ -40105,8 +40105,11 @@ module.exports = angular;
 
 myApp.constant("API_URL", "");
 myApp.filter("jsDate", function () {
+  // return function (x) {
+  //     return x.replace("/Date(", "").replace(")/", "");
+  // };
   return function (x) {
-    return x.replace("/Date(", "").replace(")/", "");
+    return new Date(x);
   };
 });
 myApp.filter("cvOrderState", function () {
@@ -40472,6 +40475,9 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
       }
     }).then(function (res) {
       $rootScope.orders = res.data;
+      $rootScope.orders.forEach(function (order) {
+        order.order_state_current = order.orderstates[order.orderstates.length - 1];
+      });
     });
   }
 
@@ -40485,6 +40491,8 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
       }
     }).then(function (res) {
       $rootScope.order = res.data;
+      $rootScope.order.order_state_current = $rootScope.order.orderstates[$rootScope.order.orderstates.length - 1];
+      console.log($rootScope.order);
     });
   }
 
@@ -40521,6 +40529,9 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
         $rootScope.cart = [];
         $scope.isPaying = false;
         $rootScope.total_price = 0;
+        $location.path("/orderdetails").search({
+          order_id: res.data.order_id
+        });
       });
     }
   };
@@ -40535,7 +40546,7 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
     if ($scope.order_state == -1) {
       return true;
     } else {
-      return row.orderstates[row.orderstates.length - 1].orderstate_name == $scope.order_state;
+      return row.order_state_current.orderstate_name == $scope.order_state;
     }
   };
 });

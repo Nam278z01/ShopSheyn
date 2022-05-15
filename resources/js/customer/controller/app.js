@@ -1,8 +1,11 @@
 myApp.constant("API_URL", "");
 
 myApp.filter("jsDate", function () {
+    // return function (x) {
+    //     return x.replace("/Date(", "").replace(")/", "");
+    // };
     return function (x) {
-        return x.replace("/Date(", "").replace(")/", "");
+        return new Date(x)
     };
 });
 

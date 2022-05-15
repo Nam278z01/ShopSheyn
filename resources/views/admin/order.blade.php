@@ -88,7 +88,7 @@
                                 'bg-red': row.order_state_current == '3',
                                 'bg-yellow': row.order_state_current == '4',
                             }"
-                            >@{{
+                            >Đơn hàng @{{
                                 row.order_state_current | cvOrderState
                             }}</span
                         >

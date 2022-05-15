@@ -20,6 +20,10 @@ myApp.controller(
                 },
             }).then((res) => {
                 $rootScope.orders = res.data;
+                $rootScope.orders.forEach((order) => {
+                    order.order_state_current =
+                        order.orderstates[order.orderstates.length - 1];
+                });
             });
         }
 
@@ -34,6 +38,11 @@ myApp.controller(
                 },
             }).then((res) => {
                 $rootScope.order = res.data;
+                $rootScope.order.order_state_current =
+                    $rootScope.order.orderstates[
+                        $rootScope.order.orderstates.length - 1
+                    ];
+                    console.log($rootScope.order)
             });
         }
 
@@ -69,6 +78,10 @@ myApp.controller(
                     $rootScope.cart = [];
                     $scope.isPaying = false;
                     $rootScope.total_price = 0;
+
+                    $location
+                        .path("/orderdetails")
+                        .search({ order_id: res.data.order_id });
                 });
             }
         };
@@ -82,10 +95,7 @@ myApp.controller(
             if ($scope.order_state == -1) {
                 return true;
             } else {
-                return (
-                    row.orderstates[row.orderstates.length - 1]
-                        .orderstate_name == $scope.order_state
-                );
+                return row.order_state_current.orderstate_name == $scope.order_state;
             }
         };
     }

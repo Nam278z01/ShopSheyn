@@ -1,5 +1,5 @@
 @extends('admin.index') @section('content')
-<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+<script src="/ckeditor/ckeditor.js"></script>
 <style>
     .product-color {
         display: flex;
