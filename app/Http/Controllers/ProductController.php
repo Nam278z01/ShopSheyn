@@ -147,35 +147,105 @@ class ProductController extends Controller
         $product->admin_updated_id = $admin->admin_id;
         $product->save();
 
-        Color::where('product_id', $id)->delete();
+        $colors_old = Color::where('product_id', $id)->get();
 
         foreach ($request->colors as $color) {
-            $color_new = new Color();
-            $color_new->color_name = $color['color_name'];
-            $color_new->product_price = $color['product_price'];
-            $color_new->product_image1 = $color['product_image1'];
-            if (isset($color['product_image2'])) {
-                $color_new->product_image2 = $color['product_image2'];
+            $exists = false;
+            foreach ($colors_old as $color_old) {
+                if(isset($color['color_id']) && $color['color_id'] == $color_old->color_id) {
+                    $color_old->color_name = $color['color_name'];
+                    $color_old->product_price = $color['product_price'];
+                    $color_old->product_image1 = $color['product_image1'];
+                    $color_old->product_image2 = $color['product_image2'];
+                    $color_old->product_image3 = $color['product_image3'];
+                    $color_old->product_image4 = $color['product_image4'];
+                    $color_old->product_image5 = $color['product_image5'];
+                    $color_old->save();
+                    $exists = true;
+                    // Update Size
+                    $sizes_old = Size::where('color_id', $color['color_id'])->get();
+                    foreach ($color['sizes'] as $size) {
+                        $exists_size = false;
+                        foreach ($sizes_old as $size_old) {
+                            if(isset($size['size_id']) && $size['size_id'] == $size_old->size_id) {
+                                $size_old->size_name = $size['size_name'];
+                                $size_old->quantity = $size['quantity'];
+                                $size_old->save();
+
+                                $exists_size = true;
+                                break;
+                            }
+                        }
+                        if(!$exists_size) {
+                            $size_new = new Size();
+                            $size_new->size_name = $size['size_name'];
+                            $size_new->quantity = $size['quantity'];
+                            $size_new->color_id =  $color['color_id'];
+                            $size_new->save();
+                        }
+                    }
+
+                    foreach ($sizes_old as $size_old) {
+                        $exists_size = false;
+                        foreach ($color['sizes'] as $size) {
+                            if(isset($size['size_id']) && $size['size_id'] == $size_old->size_id) {
+                                $exists_size = true;
+                                break;
+                            }
+                        }
+                        if(!$exists_size) {
+                            Size::find($size_old->size_id)->delete();
+                            $size_old->save();
+                        }
+                    }
+                    break;
+                }
             }
-            if (isset($color['product_image3'])) {
-                $color_new->product_image3 = $color['product_image3'];
-            }
-            if (isset($color['product_image4'])) {
-                $color_new->product_image4 = $color['product_image4'];
-            }
-            if (isset($color['product_image5'])) {
-                $color_new->product_image5 = $color['product_image5'];
-            }
-            $color_new->product_id = $id;
-            $color_new->save();
-            foreach ($color['sizes'] as $size) {
-                $size_new = new Size();
-                $size_new->size_name = $size['size_name'];
-                $size_new->quantity = $size['quantity'];
-                $size_new->color_id = $color_new->color_id;
-                $size_new->save();
+            if(!$exists) {
+                $color_new = new Color();
+                $color_new->color_name = $color['color_name'];
+                $color_new->product_price = $color['product_price'];
+                $color_new->product_image1 = $color['product_image1'];
+                if (isset($color['product_image2'])) {
+                    $color_new->product_image2 = $color['product_image2'];
+                }
+                if (isset($color['product_image3'])) {
+                    $color_new->product_image3 = $color['product_image3'];
+                }
+                if (isset($color['product_image4'])) {
+                    $color_new->product_image4 = $color['product_image4'];
+                }
+                if (isset($color['product_image5'])) {
+                    $color_new->product_image5 = $color['product_image5'];
+                }
+                $color_new->product_id = $id;
+                $color_new->save();
+                // Update Size
+                foreach ($color['sizes'] as $size) {
+                    $size_new = new Size();
+                    $size_new->size_name = $size['size_name'];
+                    $size_new->quantity = $size['quantity'];
+                    $size_new->color_id = $color_new->color_id;
+                    $size_new->save();
+                }
             }
         }
+
+        // Delete Color
+        foreach ($colors_old as $color_old) {
+            $exists = false;
+            foreach ($request->colors as $color) {
+                if(isset($color['color_id']) && $color['color_id'] == $color_old->color_id) {
+                    $exists = true;
+                    break;
+                }
+            }
+            if(!$exists) {
+                Color::find($color_old->color_id)->delete();
+                $color_old->save();
+            }
+        }
+
         return Product::with(['subcategory', 'colors', 'colors.sizes'])->findOrFail($id);
     }
 

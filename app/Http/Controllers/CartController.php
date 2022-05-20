@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use App\Models\Product;
+use App\Models\Size;
 
 class CartController extends Controller
 {
@@ -70,18 +71,26 @@ class CartController extends Controller
             "cart_id" => $request->cart_id,
         ];
 
+        $size = Size::findOrFail($product->size_id);
+
         $cart = [];
         if ($request->hasCookie('cart')) {
             $cart = json_decode($request->cookie('cart'));
             $isExists = false;
             foreach ($cart as $p) {
                 if ($p->size_id == $product->size_id) {
+                    if($p->quantity + $product->quantity > $size->quantity) {
+                        return response()->json(['status' => 'greater', 'quantity_in_cart' => $p->quantity, 'quantity_in_stock' => $size->quantity]);
+                    }
                     $p->quantity += $product->quantity;
                     $isExists = true;
                     break;
                 }
             }
             if (!$isExists) {
+                if($product->quantity > $size->quantity) {
+                    return response()->json(['status' => 'greater', 'quantity_in_cart' => 0, 'quantity_in_stock' => $size->quantity]);
+                }
                 array_unshift($cart, $product);
             }
         } else {
@@ -89,7 +98,7 @@ class CartController extends Controller
         }
         $ONE_MONTH = 60 * 24 * 30;
         $cookie = cookie('cart', json_encode($cart), $ONE_MONTH);
-        return response($cart)->cookie($cookie);
+        return response()->json(['status' => 'success', 'cart' => $cart])->cookie($cookie);
     }
 
     /**
@@ -125,8 +134,14 @@ class CartController extends Controller
     {
         //
         $cart = json_decode(request()->cookie('cart'));
+        $size = Size::findOrFail($request->size_id);
+
         foreach($cart as $p){
             if($p->cart_id == $id){
+                if($size->quantity < $request->quantity) {
+                    return response()->json(['status' => 'greater', 'quantity_in_cart' => $p->quantity, 'quantity_in_stock' => $size->quantity]);
+                }
+
                 $p->product_id = $request->product_id;
                 $p->size_id = $request->size_id;
                 $p->quantity = $request->quantity;
@@ -134,7 +149,7 @@ class CartController extends Controller
             }
         }
         $cookie = cookie('cart', json_encode($cart), 120);
-        return response($cart)->cookie($cookie);
+        return response()->json(['status' => 'success', 'cart' => $cart])->cookie($cookie);
     }
 
     /**

@@ -57,7 +57,7 @@ class UploadController extends Controller
             }
             return response()->json("success");
         } else {
-            return response()->json("failed");;
+            return response()->json("failed");
         }
     }
 

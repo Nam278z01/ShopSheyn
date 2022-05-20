@@ -32,6 +32,21 @@ class OrderController extends Controller
             ->orderByDesc('order_id')->get();
     }
 
+    public function updateOrderState(Request $request) {
+        $order_state = OrderState::firstOrCreate(
+        [
+            'order_id' => $request->order_id,
+            'orderstate_name' => $request->orderstate_name,
+        ]);
+
+        if(!$order_state->orderstate_date) {
+            return OrderState::findorFail($order_state->orderstate_id);
+        } else {
+            return false;
+        }
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

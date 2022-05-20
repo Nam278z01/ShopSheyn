@@ -329,16 +329,14 @@
                                     </a>
                                     <div class="flex py-1 -mx-[10px]">
                                         <select
-                                            ng-change="changeColorInCart(product, product.picked.color, '@{{
-                                                product.picked.color
-                                            }}'); editCart(product)"
+                                            ng-change="changeColorInCart(product, '@{{product}}')"
                                             ng-model="product.picked.color"
                                             ng-options="color.color_name for color in product.colors"
                                             class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1"
                                         ></select>
                                         <select
                                             ng-model="product.picked.size"
-                                            ng-change="editCart(product)"
+                                            ng-change="changeSizeInCart(product, '@{{product}}')"
                                             ng-options="size.size_name for size in product.picked.color.sizes"
                                             class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1"
                                         ></select>
@@ -351,13 +349,15 @@
                                         >
                                             <button
                                                 ng-click="decreaseInCart(product)"
-                                                class="w-[25px] h-[24px] border border-gray-300 flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px] text-gray-300 cursor-default"
+                                                class="w-[25px] h-[24px] border border-gray-300 focus:border-black flex items-center justify-center rounded-tl-[100px] rounded-bl-[100px]"
                                             >
                                                 <i
                                                     class="bx bx-minus text-xs"
                                                 ></i>
                                             </button>
                                             <input
+                                                ng-blur="editCart(product)"
+                                                ng-keypress="validateNumber($event, product)"
                                                 ng-model="product.picked.quantity"
                                                 type="text"
                                                 class="text-[13px] w-[30px] h-[24px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center"

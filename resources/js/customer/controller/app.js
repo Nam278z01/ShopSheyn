@@ -5,7 +5,7 @@ myApp.filter("jsDate", function () {
     //     return x.replace("/Date(", "").replace(")/", "");
     // };
     return function (x) {
-        return new Date(x)
+        return new Date(x);
     };
 });
 
@@ -174,6 +174,87 @@ myApp.run(function (
         $rootScope.is_show_modal_login = !$rootScope.is_show_modal_login;
     };
 
+    $rootScope.validateNumber = function (e, product) {
+        if (product.picked.size) {
+            const pattern = /^[0-9]$/;
+            if (!pattern.test(e.key)) {
+                e.preventDefault();
+            }
+        } else {
+            e.preventDefault();
+        }
+    };
+
+    $rootScope.validateQuantity = function (product) {
+        if (product.picked.size) {
+            $rootScope
+                .getQuantityOfSize(product.picked.size)
+                .then(function (res) {
+                    product.picked.size.quantity = res.data.quantity;
+                    if (
+                        product.picked.size &&
+                        product.picked.size.quantity < product.picked.quantity
+                    ) {
+                        product.picked.quantity = product.picked.size.quantity;
+                        $rootScope.showSnackbar(
+                            `Sản phẩm này chỉ còn tối đa ${product.picked.size.quantity} cái!`
+                        );
+                    }
+                    if (!product.picked.quantity) {
+                        product.picked.quantity = 1;
+                    }
+                });
+        }
+    };
+
+    $rootScope.getQuantityOfSize = function (size) {
+        return $http({
+            method: "GET",
+            url: API_URL + "/api/size/get-quantity/" + size.size_id,
+        });
+    };
+
+    $rootScope.snackbarContent = "Hello!";
+    var myTimeout;
+    $rootScope.showSnackbar = function (content, type) {
+        $rootScope.snackbarContent = content;
+        let snackbar = $("#snackbar");
+        if (type == "error") {
+            snackbar.css({ "background-color": "#F44336" });
+            snackbar.css({ "background-image": "unset" });
+        } else if (type == "success") {
+            snackbar.css({
+                "background-image":
+                    "linear-gradient(to right, #2F80ED, #00AEEF)",
+            });
+            snackbar.css({ "background-color": "unset" });
+        } else if (type == "warning") {
+            snackbar.css({
+                "background-image":
+                    "linear-gradient(45deg, #F2AF12 0%, #FFD200 100%)",
+            });
+            snackbar.css({ "background-color": "unset" });
+        } else {
+            snackbar.css({ "background-color": "rgba(24, 34, 45, 1)" });
+            snackbar.css({ "background-image": "unset" });
+        }
+        if (snackbar.hasClass("show")) {
+            snackbar.removeClass("show");
+            setTimeout(function () {
+                clearTimeout(myTimeout);
+                snackbar.addClass("show");
+                myTimeout = setTimeout(function () {
+                    snackbar.removeClass("show");
+                }, 5000);
+            }, 100);
+        } else {
+            snackbar.addClass("show");
+            myTimeout = setTimeout(function () {
+                snackbar.removeClass("show");
+            }, 5000);
+        }
+    };
+
     $http({
         method: "GET",
         url: API_URL + "/api/category",
@@ -181,26 +262,18 @@ myApp.run(function (
         $rootScope.categories = res.data;
     });
 
-    // Cart
-    $http({
-        method: "GET",
-        url: API_URL + "/api/cart",
-    }).then((res) => {
-        $rootScope.cart = res.data;
-        $rootScope.cart.map((product) => {
-            product.picked = {};
-            product.picked.quantity = product.quantity;
-            product.colors.forEach((color) => {
-                color.sizes.forEach((size) => {
-                    if (product.size_id == size.size_id) {
-                        product.picked.color = color;
-                        product.picked.size = size;
-                    }
-                });
-            });
-        });
-        $rootScope.recalculateTotalPrice();
-    });
+    // Show Cart
+    $rootScope.showCartTimeout;
+    $rootScope.showCart = function () {
+        if ($rootScope.showCartTimeout) {
+            $timeout.cancel($rootScope.showCartTimeout);
+        }
+        $rootScope.isShowCart = true;
+        $rootScope.showCartTimeout = $timeout(function () {
+            $rootScope.isShowCart = false;
+            $rootScope.showCartTimeout = undefined;
+        }, 3000);
+    };
 
     $rootScope.recalculateTotalPrice = function () {
         $rootScope.total_price = $rootScope.cart.reduce(function (
@@ -217,7 +290,28 @@ myApp.run(function (
             );
         },
         0);
-    }
+    };
+
+    // Get Cart
+    $http({
+        method: "GET",
+        url: API_URL + "/api/cart",
+    }).then((res) => {
+        $rootScope.cart = res.data;
+        $rootScope.cart.forEach((product) => {
+            product.picked = {};
+            product.picked.quantity = product.quantity;
+            product.colors.forEach((color) => {
+                color.sizes.forEach((size) => {
+                    if (product.size_id == size.size_id) {
+                        product.picked.color = color;
+                        product.picked.size = size;
+                    }
+                });
+            });
+        });
+        $rootScope.recalculateTotalPrice();
+    });
 
     // Add Cart
     $rootScope.addToCartInProductPage = function (product, size) {
@@ -228,43 +322,47 @@ myApp.run(function (
         if (product_new.colors.length == 1) {
             product_new.picked.color = product_new.colors[0];
         }
-        $http({
-            method: "POST",
-            url: API_URL + "/api/cart",
-            data: {
-                cart_id: product_new.cart_id,
-                product_id: product_new.product_id,
-                size_id: product_new.picked.size.size_id,
-                quantity: product_new.picked.quantity,
-            },
-        }).then((res) => {
-            let index = $rootScope.cart.findIndex(
-                (p) => p.picked.size.size_id == product_new.picked.size.size_id
-            );
-            index != -1
-                ? ($rootScope.cart[index].picked.quantity +=
-                      product_new.picked.quantity)
-                : $rootScope.cart.unshift(product_new);
-            $rootScope.showCart();
-            $rootScope.recalculateTotalPrice();
-        });
-    };
+        if (product_new.picked.size.quantity != 0) {
+            $http({
+                method: "POST",
+                url: API_URL + "/api/cart",
+                data: {
+                    cart_id: product_new.cart_id,
+                    product_id: product_new.product_id,
+                    size_id: product_new.picked.size.size_id,
+                    quantity: product_new.picked.quantity,
+                },
+            }).then((res) => {
+                if (res.data.status == "success") {
+                    let index = $rootScope.cart.findIndex(
+                        (p) =>
+                            p.picked.size.size_id ==
+                            product_new.picked.size.size_id
+                    );
+                    index != -1
+                        ? ($rootScope.cart[index].picked.quantity +=
+                              product_new.picked.quantity)
+                        : $rootScope.cart.unshift(product_new);
 
-    $rootScope.showCartTimeout;
-    $rootScope.showCart = function () {
-        if ($rootScope.showCartTimeout) {
-            $timeout.cancel($rootScope.showCartTimeout);
+                    $rootScope.showCart();
+                    $rootScope.recalculateTotalPrice();
+                } else {
+                    $rootScope.showSnackbar(
+                        `Bạn đã có ${res.data.quantity_in_cart} sản phẩm trong này giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`
+                    );
+                }
+                size.quantity = res.data.quantity_in_stock;
+            });
+        } else {
+            $rootScope.showSnackbar("Sản phẩm đã hết hàng!");
         }
-        $rootScope.isShowCart = true;
-        $rootScope.showCartTimeout = $timeout(function () {
-            $rootScope.isShowCart = false;
-            $rootScope.showCartTimeout = undefined;
-        }, 3000);
     };
 
     //  EditCart
-    $rootScope.editCart = function (product) {
-        product.picked.quantity = 1
+    $rootScope.editCart = function (product, product_old) {
+        if (!product.picked.quantity) {
+            product.picked.quantity = 1;
+        }
         $http({
             method: "PUT",
             url: API_URL + "/api/cart/" + product.cart_id,
@@ -274,9 +372,42 @@ myApp.run(function (
                 quantity: product.picked.quantity,
             },
         }).then((res) => {
-            $rootScope.recalculateTotalPrice();
+            if (res.data.status == "success") {
+                $rootScope.recalculateTotalPrice();
+            } else {
+                if (res.data.quantity_in_stock) {
+                    $rootScope.showSnackbar(
+                        `Sản phẩm này chỉ còn tối đa ${res.data.quantity_in_stock} cái!`
+                    );
+                } else {
+                    $rootScope.showSnackbar(
+                        `Sản phẩm này đã hết hàng!`
+                    );
+                }
+
+                product_old.colors.forEach(function (color) {
+                    if (color.color_id == product_old.picked.color.color_id) {
+                        product_old.picked.color = color;
+                        product_old.picked.color.sizes.forEach(function (size) {
+                            if (size.size_id == product_old.picked.size.size_id) {
+                                product_old.picked.size = size;
+                                return false;
+                            }
+                        })
+                        return false;
+                    }
+                })
+
+
+                let index = $rootScope.cart.findIndex(p => p.product_id === product_old.product_id);
+                $rootScope.cart[index] = product_old
+
+                product.picked.quantity = res.data.quantity_in_cart;
+            }
+            product.picked.size.quantity = res.data.quantity_in_stock;
         });
     };
+
     // Remove product in cart
     $rootScope.removeProductFromCart = function (cart_id) {
         $http({
@@ -292,22 +423,34 @@ myApp.run(function (
     };
 
     //Cart
-    $rootScope.changeColorInCart = function (product, color, old_color) {
+    $rootScope.changeColorInCart = function (product, product_old) {
+        let product_backup = JSON.parse(product_old);
         //Giữ size
         let index;
         if (product.picked.size) {
-            index = JSON.parse(old_color).sizes.findIndex(
+            index = product_backup.picked.color.sizes.findIndex(
                 (size) => size.size_id == product.picked.size.size_id
             );
-            product.picked.size = color.sizes[index];
+            product.picked.size = product.picked.color.sizes[index];
         }
-        product.picked.color = color;
+        product.picked.quantity = 1;
+        $rootScope.editCart(product, product_backup);
+    };
+
+    $rootScope.changeSizeInCart = function (product, product_old) {
+        let product_backup = JSON.parse(product_old);
+        product.picked.quantity = 1;
+        $rootScope.editCart(product, product_backup);
     };
 
     $rootScope.increaseInCart = function (product) {
         if (product.picked.quantity < product.picked.size.quantity) {
             product.picked.quantity++;
             $rootScope.editCart(product);
+        } else {
+            $rootScope.showSnackbar(
+                `Sản phẩm này chỉ còn tối đa ${product.picked.size.quantity} cái!`
+            );
         }
     };
 
@@ -321,7 +464,7 @@ myApp.run(function (
 
 myApp.directive("slickSlider", function ($timeout) {
     function link(scope, element, attrs) {
-        $(document).ready(function () {
+        $(function () {
             $timeout(function () {
                 $(".image-slider").slick({
                     slidesToShow: 2,
@@ -354,7 +497,7 @@ myApp.directive("slickSlider", function ($timeout) {
 
 myApp.directive("slickSlider2", function ($timeout) {
     function link(scope, element, attrs) {
-        $(document).ready(function () {
+        $(function () {
             $timeout(function () {
                 $(".image-slider2").slick({
                     slidesToShow: 5,

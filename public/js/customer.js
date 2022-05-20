@@ -40246,68 +40246,102 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
     $rootScope.is_show_modal_login = !$rootScope.is_show_modal_login;
   };
 
+  $rootScope.validateNumber = function (e, product) {
+    if (product.picked.size) {
+      var pattern = /^[0-9]$/;
+
+      if (!pattern.test(e.key)) {
+        e.preventDefault();
+      }
+    } else {
+      e.preventDefault();
+    }
+  };
+
+  $rootScope.validateQuantity = function (product) {
+    if (product.picked.size) {
+      $rootScope.getQuantityOfSize(product.picked.size).then(function (res) {
+        product.picked.size.quantity = res.data.quantity;
+
+        if (product.picked.size && product.picked.size.quantity < product.picked.quantity) {
+          product.picked.quantity = product.picked.size.quantity;
+          $rootScope.showSnackbar("S\u1EA3n ph\u1EA9m n\xE0y ch\u1EC9 c\xF2n t\u1ED1i \u0111a ".concat(product.picked.size.quantity, " c\xE1i!"));
+        }
+
+        if (!product.picked.quantity) {
+          product.picked.quantity = 1;
+        }
+      });
+    }
+  };
+
+  $rootScope.getQuantityOfSize = function (size) {
+    return $http({
+      method: "GET",
+      url: API_URL + "/api/size/get-quantity/" + size.size_id
+    });
+  };
+
+  $rootScope.snackbarContent = "Hello!";
+  var myTimeout;
+
+  $rootScope.showSnackbar = function (content, type) {
+    $rootScope.snackbarContent = content;
+    var snackbar = $("#snackbar");
+
+    if (type == "error") {
+      snackbar.css({
+        "background-color": "#F44336"
+      });
+      snackbar.css({
+        "background-image": "unset"
+      });
+    } else if (type == "success") {
+      snackbar.css({
+        "background-image": "linear-gradient(to right, #2F80ED, #00AEEF)"
+      });
+      snackbar.css({
+        "background-color": "unset"
+      });
+    } else if (type == "warning") {
+      snackbar.css({
+        "background-image": "linear-gradient(45deg, #F2AF12 0%, #FFD200 100%)"
+      });
+      snackbar.css({
+        "background-color": "unset"
+      });
+    } else {
+      snackbar.css({
+        "background-color": "rgba(24, 34, 45, 1)"
+      });
+      snackbar.css({
+        "background-image": "unset"
+      });
+    }
+
+    if (snackbar.hasClass("show")) {
+      snackbar.removeClass("show");
+      setTimeout(function () {
+        clearTimeout(myTimeout);
+        snackbar.addClass("show");
+        myTimeout = setTimeout(function () {
+          snackbar.removeClass("show");
+        }, 5000);
+      }, 100);
+    } else {
+      snackbar.addClass("show");
+      myTimeout = setTimeout(function () {
+        snackbar.removeClass("show");
+      }, 5000);
+    }
+  };
+
   $http({
     method: "GET",
     url: API_URL + "/api/category"
   }).then(function (res) {
     $rootScope.categories = res.data;
-  }); // Cart
-
-  $http({
-    method: "GET",
-    url: API_URL + "/api/cart"
-  }).then(function (res) {
-    $rootScope.cart = res.data;
-    $rootScope.cart.map(function (product) {
-      product.picked = {};
-      product.picked.quantity = product.quantity;
-      product.colors.forEach(function (color) {
-        color.sizes.forEach(function (size) {
-          if (product.size_id == size.size_id) {
-            product.picked.color = color;
-            product.picked.size = size;
-          }
-        });
-      });
-    });
-    $rootScope.recalculateTotalPrice();
-  });
-
-  $rootScope.recalculateTotalPrice = function () {
-    $rootScope.total_price = $rootScope.cart.reduce(function (total, current) {
-      return total + (current.picked.color.product_price - current.picked.color.product_price * current.product_discount / 100) * current.picked.quantity;
-    }, 0);
-  }; // Add Cart
-
-
-  $rootScope.addToCartInProductPage = function (product, size) {
-    var product_new = JSON.parse(JSON.stringify(product));
-    product_new.cart_id = Math.floor(Date.now() * Math.random());
-    product_new.picked.size = size;
-    product_new.picked.quantity = 1;
-
-    if (product_new.colors.length == 1) {
-      product_new.picked.color = product_new.colors[0];
-    }
-
-    $http({
-      method: "POST",
-      url: API_URL + "/api/cart",
-      data: {
-        cart_id: product_new.cart_id,
-        product_id: product_new.product_id,
-        size_id: product_new.picked.size.size_id,
-        quantity: product_new.picked.quantity
-      }
-    }).then(function (res) {
-      var index = $rootScope.cart.findIndex(function (p) {
-        return p.picked.size.size_id == product_new.picked.size.size_id;
-      });
-      index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
-      $rootScope.showCart();
-      $rootScope.recalculateTotalPrice();
-    });
-  };
+  }); // Show Cart
 
   $rootScope.showCartTimeout;
 
@@ -40321,11 +40355,80 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
       $rootScope.isShowCart = false;
       $rootScope.showCartTimeout = undefined;
     }, 3000);
+  };
+
+  $rootScope.recalculateTotalPrice = function () {
+    $rootScope.total_price = $rootScope.cart.reduce(function (total, current) {
+      return total + (current.picked.color.product_price - current.picked.color.product_price * current.product_discount / 100) * current.picked.quantity;
+    }, 0);
+  }; // Get Cart
+
+
+  $http({
+    method: "GET",
+    url: API_URL + "/api/cart"
+  }).then(function (res) {
+    $rootScope.cart = res.data;
+    $rootScope.cart.forEach(function (product) {
+      product.picked = {};
+      product.picked.quantity = product.quantity;
+      product.colors.forEach(function (color) {
+        color.sizes.forEach(function (size) {
+          if (product.size_id == size.size_id) {
+            product.picked.color = color;
+            product.picked.size = size;
+          }
+        });
+      });
+    });
+    $rootScope.recalculateTotalPrice();
+  }); // Add Cart
+
+  $rootScope.addToCartInProductPage = function (product, size) {
+    var product_new = JSON.parse(JSON.stringify(product));
+    product_new.cart_id = Math.floor(Date.now() * Math.random());
+    product_new.picked.size = size;
+    product_new.picked.quantity = 1;
+
+    if (product_new.colors.length == 1) {
+      product_new.picked.color = product_new.colors[0];
+    }
+
+    if (product_new.picked.size.quantity != 0) {
+      $http({
+        method: "POST",
+        url: API_URL + "/api/cart",
+        data: {
+          cart_id: product_new.cart_id,
+          product_id: product_new.product_id,
+          size_id: product_new.picked.size.size_id,
+          quantity: product_new.picked.quantity
+        }
+      }).then(function (res) {
+        if (res.data.status == "success") {
+          var index = $rootScope.cart.findIndex(function (p) {
+            return p.picked.size.size_id == product_new.picked.size.size_id;
+          });
+          index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
+          $rootScope.showCart();
+          $rootScope.recalculateTotalPrice();
+        } else {
+          $rootScope.showSnackbar("B\u1EA1n \u0111\xE3 c\xF3 ".concat(res.data.quantity_in_cart, " s\u1EA3n ph\u1EA9m trong n\xE0y gi\u1ECF h\xE0ng. Kh\xF4ng th\u1EC3 th\xEAm s\u1ED1 l\u01B0\u1EE3ng \u0111\xE3 ch\u1ECDn v\xE0o gi\u1ECF h\xE0ng v\xEC s\u1EBD v\u01B0\u1EE3t qu\xE1 gi\u1EDBi h\u1EA1n mua h\xE0ng c\u1EE7a b\u1EA1n."));
+        }
+
+        size.quantity = res.data.quantity_in_stock;
+      });
+    } else {
+      $rootScope.showSnackbar("Sản phẩm đã hết hàng!");
+    }
   }; //  EditCart
 
 
-  $rootScope.editCart = function (product) {
-    product.picked.quantity = 1;
+  $rootScope.editCart = function (product, product_old) {
+    if (!product.picked.quantity) {
+      product.picked.quantity = 1;
+    }
+
     $http({
       method: "PUT",
       url: API_URL + "/api/cart/" + product.cart_id,
@@ -40335,7 +40438,35 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
         quantity: product.picked.quantity
       }
     }).then(function (res) {
-      $rootScope.recalculateTotalPrice();
+      if (res.data.status == "success") {
+        $rootScope.recalculateTotalPrice();
+      } else {
+        if (res.data.quantity_in_stock) {
+          $rootScope.showSnackbar("S\u1EA3n ph\u1EA9m n\xE0y ch\u1EC9 c\xF2n t\u1ED1i \u0111a ".concat(res.data.quantity_in_stock, " c\xE1i!"));
+        } else {
+          $rootScope.showSnackbar("S\u1EA3n ph\u1EA9m n\xE0y \u0111\xE3 h\u1EBFt h\xE0ng!");
+        }
+
+        product_old.colors.forEach(function (color) {
+          if (color.color_id == product_old.picked.color.color_id) {
+            product_old.picked.color = color;
+            product_old.picked.color.sizes.forEach(function (size) {
+              if (size.size_id == product_old.picked.size.size_id) {
+                product_old.picked.size = size;
+                return false;
+              }
+            });
+            return false;
+          }
+        });
+        var index = $rootScope.cart.findIndex(function (p) {
+          return p.product_id === product_old.product_id;
+        });
+        $rootScope.cart[index] = product_old;
+        product.picked.quantity = res.data.quantity_in_cart;
+      }
+
+      product.picked.size.quantity = res.data.quantity_in_stock;
     });
   }; // Remove product in cart
 
@@ -40353,24 +40484,34 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
   }; //Cart
 
 
-  $rootScope.changeColorInCart = function (product, color, old_color) {
-    //Giữ size
+  $rootScope.changeColorInCart = function (product, product_old) {
+    var product_backup = JSON.parse(product_old); //Giữ size
+
     var index;
 
     if (product.picked.size) {
-      index = JSON.parse(old_color).sizes.findIndex(function (size) {
+      index = product_backup.picked.color.sizes.findIndex(function (size) {
         return size.size_id == product.picked.size.size_id;
       });
-      product.picked.size = color.sizes[index];
+      product.picked.size = product.picked.color.sizes[index];
     }
 
-    product.picked.color = color;
+    product.picked.quantity = 1;
+    $rootScope.editCart(product, product_backup);
+  };
+
+  $rootScope.changeSizeInCart = function (product, product_old) {
+    var product_backup = JSON.parse(product_old);
+    product.picked.quantity = 1;
+    $rootScope.editCart(product, product_backup);
   };
 
   $rootScope.increaseInCart = function (product) {
     if (product.picked.quantity < product.picked.size.quantity) {
       product.picked.quantity++;
       $rootScope.editCart(product);
+    } else {
+      $rootScope.showSnackbar("S\u1EA3n ph\u1EA9m n\xE0y ch\u1EC9 c\xF2n t\u1ED1i \u0111a ".concat(product.picked.size.quantity, " c\xE1i!"));
     }
   };
 
@@ -40383,7 +40524,7 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
 });
 myApp.directive("slickSlider", function ($timeout) {
   function link(scope, element, attrs) {
-    $(document).ready(function () {
+    $(function () {
       $timeout(function () {
         $(".image-slider").slick({
           slidesToShow: 2,
@@ -40407,7 +40548,7 @@ myApp.directive("slickSlider", function ($timeout) {
 });
 myApp.directive("slickSlider2", function ($timeout) {
   function link(scope, element, attrs) {
-    $(document).ready(function () {
+    $(function () {
       $timeout(function () {
         $(".image-slider2").slick({
           slidesToShow: 5,
@@ -40491,8 +40632,6 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
       }
     }).then(function (res) {
       $rootScope.order = res.data;
-      $rootScope.order.order_state_current = $rootScope.order.orderstates[$rootScope.order.orderstates.length - 1];
-      console.log($rootScope.order);
     });
   }
 
@@ -40718,31 +40857,40 @@ myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http
     product_new.cart_id = Math.floor(Date.now() * Math.random());
 
     if (product_new.picked.size) {
-      $http({
-        method: "POST",
-        url: API_URL + "/api/cart",
-        data: {
-          cart_id: product_new.cart_id,
-          product_id: product_new.product_id,
-          size_id: product_new.picked.size.size_id,
-          quantity: product_new.picked.quantity
-        }
-      }).then(function (res) {
-        var index = $rootScope.cart.findIndex(function (p) {
-          return p.picked.size.size_id == product_new.picked.size.size_id;
+      if (product_new.picked.size.quantity != 0) {
+        $http({
+          method: "POST",
+          url: API_URL + "/api/cart",
+          data: {
+            cart_id: product_new.cart_id,
+            product_id: product_new.product_id,
+            size_id: product_new.picked.size.size_id,
+            quantity: product_new.picked.quantity
+          }
+        }).then(function (res) {
+          if (res.data.status == "success") {
+            var index = $rootScope.cart.findIndex(function (p) {
+              return p.picked.size.size_id == product_new.picked.size.size_id;
+            });
+            index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
+            $rootScope.showCart();
+            $rootScope.recalculateTotalPrice();
+          } else {
+            $rootScope.showSnackbar("B\u1EA1n \u0111\xE3 c\xF3 ".concat(res.data.quantity_in_cart, " s\u1EA3n ph\u1EA9m trong n\xE0y gi\u1ECF h\xE0ng. Kh\xF4ng th\u1EC3 th\xEAm s\u1ED1 l\u01B0\u1EE3ng \u0111\xE3 ch\u1ECDn v\xE0o gi\u1ECF h\xE0ng v\xEC s\u1EBD v\u01B0\u1EE3t qu\xE1 gi\u1EDBi h\u1EA1n mua h\xE0ng c\u1EE7a b\u1EA1n."));
+          }
+
+          product.picked.size.quantity = res.data.quantity_in_stock;
         });
-        index != -1 ? $rootScope.cart[index].picked.quantity += product_new.picked.quantity : $rootScope.cart.unshift(product_new);
-        $rootScope.showCart();
-        $rootScope.recalculateTotalPrice();
-      });
+      } else {
+        $rootScope.showSnackbar("Sản phẩm đã hết hàng!");
+      }
     } else {
       $scope.show_warning.size = true;
     }
   };
 
   $scope.changeColor = function (product, color) {
-    product.picked.quantity = 1; //Giữ size
-
+    //Giữ size
     var index;
 
     if (product.picked.size) {
@@ -40758,6 +40906,7 @@ myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http
   $scope.changeSize = function (product, size) {
     product.picked.quantity = 1;
     product.picked.size = size;
+    $rootScope.validateQuantity($scope.product);
   };
 
   $scope.increase = function () {
@@ -40768,7 +40917,8 @@ myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http
 
     if ($scope.product.picked.quantity < $scope.product.picked.size.quantity) {
       $scope.product.picked.quantity++;
-    } else {}
+      $rootScope.validateQuantity($scope.product);
+    }
   };
 
   $scope.decrease = function () {
@@ -40779,6 +40929,7 @@ myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http
 
     if ($scope.product.picked.quantity > 1) {
       $scope.product.picked.quantity--;
+      $rootScope.validateQuantity($scope.product);
     }
   };
 });

@@ -22,7 +22,7 @@
                             class="text-[#888] cursor-pointer flex items-center"
                         >
                             <i class="bx bx-edit-alt text-lg"></i>
-                            <span class="ml-[5px] font-semibold"
+                            <span class="ml-[5px] font-semibold text-sm"
                                 >Sửa hồ sơ</span
                             >
                         </div>
@@ -40,7 +40,7 @@
                     </a>
                     <a
                         href="/orders"
-                        class="flex items-center mb-[15px]"
+                        class="flex items-center mb-[15px] hover:text-[#fa6338]"
                     >
                         <i class="bx bx-food-menu text-xl"></i>
                         <span class="text-[13px] font-semibold ml-[10px]"
@@ -54,10 +54,6 @@
         <div
             class="w-[980px] flex-shrink-0 flex-grow ml-[40px] shadow-[0_6px_12px_0_#0000000a]"
         >
-            <div
-                class="mb-[12px] flex w-full bg-white font-medium text-[15px] sticky top-[54px] z-30"
-            ></div>
-
             <div class="mt-[12px]">
                 <div class="pt-[24px] px-[24px] pb-[12px] bg-white">
                     <div class="text-[15px] pb-[12px] flex justify-between">
@@ -65,7 +61,7 @@
                             >ID ĐƠN HÀNG: {{ order.order_id }}</span
                         >
                         <span
-                            class="font-bold text-xs text-white px-[7px] py-[3px] rounded-[10px]"
+                            class="font-bold text-xs text-white px-[7px] py-[3px] rounded-[2px]"
                             ng-class="{
                                 'bg-[#777]': order.orderstates[order.orderstates.length - 1].orderstate_name == '0',
                                 'bg-[#00a65a]': order.orderstates[order.orderstates.length - 1].orderstate_name == '1',
@@ -112,7 +108,7 @@
                                     {{ order.customer_address }}
                                 </div>
                             </div>
-                            <div class="w-[620px] pt-[4px] pl-[24px] border-l border-[rgba(0,0,0,.09)]">
+                            <div class="w-[600px] pt-[4px] pl-[24px] border-l border-[rgba(0,0,0,.09)]">
                                 <div ng-repeat="os in order.orderstates.slice().reverse()" class="relative">
                                     <div ng-if="$index != order.orderstates.length - 1" class="absolute w-[1px] h-full top-[12px] left-[5px] bg-[#d8d8d8]"></div>
                                     <div class="relative flex items-center h-[32px] text-[rgba(0,0,0,.8)] text-[13px]">

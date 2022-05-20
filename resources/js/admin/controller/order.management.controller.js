@@ -16,11 +16,11 @@ myApp.controller(
 
         $scope.order_states = [
             { id: "", title: "" },
-            { id: 0, title: "Đang xử lý" },
-            { id: 1, title: "Đang giao" },
-            { id: 2, title: "Đã giao" },
-            { id: 3, title: "Đã hủy" },
-            { id: 4, title: "Hoàn trả" },
+            { id: 0, title: "Đơn hàng Đang xử lý" },
+            { id: 1, title: "Đơn hàng Đang giao" },
+            { id: 2, title: "Đơn hàng Đã giao" },
+            { id: 3, title: "Đơn hàng Đã hủy" },
+            { id: 4, title: "Đơn hàng Hoàn trả" },
         ];
 
         $http({
@@ -50,5 +50,50 @@ myApp.controller(
                 }
             );
         });
+
+        $scope.showModalDetails = function (order) {
+            $rootScope.order = JSON.parse(JSON.stringify(order));
+            $rootScope.order.order_state_change = $scope.order_states.find(
+                (os) => os.id === $rootScope.order.order_state_current
+            );
+        };
+
+        $scope.updateOrderState = function () {
+            $http({
+                method: "POST",
+                url: API_URL + "/api/order/update-order-state",
+                data: {
+                    order_id: $rootScope.order.order_id,
+                    orderstate_name: $rootScope.order.order_state_change.id,
+                },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization:
+                        "Bearer " + customerService.getCurrentToken(),
+                },
+            }).then((res) => {
+                if (res.data) {
+                    let index = $rootScope.orders.findIndex(
+                        (o) => o.order_id === $rootScope.order.order_id
+                    );
+                    $rootScope.orders[index].orderstates.push(res.data);
+                    $rootScope.orders[index].order_state_current = res.data.orderstate_name
+
+                    $scope.showModalDetails($rootScope.orders[index])
+
+                    $scope.tableParams.reload();
+
+                    $rootScope.showSimpleToast(
+                        "Cập nhập trạng thái đơn hàng thành công!",
+                        "success"
+                    );
+                } else {
+                    $rootScope.showSimpleToast(
+                        "Đơn hàng đang ở trạng thái này!",
+                        "warning"
+                    );
+                }
+            });
+        };
     }
 );

@@ -47,36 +47,45 @@ myApp.controller(
             let product_new = JSON.parse(JSON.stringify(product));
             product_new.cart_id = Math.floor(Date.now() * Math.random());
             if (product_new.picked.size) {
-                $http({
-                    method: "POST",
-                    url: API_URL + "/api/cart",
-                    data: {
-                        cart_id: product_new.cart_id,
-                        product_id: product_new.product_id,
-                        size_id: product_new.picked.size.size_id,
-                        quantity: product_new.picked.quantity,
-                    },
-                }).then((res) => {
-                    let index = $rootScope.cart.findIndex(
-                        (p) =>
-                            p.picked.size.size_id ==
-                            product_new.picked.size.size_id
-                    );
-                    index != -1
-                        ? ($rootScope.cart[index].picked.quantity +=
-                              product_new.picked.quantity)
-                        : $rootScope.cart.unshift(product_new);
+                if (product_new.picked.size.quantity != 0) {
+                    $http({
+                        method: "POST",
+                        url: API_URL + "/api/cart",
+                        data: {
+                            cart_id: product_new.cart_id,
+                            product_id: product_new.product_id,
+                            size_id: product_new.picked.size.size_id,
+                            quantity: product_new.picked.quantity,
+                        },
+                    }).then((res) => {
+                        if (res.data.status == "success") {
+                            let index = $rootScope.cart.findIndex(
+                                (p) =>
+                                    p.picked.size.size_id ==
+                                    product_new.picked.size.size_id
+                            );
+                            index != -1
+                                ? ($rootScope.cart[index].picked.quantity +=
+                                      product_new.picked.quantity)
+                                : $rootScope.cart.unshift(product_new);
 
-                    $rootScope.showCart();
-                    $rootScope.recalculateTotalPrice();
-                });
+                            $rootScope.showCart();
+                            $rootScope.recalculateTotalPrice();
+                        } else {
+                            $rootScope.showSnackbar(`Bạn đã có ${res.data.quantity_in_cart} sản phẩm trong này giỏ hàng. Không thể thêm số lượng đã chọn vào giỏ hàng vì sẽ vượt quá giới hạn mua hàng của bạn.`);
+                        }
+                        product.picked.size.quantity = res.data.quantity_in_stock
+                    });
+                }
+                else {
+                    $rootScope.showSnackbar("Sản phẩm đã hết hàng!");
+                }
             } else {
                 $scope.show_warning.size = true;
             }
         };
 
         $scope.changeColor = function (product, color) {
-            product.picked.quantity = 1;
             //Giữ size
             let index;
             if (product.picked.size) {
@@ -91,6 +100,7 @@ myApp.controller(
         $scope.changeSize = function (product, size) {
             product.picked.quantity = 1;
             product.picked.size = size;
+            $rootScope.validateQuantity($scope.product);
         };
 
         $scope.increase = function () {
@@ -103,7 +113,7 @@ myApp.controller(
                 $scope.product.picked.size.quantity
             ) {
                 $scope.product.picked.quantity++;
-            } else {
+                $rootScope.validateQuantity($scope.product);
             }
         };
 
@@ -114,6 +124,7 @@ myApp.controller(
             }
             if ($scope.product.picked.quantity > 1) {
                 $scope.product.picked.quantity--;
+                $rootScope.validateQuantity($scope.product);
             }
         };
     }

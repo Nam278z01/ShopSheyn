@@ -38,11 +38,6 @@ myApp.controller(
                 },
             }).then((res) => {
                 $rootScope.order = res.data;
-                $rootScope.order.order_state_current =
-                    $rootScope.order.orderstates[
-                        $rootScope.order.orderstates.length - 1
-                    ];
-                    console.log($rootScope.order)
             });
         }
 

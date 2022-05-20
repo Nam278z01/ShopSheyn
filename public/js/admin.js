@@ -83662,19 +83662,19 @@ myApp.controller("OrderManagementController", function ($scope, $rootScope, $htt
     title: ""
   }, {
     id: 0,
-    title: "Đang xử lý"
+    title: "Đơn hàng Đang xử lý"
   }, {
     id: 1,
-    title: "Đang giao"
+    title: "Đơn hàng Đang giao"
   }, {
     id: 2,
-    title: "Đã giao"
+    title: "Đơn hàng Đã giao"
   }, {
     id: 3,
-    title: "Đã hủy"
+    title: "Đơn hàng Đã hủy"
   }, {
     id: 4,
-    title: "Hoàn trả"
+    title: "Đơn hàng Hoàn trả"
   }];
   $http({
     method: "GET",
@@ -83698,6 +83698,41 @@ myApp.controller("OrderManagementController", function ($scope, $rootScope, $htt
       dataset: $scope.orders
     });
   });
+
+  $scope.showModalDetails = function (order) {
+    $rootScope.order = JSON.parse(JSON.stringify(order));
+    $rootScope.order.order_state_change = $scope.order_states.find(function (os) {
+      return os.id === $rootScope.order.order_state_current;
+    });
+  };
+
+  $scope.updateOrderState = function () {
+    $http({
+      method: "POST",
+      url: API_URL + "/api/order/update-order-state",
+      data: {
+        order_id: $rootScope.order.order_id,
+        orderstate_name: $rootScope.order.order_state_change.id
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + customerService.getCurrentToken()
+      }
+    }).then(function (res) {
+      if (res.data) {
+        var index = $rootScope.orders.findIndex(function (o) {
+          return o.order_id === $rootScope.order.order_id;
+        });
+        $rootScope.orders[index].orderstates.push(res.data);
+        $rootScope.orders[index].order_state_current = res.data.orderstate_name;
+        $scope.showModalDetails($rootScope.orders[index]);
+        $scope.tableParams.reload();
+        $rootScope.showSimpleToast("Cập nhập trạng thái đơn hàng thành công!", "success");
+      } else {
+        $rootScope.showSimpleToast("Đơn hàng đang ở trạng thái này!", "warning");
+      }
+    });
+  };
 });
 
 /***/ }),
@@ -83760,7 +83795,17 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     url: API_URL + "/api/category"
   }).then(function (res) {
     $scope.categories = res.data;
-  }); // File upload
+  }); // Editor options.
+
+  $scope.options = {
+    language: "vi",
+    allowedContent: true,
+    entities: false
+  }; // Called when the editor is completely ready.
+
+  $scope.onReady = function () {// ...
+  }; // File upload
+
 
   $scope.uploadFiles = function (files, cl, index) {
     var quantity = files.length + cl.files.filter(function (file) {
@@ -83797,16 +83842,6 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
       cl.files_for_delete.push(cl["product_image".concat(index + 1)]);
       cl["product_image".concat(index + 1)] = null;
     }
-  }; // Editor options.
-
-
-  $scope.options = {
-    language: "vi",
-    allowedContent: true,
-    entities: false
-  }; // Called when the editor is completely ready.
-
-  $scope.onReady = function () {// ...
   };
 
   $scope.addColor = function () {
@@ -83832,8 +83867,6 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
 
       $scope.product.colors.splice(index, 1);
     }
-
-    console.log(files_for_delete);
   };
 
   $scope.addSize = function () {
@@ -83888,18 +83921,20 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
         }]
       };
     } else {
-      $scope.product = JSON.parse(JSON.stringify(product));
+      $scope.product = JSON.parse(JSON.stringify(product)); // Select category & subcategory
+
       $scope.category_picked = $scope.categories.find(function (c) {
         return c.category_id == $scope.product.subcategory.category_id;
       });
       $scope.category_picked.subcategory = $scope.category_picked.subcategories.find(function (sc) {
         return sc.subcategory_id == $scope.product.subcategory.subcategory_id;
-      });
-      $scope.product = JSON.parse(JSON.stringify(product));
+      }); // Size
+
       $scope.product.sizes = JSON.parse(JSON.stringify($scope.product.colors[0].sizes));
       $scope.product.sizes.forEach(function (size) {
         size.quantity = 0;
-      });
+      }); // Color
+
       $scope.product.colors.forEach(function (color) {
         color.files = _toConsumableArray(Array(5));
         color.files_for_delete = [];
@@ -83910,6 +83945,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
 
   $scope.addOrEditProduct = function () {
     if (!$scope.progress) {
+      // Get file to upload
       var files = $scope.product.colors.reduce(function (colors, colorCurrent) {
         return [].concat(_toConsumableArray(colors), _toConsumableArray(colorCurrent.files));
       }, []).filter(function (file) {
@@ -84014,7 +84050,6 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
                   $scope.progress = 0;
                 }, 500);
               });
-              ;
             }
           });
         }, function (response) {
@@ -84028,7 +84063,8 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     } else {
       $rootScope.showSimpleToast("Xin chờ chút!", "warning");
     }
-  };
+  }; // Delete Product
+
 
   $scope.showModalDelete = function (product) {
     $scope.product_for_delete = product;

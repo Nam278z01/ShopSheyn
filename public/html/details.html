@@ -271,8 +271,14 @@
                                     class="px-[8px] font-bold text-[#222] text-sm"
                                     >{{product.picked.size.size_name}}</span
                                 >
-                                <span ng-if="product.picked.size">(Còn {{ product.picked.size.quantity | number:0 }} sản phẩm)</span>
-                                <span ng-if="product.picked.size && product.picked.size.quantity == 0">(Đã hết sản phẩm)</span>
+                                <span ng-if="product.picked.size && product.picked.size.quantity != 0"
+                                    >(Còn {{ product.picked.size.quantity |
+                                    number:0 }} sản phẩm)</span
+                                >
+                                <span
+                                    ng-if="product.picked.size && product.picked.size.quantity == 0"
+                                    >(Đã hết sản phẩm)</span
+                                >
                             </div>
                             <div class="mt-[15px] -mx-1 flex flex-wrap">
                                 <div
@@ -292,7 +298,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-if="!product.picked.size && show_warning.size" class="text-xs font-normal text-red-500">
+                        <div
+                            ng-if="!product.picked.size && show_warning.size"
+                            class="text-xs font-normal text-red-500"
+                        >
                             Vui lòng chọn size
                         </div>
                     </div>
@@ -309,6 +318,8 @@
                                     <i class="bx bx-minus"></i>
                                 </button>
                                 <input
+                                    ng-blur="validateQuantity(product)"
+                                    ng-keypress="validateNumber($event, product)"
                                     ng-model="product.picked.quantity"
                                     type="text"
                                     class="text-sm w-[48px] h-[35px] border-t border-b border-gray-300 focus:border focus:border-black focus:outline-none text-center"
@@ -321,7 +332,10 @@
                                 </button>
                             </div>
                         </div>
-                        <span ng-if="product.picked.quantity == product.picked.size.quantity" class="text-xs font-normal text-red-500">
+                        <span
+                            ng-if="product.picked.quantity == product.picked.size.quantity"
+                            class="text-xs font-normal text-red-500"
+                        >
                             Số lượng bạn chọn đã đạt mức tối đa của sản phẩm này
                         </span>
                     </div>
@@ -341,11 +355,7 @@
     <div class="px-[50px]">
         <!-- You may also like -->
         <div class="pb-[30px] pt-[100px] px-[10px]">
-            <span
-                class="text-xl text-black"
-            >
-                Có Thể Bạn Cũng Thích
-            </span>
+            <span class="text-xl text-black"> Có Thể Bạn Cũng Thích </span>
         </div>
         <div class="w-full relative">
             <div class="w-full flex image-slider2" slick-slider2>

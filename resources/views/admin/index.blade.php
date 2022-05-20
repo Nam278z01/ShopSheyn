@@ -58,9 +58,9 @@
             }
 
             table td img {
-                width: 50px;
-                height: 50px;
-                border-radius: 100%;
+                width: 60px;
+                height: 78px;
+                border-radius: 2px;
                 object-fit: cover;
             }
 

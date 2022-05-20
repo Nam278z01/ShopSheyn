@@ -43,6 +43,18 @@ myApp.controller(
             $scope.categories = res.data;
         });
 
+        // Editor options.
+        $scope.options = {
+            language: "vi",
+            allowedContent: true,
+            entities: false,
+        };
+
+        // Called when the editor is completely ready.
+        $scope.onReady = function () {
+            // ...
+        };
+
         // File upload
         $scope.uploadFiles = function (files, cl, index) {
             let quantity =
@@ -76,18 +88,6 @@ myApp.controller(
             }
         };
 
-        // Editor options.
-        $scope.options = {
-            language: "vi",
-            allowedContent: true,
-            entities: false,
-        };
-
-        // Called when the editor is completely ready.
-        $scope.onReady = function () {
-            // ...
-        };
-
         $scope.addColor = function () {
             $scope.product.colors.push({
                 color_name: "",
@@ -96,6 +96,7 @@ myApp.controller(
                 files_for_delete: [],
             });
         };
+
         let files_for_delete = [];
         $scope.removeColor = function (index) {
             if ($scope.product.colors.length > 1) {
@@ -123,7 +124,6 @@ myApp.controller(
                 }
                 $scope.product.colors.splice(index, 1);
             }
-            console.log(files_for_delete);
         };
         $scope.addSize = function () {
             $scope.product.sizes.push({
@@ -180,6 +180,7 @@ myApp.controller(
                 };
             } else {
                 $scope.product = JSON.parse(JSON.stringify(product));
+                // Select category & subcategory
                 $scope.category_picked = $scope.categories.find(
                     (c) =>
                         c.category_id == $scope.product.subcategory.category_id
@@ -190,13 +191,14 @@ myApp.controller(
                             sc.subcategory_id ==
                             $scope.product.subcategory.subcategory_id
                     );
-                $scope.product = JSON.parse(JSON.stringify(product));
+                // Size
                 $scope.product.sizes = JSON.parse(
                     JSON.stringify($scope.product.colors[0].sizes)
                 );
                 $scope.product.sizes.forEach((size) => {
                     size.quantity = 0;
                 });
+                // Color
                 $scope.product.colors.forEach((color) => {
                     color.files = [...Array(5)];
                     color.files_for_delete = [];
@@ -204,8 +206,10 @@ myApp.controller(
                 files_for_delete = [];
             }
         };
+
         $scope.addOrEditProduct = function () {
             if (!$scope.progress) {
+                // Get file to upload
                 let files = $scope.product.colors
                     .reduce(function (colors, colorCurrent) {
                         return [...colors, ...colorCurrent.files];
@@ -213,6 +217,7 @@ myApp.controller(
                     .filter(function (file) {
                         return file != undefined;
                     });
+
                 if (
                     (files && files.length) ||
                     $scope.form_name != "THÊM SẢN PHẨM"
@@ -309,46 +314,49 @@ myApp.controller(
                                                 "Bearer " +
                                                 customerService.getCurrentToken(),
                                         },
-                                    }).then((res) => {
-                                        return $http({
-                                            method: "PUT",
-                                            url:
-                                                API_URL +
-                                                "/api/product/" +
-                                                product_new.product_id,
-                                            data: product_new,
-                                            "Content-Type": "application/json",
-                                            headers: {
+                                    })
+                                        .then((res) => {
+                                            return $http({
+                                                method: "PUT",
+                                                url:
+                                                    API_URL +
+                                                    "/api/product/" +
+                                                    product_new.product_id,
+                                                data: product_new,
                                                 "Content-Type":
                                                     "application/json",
-                                                Authorization:
-                                                    "Bearer " +
-                                                    customerService.getCurrentToken(),
-                                            },
+                                                headers: {
+                                                    "Content-Type":
+                                                        "application/json",
+                                                    Authorization:
+                                                        "Bearer " +
+                                                        customerService.getCurrentToken(),
+                                                },
+                                            });
                                         })
-                                    }).then((res) => {
-                                        $scope.progress = 100;
-                                        let index =
-                                            $scope.products.findIndex(
-                                                (p) =>
-                                                    p.product_id ==
-                                                    product_new.product_id
-                                            );
-                                        $scope.products[index] = res.data;
-                                        $scope.tableParams.reload();
+                                        .then((res) => {
+                                            $scope.progress = 100;
+                                            let index =
+                                                $scope.products.findIndex(
+                                                    (p) =>
+                                                        p.product_id ==
+                                                        product_new.product_id
+                                                );
+                                            $scope.products[index] = res.data;
+                                            $scope.tableParams.reload();
 
-                                        $scope.showModalEditAndCreate(
-                                            "SỬA THÔNG TIN SẢN PHẨM",
-                                            res.data
-                                        );
-                                        $rootScope.showSimpleToast(
-                                            "Sửa thông tin sản phẩm thành công!",
-                                            "success"
-                                        );
-                                        $timeout(function () {
-                                            $scope.progress = 0;
-                                        }, 500);
-                                    });;
+                                            $scope.showModalEditAndCreate(
+                                                "SỬA THÔNG TIN SẢN PHẨM",
+                                                res.data
+                                            );
+                                            $rootScope.showSimpleToast(
+                                                "Sửa thông tin sản phẩm thành công!",
+                                                "success"
+                                            );
+                                            $timeout(function () {
+                                                $scope.progress = 0;
+                                            }, 500);
+                                        });
                                 }
                             });
                         },
@@ -372,6 +380,8 @@ myApp.controller(
                 $rootScope.showSimpleToast("Xin chờ chút!", "warning");
             }
         };
+
+        // Delete Product
         $scope.showModalDelete = function (product) {
             $scope.product_for_delete = product;
         };
@@ -394,31 +404,33 @@ myApp.controller(
                     Authorization:
                         "Bearer " + customerService.getCurrentToken(),
                 },
-            }).then((res) => {
-                return $http({
-                    method: "DELETE",
-                    url:
-                        API_URL +
-                        "/api/product/" +
-                        $scope.product_for_delete.product_id,
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization:
-                            "Bearer " + customerService.getCurrentToken(),
-                    },
+            })
+                .then((res) => {
+                    return $http({
+                        method: "DELETE",
+                        url:
+                            API_URL +
+                            "/api/product/" +
+                            $scope.product_for_delete.product_id,
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization:
+                                "Bearer " + customerService.getCurrentToken(),
+                        },
+                    });
                 })
-            }).then((res) => {
-                $rootScope.showSimpleToast(
-                    "Xóa sản phẩm thành công!",
-                    "success"
-                );
-                let index = $scope.products.findIndex(
-                    (p) =>
-                        p.product_id == $scope.product_for_delete.product_id
-                );
-                $scope.products.splice(index, 1);
-                $scope.tableParams.reload();
-            });
+                .then((res) => {
+                    $rootScope.showSimpleToast(
+                        "Xóa sản phẩm thành công!",
+                        "success"
+                    );
+                    let index = $scope.products.findIndex(
+                        (p) =>
+                            p.product_id == $scope.product_for_delete.product_id
+                    );
+                    $scope.products.splice(index, 1);
+                    $scope.tableParams.reload();
+                });
         };
     }
 );

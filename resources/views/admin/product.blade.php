@@ -311,7 +311,6 @@
                                 <label>Danh mục lớn</label>
                                 <md-select
                                     ng-model="category_picked"
-                                    ng-change="show()"
                                 >
                                     <md-option
                                         ng-repeat="category in categories"

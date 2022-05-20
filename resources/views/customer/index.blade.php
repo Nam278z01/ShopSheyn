@@ -12,42 +12,10 @@
             href="https://fonts.googleapis.com/css2?family=Beau+Rivage&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
             rel="stylesheet"
         />
-        <style>
-            /* Loading */
-            .loading {
-                position: fixed;
-                display: flex;
-                z-index: 1000;
-                background-color: white;
-                top: 0;
-                bottom: 0;
-                left: 0;
-                right: 0;
-            }
-
-            .loading.hidden {
-                opacity: 0;
-                visibility: hidden;
-                animation: fadeOut 0.5s linear;
-            }
-
-            .loading img {
-                width: 100px;
-                margin: auto;
-            }
-
-            @keyframes fadeOut {
-                from {
-                    opacity: 1;
-                }
-                to {
-                    opacity: 0;
-                }
-            }
-        </style>
     </head>
 
     <body>
+        <div id="snackbar">@{{snackbarContent}}</div>
         <div class="loading">
             <img src="/image/product/loading-37.gif" alt="" />
         </div>

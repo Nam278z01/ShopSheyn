@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SizeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UploadController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\AuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get('/size/get-quantity/{id}', [SizeController::class, 'getQuantity']);
 Route::post('/login/{type}', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/signup-for-admin', [AuthController::class, 'signupForAdmin']);
@@ -34,6 +36,8 @@ Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
     Route::get('/admin', function (Request $request) {
         return $request->user();
     });
+    Route::post('/order/update-order-state', [OrderController::class, 'updateOrderState']);
+
     Route::get('/order/get-all', [OrderController::class, 'getAllOrder']);
     Route::post('/upload/delete', [UploadController::class, 'deleteFiles']);
     Route::resources([
