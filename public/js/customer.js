@@ -40619,8 +40619,8 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
         Authorization: "Bearer " + customerService.getCurrentToken()
       }
     }).then(function (res) {
-      $rootScope.orders = res.data;
-      $rootScope.orders.forEach(function (order) {
+      $scope.orders = res.data;
+      $scope.orders.forEach(function (order) {
         order.order_state_current = order.orderstates[order.orderstates.length - 1];
       });
     });
@@ -40635,8 +40635,31 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
         Authorization: "Bearer " + customerService.getCurrentToken()
       }
     }).then(function (res) {
-      $rootScope.order = res.data;
+      $scope.order = res.data;
     });
+
+    $scope.updateOrderState = function (orderstate_name) {
+      $http({
+        method: "POST",
+        url: API_URL + "/api/order/update-order-state-for-customer",
+        data: {
+          order_id: $routeParams.order_id,
+          orderstate_name: orderstate_name
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + customerService.getCurrentToken()
+        }
+      }).then(function (res) {
+        $scope.order.orderstates.push(res.data);
+
+        if (orderstate_name == 3) {
+          $rootScope.showSnackbar("Hủy đơn hàng thành công!");
+        } else {
+          $rootScope.showSnackbar("Hoàn trả đơn hàng thành công!");
+        }
+      });
+    };
   }
 
   if ($rootScope.customer) {

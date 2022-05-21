@@ -252,13 +252,15 @@
                     >
                         <div class="flex">
                             <button
+                                ng-click="updateOrderState(3)"
                                 ng-if="order.orderstates.length == 1"
                                 class="mr-[15px] flex justify-center items-center h-[36px] text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
                             >
                                 Hủy đơn hàng
                             </button>
                             <button
-                                ng-if="order.orderstates.length == 3"
+                                ng-click="updateOrderState(4)"
+                                ng-if="order.orderstates[order.orderstates.length - 1].orderstate_name == 2"
                                 class="mr-[15px] flex justify-center items-center h-[36px] text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
                             >
                                 Hoàn trả đơn hàng

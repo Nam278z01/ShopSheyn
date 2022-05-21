@@ -51,7 +51,7 @@ class OrderController extends Controller
         }
 
         if(!$order_state->orderstate_date) {
-            return OrderState::findorFail($order_state->orderstate_id);
+            return OrderState::findOrFail($order_state->orderstate_id);
         } else {
             return false;
         }
@@ -63,7 +63,7 @@ class OrderController extends Controller
         $valid = Order::where('customer_id', $customer->customer_id)
                         ->where('order_id', $request->order_id)->first();
 
-        if($valid) {
+        if($valid && ($request->orderstate_name == 3 || $request->orderstate_name == 4)) {
             $order_state = OrderState::firstOrCreate(
             [
                 'order_id' => $request->order_id,
@@ -73,19 +73,13 @@ class OrderController extends Controller
             $order_details = Order::with('orderdetails')->findOrFail($request->order_id);
 
             // Undo quantity
-            if($request->orderstate_name == 3 || $request->orderstate_name == 4) {
-                foreach ($order_details->orderdetails as $od) {
-                    $size_update = Size::findOrFail($od->size_id);
-                    $size_update->quantity += $od->product_quantity;
-                    $size_update->save();
-                }
+            foreach ($order_details->orderdetails as $od) {
+                $size_update = Size::findOrFail($od->size_id);
+                $size_update->quantity += $od->product_quantity;
+                $size_update->save();
             }
 
-            if(!$order_state->orderstate_date) {
-                return OrderState::findorFail($order_state->orderstate_id);
-            } else {
-                return false;
-            }
+            return OrderState::findOrFail($order_state->orderstate_id);
         }
         return false;
     }
