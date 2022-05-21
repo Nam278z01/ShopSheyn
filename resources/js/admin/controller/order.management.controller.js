@@ -52,10 +52,35 @@ myApp.controller(
         });
 
         $scope.showModalDetails = function (order) {
-            $rootScope.order = JSON.parse(JSON.stringify(order));
-            $rootScope.order.order_state_change = $scope.order_states.find(
-                (os) => os.id === $rootScope.order.order_state_current
-            );
+            $http({
+                method: "GET",
+                url:
+                    API_URL +
+                    "/api/order/get-order-for-admin/" +
+                    order.order_id,
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization:
+                        "Bearer " + customerService.getCurrentToken(),
+                },
+            }).then((res) => {
+                let index = $rootScope.orders.findIndex(
+                    (o) => o.order_id === order.order_id
+                );
+
+                $rootScope.orders[index] = res.data;
+                $rootScope.orders[index].order_state_current =
+                    $rootScope.orders[index].orderstates[
+                        $rootScope.orders[index].orderstates.length - 1
+                    ].orderstate_name;
+
+                $scope.tableParams.reload();
+
+                $rootScope.order = JSON.parse(JSON.stringify($rootScope.orders[index]));
+                $rootScope.order.order_state_change = $scope.order_states.find(
+                    (os) => os.id === $rootScope.order.order_state_current
+                );
+            });
         };
 
         $scope.updateOrderState = function () {
@@ -77,9 +102,10 @@ myApp.controller(
                         (o) => o.order_id === $rootScope.order.order_id
                     );
                     $rootScope.orders[index].orderstates.push(res.data);
-                    $rootScope.orders[index].order_state_current = res.data.orderstate_name
+                    $rootScope.orders[index].order_state_current =
+                        res.data.orderstate_name;
 
-                    $scope.showModalDetails($rootScope.orders[index])
+                    $scope.showModalDetails($rootScope.orders[index]);
 
                     $scope.tableParams.reload();
 

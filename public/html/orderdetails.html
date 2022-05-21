@@ -19,7 +19,7 @@
                             {{ customer.customer_name }}
                         </div>
                         <div
-                            class="text-[#888] cursor-pointer flex items-center"
+                            class="text-[#888] cursor-pointer flex items-center italic"
                         >
                             <i class="bx bx-edit-alt text-lg"></i>
                             <span class="ml-[5px] font-semibold text-sm"
@@ -57,7 +57,7 @@
             <div class="mt-[12px]">
                 <div class="pt-[24px] px-[24px] pb-[12px] bg-white">
                     <div class="text-[15px] pb-[12px] flex justify-between">
-                        <span class="text-black font-bold text-xs"
+                        <span class="text-black font-bold text-xs italic"
                             >ID ĐƠN HÀNG: {{ order.order_id }}</span
                         >
                         <span
@@ -256,6 +256,12 @@
                                 class="mr-[15px] flex justify-center items-center h-[36px] text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
                             >
                                 Hủy đơn hàng
+                            </button>
+                            <button
+                                ng-if="order.orderstates.length == 3"
+                                class="mr-[15px] flex justify-center items-center h-[36px] text-[13px] px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"
+                            >
+                                Hoàn trả đơn hàng
                             </button>
                         </div>
                     </div>

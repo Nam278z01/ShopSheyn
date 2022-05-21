@@ -345,11 +345,10 @@
                             />
                             <div ng-messages="productForm.product_name.$error">
                                 <div ng-message="required">
-                                    This is required.
+                                    Không được bỏ trống
                                 </div>
                                 <div ng-message="md-maxlength">
-                                    The product_name must be less than 500
-                                    characters long.
+                                    Tên sản phẩm phải dưới 500 kí tự
                                 </div>
                             </div>
                         </md-input-container>
@@ -372,24 +371,15 @@
                                 md-auto-hide="false"
                             >
                                 <div ng-message="required">
-                                    You've got to charge something! You can't
-                                    just <b>give away</b> a Missile Defense
-                                    System.
+                                    Không được bỏ trống
                                 </div>
 
                                 <div ng-message="min">
-                                    You should charge at least $800 an hour.
-                                    This job is a big deal... if you mess up,
-                                    everyone dies!
+                                    Giảm giá phải lớn hơn 0
                                 </div>
 
                                 <div ng-message="max">
-                                    @{{
-                                        productForm.rate.$viewValue
-                                            | currency: "$":0
-                                    }}
-                                    an hour? That's a little ridiculous. I doubt
-                                    even Bill Clinton could afford that.
+                                    Giảm giá phải nhỏ hơn 100
                                 </div>
                             </div>
                         </md-input-container>

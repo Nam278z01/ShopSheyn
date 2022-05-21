@@ -22,17 +22,17 @@ class CartController extends Controller
             $product_ids = array_column($cart, 'product_id');
 
             $products = Product::with(['subcategory', 'colors', 'colors.sizes'])->whereIn("product_id", $product_ids)->get();
-            $products_to_array = json_decode($products->toJson());
 
             $products_in_cart = [];
 
             foreach ($cart as $c) {
-                foreach ($products_to_array as $p) {
+                foreach ($products as $p) {
                     if($p->product_id == $c->product_id){
                         $pro_new = json_decode(json_encode($p));
                         $pro_new->size_id = $c->size_id;
                         $pro_new->quantity = $c->quantity;
                         $pro_new->cart_id = $c->cart_id;
+                        $pro_new->chose = $c->chose;
                         array_push($products_in_cart, $pro_new);
                         break;
                     }
@@ -69,6 +69,7 @@ class CartController extends Controller
             "quantity" => $request->quantity,
             "size_id" => $request->size_id,
             "cart_id" => $request->cart_id,
+            "chose" => false,
         ];
 
         $size = Size::findOrFail($product->size_id);
@@ -98,7 +99,7 @@ class CartController extends Controller
         }
         $ONE_MONTH = 60 * 24 * 30;
         $cookie = cookie('cart', json_encode($cart), $ONE_MONTH);
-        return response()->json(['status' => 'success', 'cart' => $cart])->cookie($cookie);
+        return response()->json(['status' => 'success', 'quantity_in_stock' => $size->quantity, 'cart' => $cart])->cookie($cookie);
     }
 
     /**
@@ -148,7 +149,33 @@ class CartController extends Controller
                 break;
             }
         }
-        $cookie = cookie('cart', json_encode($cart), 120);
+        $ONE_MONTH = 60 * 24 * 30;
+        $cookie = cookie('cart', json_encode($cart), $ONE_MONTH);
+        return response()->json(['status' => 'success', 'quantity_in_stock' => $size->quantity, 'cart' => $cart])->cookie($cookie);
+    }
+
+    public function choseAll(Request $request) {
+        $cart = json_decode(request()->cookie('cart'));
+
+        foreach($cart as $p){
+            $p->chose = $request->value;
+        }
+        $ONE_MONTH = 60 * 24 * 30;
+        $cookie = cookie('cart', json_encode($cart), $ONE_MONTH);
+        return response()->json(['status' => 'success', 'cart' => $cart])->cookie($cookie);
+    }
+
+    public function chose(Request $request) {
+        $cart = json_decode(request()->cookie('cart'));
+
+        foreach($cart as $p){
+            if($p->cart_id == $request->cart_id) {
+                $p->chose = $request->value;
+                break;
+            }
+        }
+        $ONE_MONTH = 60 * 24 * 30;
+        $cookie = cookie('cart', json_encode($cart), $ONE_MONTH);
         return response()->json(['status' => 'success', 'cart' => $cart])->cookie($cookie);
     }
 
@@ -168,7 +195,8 @@ class CartController extends Controller
                 $cart_new[] = $p;
             }
         }
-        $cookie = cookie('cart', json_encode($cart_new), 120);
+        $ONE_MONTH = 60 * 24 * 30;
+        $cookie = cookie('cart', json_encode($cart_new), $ONE_MONTH);
         return response($cart_new)->cookie($cookie);
     }
 }

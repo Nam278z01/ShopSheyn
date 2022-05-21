@@ -27,6 +27,8 @@ Route::post('/signup-for-admin', [AuthController::class, 'signupForAdmin']);
 Route::get('/product/search', [ProductController::class, 'search']);
 Route::get('/product/get-detail/{id}', [ProductController::class, 'getProduct']);
 Route::get('/product/get-by-subcategory/{id}', [ProductController::class, 'getProductBySubcategory']);
+Route::put('/cart/chose-all', [CartController::class, 'choseAll']);
+Route::put('/cart/chose', [CartController::class, 'chose']);
 
 Route::middleware(['auth:sanctum', 'ability:customer,admin'])->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
@@ -36,7 +38,9 @@ Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
     Route::get('/admin', function (Request $request) {
         return $request->user();
     });
+
     Route::post('/order/update-order-state', [OrderController::class, 'updateOrderState']);
+    Route::get('/order/get-order-for-admin/{id}', [OrderController::class, 'showForAdmin']);
 
     Route::get('/order/get-all', [OrderController::class, 'getAllOrder']);
     Route::post('/upload/delete', [UploadController::class, 'deleteFiles']);
@@ -53,6 +57,7 @@ Route::middleware(['auth:sanctum', 'ability:customer'])->group(function () {
     Route::resources([
         'order' => OrderController::class,
     ]);
+    Route::post('/order/update-order-state-for-customer', [OrderController::class, 'updateOrderStateForCustomer']);
 });
 
 Route::resources([

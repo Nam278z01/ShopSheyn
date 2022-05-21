@@ -53,7 +53,8 @@ myApp.controller(
                 $rootScope.showModalLogin();
                 return false;
             }
-            if (!$scope.isPaying && $rootScope.cart.length) {
+            let quantity = $rootScope.cart.filter(product => product.chose).length
+            if (!$scope.isPaying && quantity) {
                 $scope.isPaying = true;
                 $http({
                     method: "POST",
@@ -70,14 +71,47 @@ myApp.controller(
                             "Bearer " + customerService.getCurrentToken(),
                     },
                 }).then((res) => {
-                    $rootScope.cart = [];
-                    $scope.isPaying = false;
-                    $rootScope.total_price = 0;
-
-                    $location
-                        .path("/orderdetails")
-                        .search({ order_id: res.data.order_id });
+                    if (res.data.status == "success") {
+                        $rootScope.cart = $rootScope.cart.filter(
+                            (product) => !product.chose
+                        );
+                        $scope.isPaying = false;
+                        $rootScope.recalculateTotalPrice();
+                        $location
+                            .path("/orderdetails")
+                            .search({ order_id: res.data.order_id });
+                    } else {
+                        // Get Cart
+                        $http({
+                            method: "GET",
+                            url: API_URL + "/api/cart",
+                        }).then((res) => {
+                            $rootScope.cart = res.data;
+                            $rootScope.cart.forEach((product) => {
+                                product.picked = {};
+                                product.picked.quantity = product.quantity;
+                                product.colors.forEach((color) => {
+                                    color.sizes.forEach((size) => {
+                                        if (product.size_id == size.size_id) {
+                                            product.picked.color = color;
+                                            product.picked.size = size;
+                                        }
+                                    });
+                                });
+                            });
+                            $scope.isPaying = false;
+                            $rootScope.recalculateTotalPrice();
+                            $rootScope.showSnackbar(
+                                "Không thể đặt hàng do có sản phẩm có số lượng đặt vượt quá số lượng trong kho hàng"
+                            );
+                        });
+                    }
                 });
+            }
+            if (!quantity) {
+                $rootScope.showSnackbar(
+                    "Vui lòng chọn sản phẩm cần đặt hàng!"
+                );
             }
         };
 
@@ -90,8 +124,50 @@ myApp.controller(
             if ($scope.order_state == -1) {
                 return true;
             } else {
-                return row.order_state_current.orderstate_name == $scope.order_state;
+                return (
+                    row.order_state_current.orderstate_name ==
+                    $scope.order_state
+                );
             }
+        };
+
+        $scope.chose_all = {
+            value:
+                $rootScope.cart.filter((product) => {
+                    return product.chose;
+                }).length == $rootScope.cart.length,
+        };
+
+        $scope.choseAll = function () {
+            $http({
+                method: "PUT",
+                url: API_URL + "/api/cart/chose-all",
+                data: {
+                    value: $scope.chose_all.value,
+                },
+            }).then((res) => {
+            });
+            $rootScope.cart.forEach((product) => {
+                product.chose = $scope.chose_all.value;
+            });
+            $rootScope.recalculateTotalPrice();
+        };
+
+        $scope.chose = function (product) {
+            $http({
+                method: "PUT",
+                url: API_URL + "/api/cart/chose",
+                data: {
+                    cart_id: product.cart_id,
+                    value: product.chose,
+                },
+            }).then((res) => {
+            });
+            $scope.chose_all.value =
+                $rootScope.cart.filter((product) => {
+                    return product.chose;
+                }).length == $rootScope.cart.length;
+            $rootScope.recalculateTotalPrice();
         };
     }
 );

@@ -40354,11 +40354,13 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
     $rootScope.showCartTimeout = $timeout(function () {
       $rootScope.isShowCart = false;
       $rootScope.showCartTimeout = undefined;
-    }, 3000);
+    }, 2000);
   };
 
   $rootScope.recalculateTotalPrice = function () {
-    $rootScope.total_price = $rootScope.cart.reduce(function (total, current) {
+    $rootScope.total_price = $rootScope.cart.filter(function (product) {
+      return product.chose;
+    }).reduce(function (total, current) {
       return total + (current.picked.color.product_price - current.picked.color.product_price * current.product_discount / 100) * current.picked.quantity;
     }, 0);
   }; // Get Cart
@@ -40389,6 +40391,7 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
     product_new.cart_id = Math.floor(Date.now() * Math.random());
     product_new.picked.size = size;
     product_new.picked.quantity = 1;
+    product_new.chose = false;
 
     if (product_new.colors.length == 1) {
       product_new.picked.color = product_new.colors[0];
@@ -40440,12 +40443,14 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
     }).then(function (res) {
       if (res.data.status == "success") {
         $rootScope.recalculateTotalPrice();
+        product.picked.size.quantity = res.data.quantity_in_stock;
       } else {
         if (res.data.quantity_in_stock) {
           $rootScope.showSnackbar("S\u1EA3n ph\u1EA9m n\xE0y ch\u1EC9 c\xF2n t\u1ED1i \u0111a ".concat(res.data.quantity_in_stock, " c\xE1i!"));
         } else {
           $rootScope.showSnackbar("S\u1EA3n ph\u1EA9m n\xE0y \u0111\xE3 h\u1EBFt h\xE0ng!");
-        }
+        } // Edit on view
+
 
         product_old.colors.forEach(function (color) {
           if (color.color_id == product_old.picked.color.color_id) {
@@ -40459,14 +40464,13 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
             return false;
           }
         });
+        product_old.picked.quantity = res.data.quantity_in_cart;
+        product_old.picked.size.quantity = res.data.quantity_in_stock;
         var index = $rootScope.cart.findIndex(function (p) {
           return p.product_id === product_old.product_id;
         });
         $rootScope.cart[index] = product_old;
-        product.picked.quantity = res.data.quantity_in_cart;
       }
-
-      product.picked.size.quantity = res.data.quantity_in_stock;
     });
   }; // Remove product in cart
 
@@ -40649,7 +40653,11 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
       return false;
     }
 
-    if (!$scope.isPaying && $rootScope.cart.length) {
+    var quantity = $rootScope.cart.filter(function (product) {
+      return product.chose;
+    }).length;
+
+    if (!$scope.isPaying && quantity) {
       $scope.isPaying = true;
       $http({
         method: "POST",
@@ -40665,13 +40673,44 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
           Authorization: "Bearer " + customerService.getCurrentToken()
         }
       }).then(function (res) {
-        $rootScope.cart = [];
-        $scope.isPaying = false;
-        $rootScope.total_price = 0;
-        $location.path("/orderdetails").search({
-          order_id: res.data.order_id
-        });
+        if (res.data.status == "success") {
+          $rootScope.cart = $rootScope.cart.filter(function (product) {
+            return !product.chose;
+          });
+          $scope.isPaying = false;
+          $rootScope.recalculateTotalPrice();
+          $location.path("/orderdetails").search({
+            order_id: res.data.order_id
+          });
+        } else {
+          // Get Cart
+          $http({
+            method: "GET",
+            url: API_URL + "/api/cart"
+          }).then(function (res) {
+            $rootScope.cart = res.data;
+            $rootScope.cart.forEach(function (product) {
+              product.picked = {};
+              product.picked.quantity = product.quantity;
+              product.colors.forEach(function (color) {
+                color.sizes.forEach(function (size) {
+                  if (product.size_id == size.size_id) {
+                    product.picked.color = color;
+                    product.picked.size = size;
+                  }
+                });
+              });
+            });
+            $scope.isPaying = false;
+            $rootScope.recalculateTotalPrice();
+            $rootScope.showSnackbar("Không thể đặt hàng do có sản phẩm có số lượng đặt vượt quá số lượng trong kho hàng");
+          });
+        }
       });
+    }
+
+    if (!quantity) {
+      $rootScope.showSnackbar("Vui lòng chọn sản phẩm cần đặt hàng!");
     }
   };
 
@@ -40687,6 +40726,41 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
     } else {
       return row.order_state_current.orderstate_name == $scope.order_state;
     }
+  };
+
+  $scope.chose_all = {
+    value: $rootScope.cart.filter(function (product) {
+      return product.chose;
+    }).length == $rootScope.cart.length
+  };
+
+  $scope.choseAll = function () {
+    $http({
+      method: "PUT",
+      url: API_URL + "/api/cart/chose-all",
+      data: {
+        value: $scope.chose_all.value
+      }
+    }).then(function (res) {});
+    $rootScope.cart.forEach(function (product) {
+      product.chose = $scope.chose_all.value;
+    });
+    $rootScope.recalculateTotalPrice();
+  };
+
+  $scope.chose = function (product) {
+    $http({
+      method: "PUT",
+      url: API_URL + "/api/cart/chose",
+      data: {
+        cart_id: product.cart_id,
+        value: product.chose
+      }
+    }).then(function (res) {});
+    $scope.chose_all.value = $rootScope.cart.filter(function (product) {
+      return product.chose;
+    }).length == $rootScope.cart.length;
+    $rootScope.recalculateTotalPrice();
   };
 });
 

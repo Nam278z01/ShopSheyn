@@ -39,12 +39,55 @@ class OrderController extends Controller
             'orderstate_name' => $request->orderstate_name,
         ]);
 
+        $order_details = Order::with('orderdetails')->findOrFail($request->order_id);
+
+        // Undo quantity
+        if($request->orderstate_name == 3 || $request->orderstate_name == 4) {
+            foreach ($order_details->orderdetails as $od) {
+                $size_update = Size::findOrFail($od->size_id);
+                $size_update->quantity += $od->product_quantity;
+                $size_update->save();
+            }
+        }
+
         if(!$order_state->orderstate_date) {
             return OrderState::findorFail($order_state->orderstate_id);
         } else {
             return false;
         }
+    }
 
+    public function updateOrderStateForCustomer(Request $request) {
+        $customer = $request->user();
+
+        $valid = Order::where('customer_id', $customer->customer_id)
+                        ->where('order_id', $request->order_id)->first();
+
+        if($valid) {
+            $order_state = OrderState::firstOrCreate(
+            [
+                'order_id' => $request->order_id,
+                'orderstate_name' => $request->orderstate_name,
+            ]);
+
+            $order_details = Order::with('orderdetails')->findOrFail($request->order_id);
+
+            // Undo quantity
+            if($request->orderstate_name == 3 || $request->orderstate_name == 4) {
+                foreach ($order_details->orderdetails as $od) {
+                    $size_update = Size::findOrFail($od->size_id);
+                    $size_update->quantity += $od->product_quantity;
+                    $size_update->save();
+                }
+            }
+
+            if(!$order_state->orderstate_date) {
+                return OrderState::findorFail($order_state->orderstate_id);
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
@@ -69,21 +112,47 @@ class OrderController extends Controller
         try {
             $customer = $request->user();
             $cart = json_decode(Cookie::get('cart'));
-            $size_ids = array_column($cart, 'size_id');
-            $products = Size::with(['color', 'color.product'])->whereIn("size_id", $size_ids)->get();
-            $products_to_array = json_decode($products->toJson());
+
+            $cart_to_order = [];
+            $cart_remain = [];
             foreach ($cart as $c) {
-                foreach ($products_to_array as $p) {
+               if($c->chose) {
+                    $cart_to_order[] = $c;
+               } else {
+                    $cart_remain[] = $c;
+               }
+            }
+
+            // Failed if the order quantity is greater than the quantity in stock
+            foreach ($cart_to_order as $c) {
+                $size = Size::findOrFail($c->size_id);
+                if($size->quantity < $c->quantity) {
+                    return response()->json([
+                        'status' => "failed",
+                    ]);
+                }
+            }
+
+            $size_ids = array_column($cart_to_order, 'size_id');
+
+            // Get discount of product
+            $products = Size::with(['color', 'color.product'])->whereIn("size_id", $size_ids)->get();
+            foreach ($cart_to_order as $c) {
+                foreach ($products as $p) {
                     if ($p->size_id == $c->size_id) {
                         $p->quantity = $c->quantity;
                         break;
                     }
                 }
             }
+
+            // Calculate total
             $total_price = 0;
-            foreach ($products_to_array as $p) {
+            foreach ($products as $p) {
                 $total_price += ($p->color->product_price - $p->color->product_price * $p->color->product->product_discount / 100) * $p->quantity;
             }
+
+            // Save order
             $order = new Order();
             $order->customer_name = $request->customer_name;
             $order->customer_address = $request->customer_address;
@@ -98,7 +167,7 @@ class OrderController extends Controller
             $orderstate->order_id = $order->order_id;
             $orderstate->save();
 
-            foreach ($products_to_array as $p) {
+            foreach ($products as $p) {
                 $orderdetail = new OrderDetail();
                 $orderdetail->product_discount = $p->color->product->product_discount;
                 $orderdetail->product_quantity = $p->quantity;
@@ -106,16 +175,23 @@ class OrderController extends Controller
                 $orderdetail->size_id = $p->size_id;
                 $orderdetail->order_id = $order->order_id;
                 $orderdetail->save();
+
+                //Update quantity of size
+                $size_update = Size::findOrFail($p->size_id);
+                $size_update->quantity -= $p->quantity;
+                $size_update->save();
             }
 
+            $ONE_MONTH = 60 * 24 * 30;
             return response()->json([
                 'order_id' => $order->order_id,
-                'status_code' => 200,
+                'status' => "success",
                 'message' => 'Order successfully',
-            ])->withCookie(cookie('cart', json_encode([]), 0));
+            ])->withCookie(cookie('cart', json_encode($cart_remain),$ONE_MONTH));
+
         } catch (\Exception $error) {
             return response()->json([
-                'status_code' => 500,
+                'status' => "failed",
                 'message' => 'Error when Order',
                 'error' => $error,
             ]);
@@ -128,6 +204,13 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function showForAdmin($id)
+    {
+        //
+        return Order::with(['orderdetails', 'orderdetails.size', 'orderdetails.size.color', 'orderdetails.size.color.product', 'orderstates'])
+            ->where('order_id', $id)->first();
+    }
+
     public function show($id)
     {
         //

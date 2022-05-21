@@ -272,24 +272,22 @@ myApp.run(function (
         $rootScope.showCartTimeout = $timeout(function () {
             $rootScope.isShowCart = false;
             $rootScope.showCartTimeout = undefined;
-        }, 3000);
+        }, 2000);
     };
 
     $rootScope.recalculateTotalPrice = function () {
-        $rootScope.total_price = $rootScope.cart.reduce(function (
-            total,
-            current
-        ) {
-            return (
-                total +
-                (current.picked.color.product_price -
-                    (current.picked.color.product_price *
-                        current.product_discount) /
-                        100) *
-                    current.picked.quantity
-            );
-        },
-        0);
+        $rootScope.total_price = $rootScope.cart
+            .filter((product) => product.chose)
+            .reduce(function (total, current) {
+                return (
+                    total +
+                    (current.picked.color.product_price -
+                        (current.picked.color.product_price *
+                            current.product_discount) /
+                            100) *
+                        current.picked.quantity
+                );
+            }, 0);
     };
 
     // Get Cart
@@ -319,6 +317,7 @@ myApp.run(function (
         product_new.cart_id = Math.floor(Date.now() * Math.random());
         product_new.picked.size = size;
         product_new.picked.quantity = 1;
+        product_new.chose = false;
         if (product_new.colors.length == 1) {
             product_new.picked.color = product_new.colors[0];
         }
@@ -374,37 +373,40 @@ myApp.run(function (
         }).then((res) => {
             if (res.data.status == "success") {
                 $rootScope.recalculateTotalPrice();
+                product.picked.size.quantity = res.data.quantity_in_stock;
             } else {
                 if (res.data.quantity_in_stock) {
                     $rootScope.showSnackbar(
                         `Sản phẩm này chỉ còn tối đa ${res.data.quantity_in_stock} cái!`
                     );
                 } else {
-                    $rootScope.showSnackbar(
-                        `Sản phẩm này đã hết hàng!`
-                    );
+                    $rootScope.showSnackbar(`Sản phẩm này đã hết hàng!`);
                 }
 
+                // Edit on view
                 product_old.colors.forEach(function (color) {
                     if (color.color_id == product_old.picked.color.color_id) {
                         product_old.picked.color = color;
                         product_old.picked.color.sizes.forEach(function (size) {
-                            if (size.size_id == product_old.picked.size.size_id) {
+                            if (
+                                size.size_id == product_old.picked.size.size_id
+                            ) {
                                 product_old.picked.size = size;
                                 return false;
                             }
-                        })
+                        });
                         return false;
                     }
-                })
+                });
 
+                product_old.picked.quantity = res.data.quantity_in_cart;
+                product_old.picked.size.quantity = res.data.quantity_in_stock;
+                let index = $rootScope.cart.findIndex(
+                    (p) => p.product_id === product_old.product_id
+                );
 
-                let index = $rootScope.cart.findIndex(p => p.product_id === product_old.product_id);
-                $rootScope.cart[index] = product_old
-
-                product.picked.quantity = res.data.quantity_in_cart;
+                $rootScope.cart[index] = product_old;
             }
-            product.picked.size.quantity = res.data.quantity_in_stock;
         });
     };
 

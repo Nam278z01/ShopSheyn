@@ -179,32 +179,48 @@ myApp.controller(
                     ],
                 };
             } else {
-                $scope.product = JSON.parse(JSON.stringify(product));
-                // Select category & subcategory
-                $scope.category_picked = $scope.categories.find(
-                    (c) =>
-                        c.category_id == $scope.product.subcategory.category_id
-                );
-                $scope.category_picked.subcategory =
-                    $scope.category_picked.subcategories.find(
-                        (sc) =>
-                            sc.subcategory_id ==
-                            $scope.product.subcategory.subcategory_id
+                $http({
+                    method: "GET",
+                    url: API_URL + "/api/product/get-detail/" + product.product_id,
+                }).then((res) => {
+                    let index =
+                        $scope.products.findIndex(
+                            (p) =>
+                                p.product_id ==
+                                product.product_id
+                        );
+                    $scope.products[index] = res.data;
+                    $scope.tableParams.reload();
+
+                    $scope.product = JSON.parse(JSON.stringify($scope.products[index]));
+                    // Select category & subcategory
+                    $scope.category_picked = $scope.categories.find(
+                        (c) =>
+                            c.category_id == $scope.product.subcategory.category_id
                     );
-                // Size
-                $scope.product.sizes = JSON.parse(
-                    JSON.stringify($scope.product.colors[0].sizes)
-                );
-                $scope.product.sizes.forEach((size) => {
-                    size.quantity = 0;
+                    $scope.category_picked.subcategory =
+                        $scope.category_picked.subcategories.find(
+                            (sc) =>
+                                sc.subcategory_id ==
+                                $scope.product.subcategory.subcategory_id
+                        );
+                    // Size
+                    $scope.product.sizes = JSON.parse(
+                        JSON.stringify($scope.product.colors[0].sizes)
+                    );
+                    $scope.product.sizes.forEach((size) => {
+                        size.quantity = 0;
+                    });
+                    // Color
+                    $scope.product.colors.forEach((color) => {
+                        color.files = [...Array(5)];
+                        color.files_for_delete = [];
+                    });
+                    files_for_delete = [];
+
                 });
-                // Color
-                $scope.product.colors.forEach((color) => {
-                    color.files = [...Array(5)];
-                    color.files_for_delete = [];
-                });
-                files_for_delete = [];
             }
+
         };
 
         $scope.addOrEditProduct = function () {

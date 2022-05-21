@@ -138,7 +138,7 @@
                             <div class="mt-[12px]">
                                 <div class="pt-[24px] px-[24px] pb-[12px] bg-white">
                                     <div class="text-[15px] pb-[12px] flex justify-between">
-                                        <span class="text-black font-bold text-[12px]"
+                                        <span class="text-black font-bold text-[12px] italic"
                                             >ID ĐƠN HÀNG: @{{ order.order_id }}</span
                                         >
                                         <span

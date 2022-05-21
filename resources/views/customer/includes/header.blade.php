@@ -356,7 +356,7 @@
                                                 ></i>
                                             </button>
                                             <input
-                                                ng-blur="editCart(product)"
+                                                ng-blur="editCart(product, product)"
                                                 ng-keypress="validateNumber($event, product)"
                                                 ng-model="product.picked.quantity"
                                                 type="text"
@@ -422,15 +422,15 @@
                         </div>
                         <div
                             ng-if="cart && cart.length != 0"
-                            class="h-[90px] m-[15px] pt-[15px] text-[13px] border-t border-dashed border-[#e5e5e5]"
+                            class="h-[50px] m-[15px] pt-[15px] text-[13px] border-t border-dashed border-[#e5e5e5]"
                         >
-                            <p class="flex justify-end items-center pb-2">
+                            {{-- <p class="flex justify-end items-center pb-2">
                                 <span> Tổng cộng: </span>
                                 <span
                                     class="text-[#fa6338] text-[18px] font-bold ml-1"
                                     >@{{ total_price | number: 0 }}₫</span
                                 >
-                            </p>
+                            </p> --}}
                             <a
                                 href="/cart"
                                 class="flex justify-center items-center h-[36px] w-full text-sm px-[30px] font-extrabold border border-black text-black bg-white hover:bg-[rgba(34,34,34,.8)] hover:text-white"

@@ -300,7 +300,7 @@
                         </div>
                         <div
                             ng-if="!product.picked.size && show_warning.size"
-                            class="text-xs font-normal text-red-500"
+                            class="text-xs font-normal text-red-500 italic"
                         >
                             Vui lòng chọn size
                         </div>
@@ -334,7 +334,7 @@
                         </div>
                         <span
                             ng-if="product.picked.quantity == product.picked.size.quantity"
-                            class="text-xs font-normal text-red-500"
+                            class="text-xs font-normal text-red-500 italic"
                         >
                             Số lượng bạn chọn đã đạt mức tối đa của sản phẩm này
                         </span>
@@ -355,7 +355,7 @@
     <div class="px-[50px]">
         <!-- You may also like -->
         <div class="pb-[30px] pt-[100px] px-[10px]">
-            <span class="text-xl text-black"> Có Thể Bạn Cũng Thích </span>
+            <span class="text-xl text-black font-semibold italic"> Có Thể Bạn Cũng Thích </span>
         </div>
         <div class="w-full relative">
             <div class="w-full flex image-slider2" slick-slider2>

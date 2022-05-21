@@ -83700,9 +83700,24 @@ myApp.controller("OrderManagementController", function ($scope, $rootScope, $htt
   });
 
   $scope.showModalDetails = function (order) {
-    $rootScope.order = JSON.parse(JSON.stringify(order));
-    $rootScope.order.order_state_change = $scope.order_states.find(function (os) {
-      return os.id === $rootScope.order.order_state_current;
+    $http({
+      method: "GET",
+      url: API_URL + "/api/order/get-order-for-admin/" + order.order_id,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + customerService.getCurrentToken()
+      }
+    }).then(function (res) {
+      var index = $rootScope.orders.findIndex(function (o) {
+        return o.order_id === order.order_id;
+      });
+      $rootScope.orders[index] = res.data;
+      $rootScope.orders[index].order_state_current = $rootScope.orders[index].orderstates[$rootScope.orders[index].orderstates.length - 1].orderstate_name;
+      $scope.tableParams.reload();
+      $rootScope.order = JSON.parse(JSON.stringify($rootScope.orders[index]));
+      $rootScope.order.order_state_change = $scope.order_states.find(function (os) {
+        return os.id === $rootScope.order.order_state_current;
+      });
     });
   };
 
@@ -83921,25 +83936,35 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
         }]
       };
     } else {
-      $scope.product = JSON.parse(JSON.stringify(product)); // Select category & subcategory
+      $http({
+        method: "GET",
+        url: API_URL + "/api/product/get-detail/" + product.product_id
+      }).then(function (res) {
+        var index = $scope.products.findIndex(function (p) {
+          return p.product_id == product.product_id;
+        });
+        $scope.products[index] = res.data;
+        $scope.tableParams.reload();
+        $scope.product = JSON.parse(JSON.stringify($scope.products[index])); // Select category & subcategory
 
-      $scope.category_picked = $scope.categories.find(function (c) {
-        return c.category_id == $scope.product.subcategory.category_id;
+        $scope.category_picked = $scope.categories.find(function (c) {
+          return c.category_id == $scope.product.subcategory.category_id;
+        });
+        $scope.category_picked.subcategory = $scope.category_picked.subcategories.find(function (sc) {
+          return sc.subcategory_id == $scope.product.subcategory.subcategory_id;
+        }); // Size
+
+        $scope.product.sizes = JSON.parse(JSON.stringify($scope.product.colors[0].sizes));
+        $scope.product.sizes.forEach(function (size) {
+          size.quantity = 0;
+        }); // Color
+
+        $scope.product.colors.forEach(function (color) {
+          color.files = _toConsumableArray(Array(5));
+          color.files_for_delete = [];
+        });
+        files_for_delete = [];
       });
-      $scope.category_picked.subcategory = $scope.category_picked.subcategories.find(function (sc) {
-        return sc.subcategory_id == $scope.product.subcategory.subcategory_id;
-      }); // Size
-
-      $scope.product.sizes = JSON.parse(JSON.stringify($scope.product.colors[0].sizes));
-      $scope.product.sizes.forEach(function (size) {
-        size.quantity = 0;
-      }); // Color
-
-      $scope.product.colors.forEach(function (color) {
-        color.files = _toConsumableArray(Array(5));
-        color.files_for_delete = [];
-      });
-      files_for_delete = [];
     }
   };
 
