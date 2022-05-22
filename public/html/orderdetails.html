@@ -73,7 +73,7 @@
                             1].orderstate_name | cvOrderState }}</span
                         >
                     </div>
-                    <div class="py-[10px] text-xs font-bold text-[#fa6338] border-t border-[#eaeaea] text-center">
+                    <div class="py-[10px] text-xs font-bold text-black border-t border-[#eaeaea] text-center">
                         Cảm ơn bạn đã mua sắm tại Shop Sheyn!
                     </div>
                     <div class="relative py-[30px] border-t border-[#eaeaea] rounded-br rounded-bl flex justify-between">
@@ -137,10 +137,10 @@
                         >
                             <div class="flex">
                                 <div
-                                    class="w-[90px] border border-[#e1e1e1] relative group"
+                                    class="w-[90px] h-[118px] border border-[#e1e1e1] relative group"
                                 >
                                     <img
-                                        class="w-full h-full"
+                                        class="w-full h-full object-cover"
                                         ng-src="/image/product/{{ od.size.color.product_image1 }}"
                                         alt="{{ od.size.color.product.product_name }}"
                                     />
@@ -234,7 +234,7 @@
                             <div class="flex-1 py-[13px] px-[10px] text-xs text-[rgba(0,0,0,.54)]">
                                 Tổng số tiền
                             </div>
-                            <div class="w-[240px] text-[#fa6338] py-[13px] text-2xl font-bold border-l border-dotted border-[rgba(0,0,0,.09)]">
+                            <div class="w-[240px] text-black py-[13px] text-2xl font-bold border-l border-dotted border-[rgba(0,0,0,.09)]">
                                 {{ order.total | number:0}}₫
                             </div>
                         </div>

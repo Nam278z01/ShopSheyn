@@ -44,7 +44,7 @@
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img
+                            <img style="margin: auto"
                                 ng-src="/image/img/@{{
                                     admin.image
                                 }}"

@@ -4,7 +4,6 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>@{{ title }}</title>
-        <link rel="shortcut icon" href="/image/product/icon.png" />
         <link href="/css/customer.css" rel="stylesheet" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,7 +16,7 @@
     <body>
         <div id="snackbar">@{{snackbarContent}}</div>
         <div class="loading">
-            <img src="/image/product/loading-37.gif" alt="" />
+            <img src="/image/product/loading-3.gif" alt="" />
         </div>
         <div id="root">
             <!-- Header -->
@@ -45,7 +44,7 @@
                             class="py-[16px] px-[12px] flex justify-between items-center"
                         >
                             <h3
-                                class="font-semibold text-[20px] text-[#2563eb]"
+                                class="font-semibold text-[20px] text-black"
                             >
                                 Đăng nhập
                             </h3>
@@ -55,13 +54,13 @@
                                 <div class="relative">
                                     <label
                                         for="EmailLogin"
-                                        class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-[#2563eb]"
+                                        class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-black"
                                         >Email</label
                                     >
                                     <input
                                         ng-model="email"
                                         type="email"
-                                        class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-[#2563eb]"
+                                        class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-black"
                                         name="EmailLogin"
                                         placeholder="Email của bạn"
                                         required
@@ -72,13 +71,13 @@
                                 <div class="relative">
                                     <label
                                         for="EmailLogin"
-                                        class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-[#2563eb]"
+                                        class="absolute top-0 left-[10px] cursor-pointer py-[1px] px-[5px] bg-white text-xs -translate-y-2/4 font-semibold text-black"
                                         >Mật khẩu</label
                                     >
                                     <input
                                         ng-model="password"
                                         type="password"
-                                        class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-[#2563eb]"
+                                        class="p-[15px] h-[44px] rounded text-sm w-full border focus:outline-none focus:border-black"
                                         name="PassLogin"
                                         placeholder="Mật khẩu của bạn"
                                         required
@@ -90,7 +89,7 @@
                             <div class="flex justify-end items-center">
                                 <a
                                     href="#"
-                                    class="text-sm font-medium text-[#2563eb]"
+                                    class="text-sm font-medium text-black"
                                     >Quên mật khẩu</a
                                 >
                                 <span
@@ -114,7 +113,7 @@
                             <button
                                 ng-click="login()"
                                 type="submit"
-                                class="text-[13px] bg-gradient-to-r from-[#2563eb] to-[#6bcd87] text-white rounded-[50px] flex justify-center items-center px-[14px] py-[6px]"
+                                class="text-[13px] bg-black text-white rounded-[50px] flex justify-center items-center px-[14px] py-[6px]"
                             >
                                 Đăng nhập
                             </button>

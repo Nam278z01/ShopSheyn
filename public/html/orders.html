@@ -31,7 +31,7 @@
                 <div class="my-[30px]">
                     <a
                         href="#"
-                        class="flex items-center mb-[15px] hover:text-[#fa6338]"
+                        class="text-[#8e8e8e] flex items-center mb-[15px] hover:text-black"
                     >
                         <i class="bx bx-user text-xl"></i>
                         <span class="text-[13px] font-semibold ml-[10px]"
@@ -40,7 +40,7 @@
                     </a>
                     <a
                         href="/orders"
-                        class="flex items-center mb-[15px] text-[#fa6338]"
+                        class="flex items-center mb-[15px] text-black"
                     >
                         <i class="bx bx-food-menu text-xl"></i>
                         <span class="text-[13px] font-semibold ml-[10px]"
@@ -58,44 +58,44 @@
                 class="mb-[12px] flex w-full bg-white font-medium text-[15px] sticky top-[54px] z-30"
             >
                 <div
-                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == -1, 'border-[#00000017]': order_state != -1}"
+                    ng-class="{'border-black text-[#000]': order_state == -1, 'border-[#00000017]': order_state != -1}"
                     ng-click="setOrderState(-1)"
-                    class="cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="text-[#8e8e8e] cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-black"
                 >
                     Tất cả
                 </div>
                 <div
-                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 0, 'border-[#00000017]': order_state != 0}"
+                    ng-class="{'border-black text-[#000]': order_state == 0, 'border-[#00000017]': order_state != 0}"
                     ng-click="setOrderState(0)"
-                    class="cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="text-[#8e8e8e] cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-black"
                 >
                     Đang xử lý
                 </div>
                 <div
-                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 1, 'border-[#00000017]': order_state != 1}"
+                    ng-class="{'border-black text-[#000]': order_state == 1, 'border-[#00000017]': order_state != 1}"
                     ng-click="setOrderState(1)"
-                    class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="text-[#8e8e8e] cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-black"
                 >
                     Đang giao
                 </div>
                 <div
-                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 2, 'border-[#00000017]': order_state != 2}"
+                    ng-class="{'border-black text-[#000]': order_state == 2, 'border-[#00000017]': order_state != 2}"
                     ng-click="setOrderState(2)"
-                    class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="text-[#8e8e8e] cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-black"
                 >
                     Đã giao
                 </div>
                 <div
-                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 3, 'border-[#00000017]': order_state != 3}"
+                    ng-class="{'border-black text-[#000]': order_state == 3, 'border-[#00000017]': order_state != 3}"
                     ng-click="setOrderState(3)"
-                    class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="text-[#8e8e8e] cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-black"
                 >
                     Đã hủy
                 </div>
                 <div
-                    ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 4, 'border-[#00000017]': order_state != 4}"
+                    ng-class="{'border-black text-[#000]': order_state == 4, 'border-[#00000017]': order_state != 4}"
                     ng-click="setOrderState(4)"
-                    class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="text-[#8e8e8e] cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-black"
                 >
                     Hoàn trả
                 </div>
@@ -155,10 +155,10 @@
                         >
                             <div class="flex">
                                 <div
-                                    class="w-[90px] border border-[#e1e1e1] relative group"
+                                    class="w-[90px] h-[118px] border border-[#e1e1e1] relative group"
                                 >
                                     <img
-                                        class="w-full h-full"
+                                        class="w-full h-full object-cover"
                                         ng-src="/image/product/{{ od.size.color.product_image1 }}"
                                         alt="{{ od.size.color.product.product_name }}"
                                     />
@@ -208,7 +208,7 @@
                                 <!-- Discount -->
                                 <span
                                     ng-if="od.product_discount != 0"
-                                    class="text-[#fa6338] text-lg block font-semibold mr-2"
+                                    class="text-black text-lg block font-semibold mr-2"
                                 >
                                     {{(od.price - od.price * od.product_discount
                                     / 100) * od.product_quantity | number:0}}₫
@@ -244,7 +244,7 @@
                             <span class="text-sm text-[#000000cc] mr-[5px]"
                                 >Tổng số tiền:</span
                             >
-                            <span class="text-2xl text-[#fa6338] font-bold"
+                            <span class="text-2xl text-black font-bold"
                                 >{{ o.total | number:0 }}đ</span
                             >
                         </div>

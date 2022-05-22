@@ -40174,7 +40174,7 @@ myApp.controller("LoginController", function ($scope, $rootScope, API_URL, custo
   };
 });
 myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL, customerService, $timeout) {
-  $rootScope.title = "Shop Sheyn";
+  $rootScope.title = "Adidas";
 
   if (customerService.checkIfLoggedIn()) {
     $http({

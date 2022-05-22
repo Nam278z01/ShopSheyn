@@ -184,20 +184,20 @@
                         ></span>
                     </label>
                     <div class="w-[126px] relative group">
-                        <div class="relative">
+                        <div class="relative w-[126px] h-[168px]">
                             <img
                                 ng-src="/image/product/{{
                                 product.picked.color.product_image1
                             }}"
                                 alt="{{ product.product_name }}"
-                                class="w-full"
+                                class="w-full h-full object-cover"
                             />
                             <img
                                 ng-src="/image/product/{{
                                 product.picked.color.product_image2 || product.picked.color.product_image3 || product.picked.color.product_image4 || product.picked.color.product_image5
                             }}"
                                 alt="{{ product.product_name }}"
-                                class="absolute top-0 left-0 w-full opacity-0 group-hover:opacity-100 transition-all duration-500"
+                                class="absolute top-0 left-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-all duration-500"
                             />
                             <div
                                 ng-click="removeProductFromCart(product.cart_id)"
@@ -277,7 +277,7 @@
                                 ng-if="product.product_discount != 0"
                                 class="flex flex-col text-sm"
                             >
-                                <span class="text-[#fa6338] font-bold">
+                                <span class="text-black font-bold">
                                     {{ (product.picked.color .product_price -
                                     (product.picked.color .product_price *
                                     product.product_discount) / 100) *
@@ -308,7 +308,7 @@
                         class="h-full w-full border border-[rgb(0 0 0 / 10%)] pl-3 pr-14 focus:outline-none focus:border-black text-sm"
                     />
                     <button
-                        class="absolute top-0 right-0 h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[#d73211]"
+                        class="absolute top-0 right-0 h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-black hover:bg-[rgba(34,34,34,.8)]"
                     >
                         Áp dụng
                     </button>
@@ -334,7 +334,7 @@
                 <div class="my-[20px]">
                     <div class="flex justify-between text-sm mb-[15px]">
                         <p>Tổng cộng</p>
-                        <p class="text-2xl font-bold text-[#fa6338]">
+                        <p class="text-2xl font-bold text-black">
                             {{ total_price | number: 0 }}₫
                         </p>
                     </div>

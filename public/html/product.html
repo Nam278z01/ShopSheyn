@@ -3,22 +3,7 @@
         <!-- Bread crumb -->
         <div class="text-xs whitespace-nowrap">
             <div class="py-4">
-                <div class="inline-block">
-                    <a
-                        href="/"
-                        class="text-[#999] hover:underline hover:text-black"
-                        >Trang chủ</a
-                    >
-                </div>
-                <div
-                    class="inline-block before:content-['/'] before:px-2 before:text-[#999]"
-                >
-                    <a
-                        href="#"
-                        class="text-black"
-                        >Quần áo nữ</a
-                    >
-                </div>
+
             </div>
         </div>
 
@@ -64,8 +49,11 @@
                             ng-click="changeCategory(undefine, false, null)"
                         >
                             <span
-                                ng-class="{'text-[#fa6338]': changeCategory(undefine, true)}"
-                                class="text-black font-bold hover:text-[#fa6338] cursor-pointer"
+                                ng-class="{
+                                    'text-[#8e8e8e]': !changeCategory(undefine, true),
+                                    'text-black' : changeCategory(undefine, true)
+                                }"
+                                class="hover:text-black font-bold cursor-pointer"
                                 >Tất cả</span
                             >
                         </li>
@@ -75,8 +63,11 @@
                             ng-click="changeCategory(c.category_id, false, c)"
                         >
                             <span
-                                ng-class="{'text-[#fa6338]': changeCategory(c.category_id, true, c)}"
-                                class="text-black font-bold hover:text-[#fa6338] cursor-pointer"
+                                ng-class="{
+                                    'text-[#8e8e8e]': !changeCategory(c.category_id, true, c),
+                                    'text-black' : changeCategory(c.category_id, true, c)
+                                }"
+                                class="hover:text-black font-bold cursor-pointer"
                                 >{{ c.category_name }}</span
                             >
                         </li>
@@ -111,7 +102,7 @@
                                 class="mr-2"
                             />
                             <span
-                                class="text-[#000000cc] font-semibold hover:text-[#fa6338]"
+                                class="text-[#000000cc] font-semibold hover:text-black"
                                 >{{ sc.subcategory_name }}</span
                             >
                         </label>
@@ -139,7 +130,7 @@
                         </div>
                         <button
                             ng-click="changePrice()"
-                            class="w-full h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white bg-[#fa6338] hover:bg-[#d73211]"
+                            class="w-full h-[40px] font-extrabold text-[13px] px-[30px] flex justify-center items-center text-white hover:bg-[rgba(34,34,34,0.8)] bg-black"
                         >
                             ÁP DỤNG
                         </button>
@@ -186,7 +177,7 @@
                     total-items="total_row"
                     current-page="filter.page"
                     ng-if="!isLoading"
-                    class="w-1/4 px-[10px]"
+                    class="w-1/4 px-[10px] relative hover:before:block hover:before:absolute hover:before:-top-[4px] hover:before:right-[5px] hover:before:bottom-[30px] hover:before:left-[5px] hover:before:border hover:before:border-[#222] hover:before:shadow-[inset_0_0_0_2px_#fff]"
                 >
                     <div
                         class="w-full pb-[132%] h-0 relative overflow-hidden bg-[#f7f7f7] group"
@@ -198,12 +189,12 @@
                             <img
                                 ng-src="/image/product/{{p.picked.color.product_image1}}"
                                 alt="{{ p.product_name }}"
-                                class="w-full"
+                                class="w-full h-full object-cover absolute top-0 left-0"
                             />
                             <img
                                 ng-src="/image/product/{{p.picked.color.product_image2 || p.picked.color.product_image3 || p.picked.color.product_image4 || p.picked.color.product_image5}}"
                                 alt="{{ p.product_name }}"
-                                class="w-full absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500"
+                                class="w-full h-full object-cover absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500"
                             />
                         </a>
                         <div
@@ -245,7 +236,7 @@
                             <!-- IF Discount -->
                             <span
                                 ng-if="p.product_discount != 0"
-                                class="text-[#fa6338] text-sm block font-bold mr-1"
+                                class="text-black text-sm block font-bold mr-1"
                             >
                                 {{p.picked.color.product_price -
                                 p.picked.color.product_price *

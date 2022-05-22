@@ -47,7 +47,7 @@
 }
 
 .scrollbar:hover::-webkit-scrollbar-thumb {
-    background-color: #fa6338;
+    background-color: black;
 }
 
 /*Toast / Snackbar*/
@@ -91,7 +91,7 @@
 }
 
 .loading img {
-    width: 100px;
+    width: 50px;
     margin: auto;
 }
 
