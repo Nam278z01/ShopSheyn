@@ -59,7 +59,7 @@
 
             table td img {
                 width: 60px;
-                height: 78px;
+                height: 72px;
                 border-radius: 2px;
                 object-fit: cover;
             }
