@@ -1,26 +1,24 @@
 myApp.constant("API_URL", "");
 
 myApp.filter("jsDate", function () {
-    // return function (x) {
-    //     return x.replace("/Date(", "").replace(")/", "");
-    // };
     return function (x) {
         return new Date(x);
     };
 });
 
 myApp.filter("cvOrderState", function () {
-    return function (x) {
-        if (x == 0) {
-            return "Đang xử lý";
-        } else if (x == 1) {
-            return "Đang giao";
-        } else if (x == 2) {
-            return "Đã giao";
-        } else if (x == 3) {
-            return "Đã hủy";
-        } else {
-            return "Hoàn trả";
+    return function (name) {
+        switch (name) {
+            case 0:
+                return "Đang xử lý";
+            case 1:
+                return "Đang giao";
+            case 2:
+                return "Đã giao";
+            case 3:
+                return "Đã hủy";
+            default:
+                return "Hoàn trả";
         }
     };
 });
@@ -74,7 +72,7 @@ myApp.factory(
 
 myApp.controller(
     "LoginController",
-    function ($scope, $rootScope, API_URL, customerService, $window) {
+    function ($scope, $rootScope, customerService, $window) {
         $rootScope.login = function () {
             customerService.login(
                 $scope.email,
@@ -93,7 +91,6 @@ myApp.controller(
 myApp.run(function (
     $rootScope,
     $http,
-    $routeParams,
     $location,
     $window,
     API_URL,
@@ -210,7 +207,7 @@ myApp.run(function (
     $rootScope.getQuantityOfSize = function (size) {
         return $http({
             method: "GET",
-            url: API_URL + "/api/size/get-quantity/" + size.size_id,
+            url: API_URL + "/api/product/get-quantity/" + size.size_id,
         });
     };
 
@@ -290,12 +287,7 @@ myApp.run(function (
             }, 0);
     };
 
-    // Get Cart
-    $http({
-        method: "GET",
-        url: API_URL + "/api/cart",
-    }).then((res) => {
-        $rootScope.cart = res.data;
+    $rootScope.mapCart = function () {
         $rootScope.cart.forEach((product) => {
             product.picked = {};
             product.picked.quantity = product.quantity;
@@ -308,6 +300,15 @@ myApp.run(function (
                 });
             });
         });
+    }
+
+    // Get Cart
+    $http({
+        method: "GET",
+        url: API_URL + "/api/cart",
+    }).then((res) => {
+        $rootScope.cart = res.data;
+        $rootScope.mapCart();
         $rootScope.recalculateTotalPrice();
     });
 

@@ -1,11 +1,8 @@
 myApp.constant("API_URL", "");
 
 myApp.filter("jsDate", function () {
-    // return function (x) {
-    //     return x.replace("/Date(", "").replace(")/", "");
-    // };
     return function (x) {
-        return new Date(x)
+        return new Date(x);
     };
 });
 
@@ -17,138 +14,96 @@ myApp.config(function ($mdThemingProvider) {
 });
 
 myApp.filter("cvOrderState", function () {
-    return function (x) {
-        if (x == 0) {
-            return "Đang xử lý";
-        } else if (x == 1) {
-            return "Đang giao";
-        } else if (x == 2) {
-            return "Đã giao";
-        } else if (x == 3) {
-            return "Đã hủy";
-        } else {
-            return "Hoàn trả";
+    return function (name) {
+        switch (name) {
+            case 0:
+                return "Đang xử lý";
+            case 1:
+                return "Đang giao";
+            case 2:
+                return "Đã giao";
+            case 3:
+                return "Đã hủy";
+            default:
+                return "Hoàn trả";
         }
     };
 });
 
-myApp.factory(
-    "customerService",
-    function ($http, localStorageService, API_URL) {
-        function checkIfLoggedIn() {
-            if (localStorageService.get("authTokenAdmin")) return true;
-            else return false;
-        }
-        function login(email, password, onSuccess, onError) {
-            $http({
-                method: "POST",
-                url: API_URL + "/api/login/admin",
-                data: {
-                    accountname: email,
-                    password: password,
-                },
-                "Content-Type": "application/json",
-            }).then(
-                function (response) {
-                    localStorageService.set(
-                        "authTokenAdmin",
-                        response.data.access_token
-                    );
-                    onSuccess(response);
-                },
-                function (response) {
-                    onError(response);
-                }
-            );
-        }
-
-        function logout() {
-            localStorageService.remove("authTokenAdmin");
-        }
-
-        function getCurrentToken() {
-            return localStorageService.get("authTokenAdmin");
-        }
-
-        return {
-            checkIfLoggedIn: checkIfLoggedIn,
-            login: login,
-            logout: logout,
-            getCurrentToken: getCurrentToken,
-        };
+myApp.factory("adminService", function ($http, localStorageService, API_URL) {
+    function checkIfLoggedIn() {
+        if (localStorageService.get("authTokenAdmin")) return true;
+        else return false;
     }
-);
+    function login(email, password, onSuccess, onError) {
+        $http({
+            method: "POST",
+            url: API_URL + "/api/login/admin",
+            data: {
+                accountname: email,
+                password: password,
+            },
+            "Content-Type": "application/json",
+        }).then(
+            function (response) {
+                localStorageService.set(
+                    "authTokenAdmin",
+                    response.data.access_token
+                );
+                onSuccess(response);
+            },
+            function (response) {
+                onError(response);
+            }
+        );
+    }
+
+    function logout() {
+        localStorageService.remove("authTokenAdmin");
+    }
+
+    function getCurrentToken() {
+        return localStorageService.get("authTokenAdmin");
+    }
+
+    return {
+        checkIfLoggedIn: checkIfLoggedIn,
+        login: login,
+        logout: logout,
+        getCurrentToken: getCurrentToken,
+    };
+});
 
 myApp.controller(
     "LoginManagementController",
-    function (
-        $scope,
-        $rootScope,
-        $http,
-        API_URL,
-        $mdDialog,
-        NgTableParams,
-        Upload,
-        $timeout,
-        customerService,
-        $location
-    ) {
+    function ($scope, $rootScope, adminService) {
         $rootScope.login = function () {
-            customerService.login(
+            adminService.login(
                 $scope.accountname,
                 $scope.password,
                 function (res) {
                     if (res.data.status_code == 200) {
-                        document.location.href = '/admin';
+                        document.location.href = "/admin";
                     }
                 },
                 function (err) {}
             );
         };
 
-        if (customerService.checkIfLoggedIn()) {
-            document.location.href = '/admin';
+        if (adminService.checkIfLoggedIn()) {
+            document.location.href = "/admin";
         }
     }
 );
 
-myApp.run(function ($rootScope, $http, API_URL, $mdToast, customerService, $window, $location) {
-
-    if (customerService.checkIfLoggedIn()) {
-        $http({
-            method: "GET",
-            url: API_URL + "/api/admin",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + customerService.getCurrentToken(),
-            },
-        }).then((res) => {
-            $rootScope.is_login = true;
-            $rootScope.admin = res.data;
-        });
-    } else {
-        var restrictedPage = $.inArray(document.location.pathname, ['/admin', '/admin/order', '/admin/product']) != -1;
-        if (restrictedPage) {
-            document.location.href = '/admin/login';
-        }
-    }
-
-    $rootScope.logout = function () {
-        $http({
-            method: "DELETE",
-            url: API_URL + "/api/logout",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + customerService.getCurrentToken(),
-            },
-        }).then((res) => {
-            if (res.data.status_code == 200) {
-                customerService.logout();
-                $window.location.reload();
-            }
-        });
-    };
-
+myApp.run(function (
+    $rootScope,
+    $http,
+    API_URL,
+    $mdToast,
+    adminService,
+    $window
+) {
     // Sidebar active
     $rootScope.currentIndex = -1;
     $rootScope.currentSubIndex = -1;
@@ -158,6 +113,7 @@ myApp.run(function ($rootScope, $http, API_URL, $mdToast, customerService, $wind
     $rootScope.isActiveSubNav = function (index) {
         return index == $rootScope.currentSubIndex;
     };
+
     // Toast
     $rootScope.showSimpleToast = function (toast_name, type) {
         $mdToast.show(
@@ -169,5 +125,46 @@ myApp.run(function ($rootScope, $http, API_URL, $mdToast, customerService, $wind
                 .hideDelay(3000)
                 .theme(type + "-toast")
         );
+    };
+
+    //Check login
+    if (adminService.checkIfLoggedIn()) {
+        $http({
+            method: "GET",
+            url: API_URL + "/api/admin",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + adminService.getCurrentToken(),
+            },
+        }).then((res) => {
+            $rootScope.is_login = true;
+            $rootScope.admin = res.data;
+        });
+    } else {
+        var restrictedPage =
+            $.inArray(document.location.pathname, [
+                "/admin",
+                "/admin/order",
+                "/admin/product",
+            ]) != -1;
+        if (restrictedPage) {
+            document.location.href = "/admin/login";
+        }
+    }
+
+    $rootScope.logout = function () {
+        $http({
+            method: "DELETE",
+            url: API_URL + "/api/logout",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + adminService.getCurrentToken(),
+            },
+        }).then((res) => {
+            if (res.data.status_code == 200) {
+                adminService.logout();
+                $window.location.reload();
+            }
+        });
     };
 });

@@ -40105,25 +40105,27 @@ module.exports = angular;
 
 myApp.constant("API_URL", "");
 myApp.filter("jsDate", function () {
-  // return function (x) {
-  //     return x.replace("/Date(", "").replace(")/", "");
-  // };
   return function (x) {
     return new Date(x);
   };
 });
 myApp.filter("cvOrderState", function () {
-  return function (x) {
-    if (x == 0) {
-      return "Đang xử lý";
-    } else if (x == 1) {
-      return "Đang giao";
-    } else if (x == 2) {
-      return "Đã giao";
-    } else if (x == 3) {
-      return "Đã hủy";
-    } else {
-      return "Hoàn trả";
+  return function (name) {
+    switch (name) {
+      case 0:
+        return "Đang xử lý";
+
+      case 1:
+        return "Đang giao";
+
+      case 2:
+        return "Đã giao";
+
+      case 3:
+        return "Đã hủy";
+
+      default:
+        return "Hoàn trả";
     }
   };
 });
@@ -40164,7 +40166,7 @@ myApp.factory("customerService", function ($http, localStorageService, API_URL) 
     getCurrentToken: getCurrentToken
   };
 });
-myApp.controller("LoginController", function ($scope, $rootScope, API_URL, customerService, $window) {
+myApp.controller("LoginController", function ($scope, $rootScope, customerService, $window) {
   $rootScope.login = function () {
     customerService.login($scope.email, $scope.password, function (res) {
       if (res.data.status_code == 200) {
@@ -40173,7 +40175,7 @@ myApp.controller("LoginController", function ($scope, $rootScope, API_URL, custo
     }, function (err) {});
   };
 });
-myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL, customerService, $timeout) {
+myApp.run(function ($rootScope, $http, $location, $window, API_URL, customerService, $timeout) {
   $rootScope.title = "Shop Sheyn";
 
   if (customerService.checkIfLoggedIn()) {
@@ -40278,7 +40280,7 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
   $rootScope.getQuantityOfSize = function (size) {
     return $http({
       method: "GET",
-      url: API_URL + "/api/size/get-quantity/" + size.size_id
+      url: API_URL + "/api/product/get-quantity/" + size.size_id
     });
   };
 
@@ -40363,14 +40365,9 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
     }).reduce(function (total, current) {
       return total + (current.picked.color.product_price - current.picked.color.product_price * current.product_discount / 100) * current.picked.quantity;
     }, 0);
-  }; // Get Cart
+  };
 
-
-  $http({
-    method: "GET",
-    url: API_URL + "/api/cart"
-  }).then(function (res) {
-    $rootScope.cart = res.data;
+  $rootScope.mapCart = function () {
     $rootScope.cart.forEach(function (product) {
       product.picked = {};
       product.picked.quantity = product.quantity;
@@ -40383,6 +40380,15 @@ myApp.run(function ($rootScope, $http, $routeParams, $location, $window, API_URL
         });
       });
     });
+  }; // Get Cart
+
+
+  $http({
+    method: "GET",
+    url: API_URL + "/api/cart"
+  }).then(function (res) {
+    $rootScope.cart = res.data;
+    $rootScope.mapCart();
     $rootScope.recalculateTotalPrice();
   }); // Add Cart
 
@@ -40624,9 +40630,20 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
         order.order_state_current = order.orderstates[order.orderstates.length - 1];
       });
     });
-  }
+    $scope.order_state = -1;
 
-  if ($location.path() == "/orderdetails") {
+    $scope.setOrderState = function (type) {
+      $scope.order_state = type;
+    };
+
+    $scope.searchOrderByState = function (row) {
+      if ($scope.order_state == -1) {
+        return true;
+      } else {
+        return row.order_state_current.orderstate_name == $scope.order_state;
+      }
+    };
+  } else if ($location.path() == "/orderdetails") {
     $http({
       method: "GET",
       url: API_URL + "/api/order/" + $routeParams.order_id,
@@ -40660,131 +40677,106 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
         }
       });
     };
-  }
-
-  if ($rootScope.customer) {
-    $scope.name = $rootScope.customer.customer_name;
-    $scope.address = $rootScope.customer.customer_address;
-    $scope.phone = $rootScope.customer.customer_phone;
-  }
-
-  $scope.isPaying = false;
-
-  $scope.checkout = function () {
-    if (!$rootScope.is_login) {
-      $rootScope.showModalLogin();
-      return false;
+  } else {
+    if ($rootScope.customer) {
+      $scope.name = $rootScope.customer.customer_name;
+      $scope.address = $rootScope.customer.customer_address;
+      $scope.phone = $rootScope.customer.customer_phone;
     }
 
-    var quantity = $rootScope.cart.filter(function (product) {
-      return product.chose;
-    }).length;
+    $scope.isPaying = false;
 
-    if (!$scope.isPaying && quantity) {
-      $scope.isPaying = true;
-      $http({
-        method: "POST",
-        url: API_URL + "/api/order",
-        data: {
-          customer_name: $scope.name,
-          customer_address: $scope.address,
-          customer_phone: $scope.phone,
-          note: $scope.note
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + customerService.getCurrentToken()
-        }
-      }).then(function (res) {
-        if (res.data.status == "success") {
-          $rootScope.cart = $rootScope.cart.filter(function (product) {
-            return !product.chose;
-          });
-          $scope.isPaying = false;
-          $rootScope.recalculateTotalPrice();
-          $location.path("/orderdetails").search({
-            order_id: res.data.order_id
-          });
-        } else {
-          // Get Cart
-          $http({
-            method: "GET",
-            url: API_URL + "/api/cart"
-          }).then(function (res) {
-            $rootScope.cart = res.data;
-            $rootScope.cart.forEach(function (product) {
-              product.picked = {};
-              product.picked.quantity = product.quantity;
-              product.colors.forEach(function (color) {
-                color.sizes.forEach(function (size) {
-                  if (product.size_id == size.size_id) {
-                    product.picked.color = color;
-                    product.picked.size = size;
-                  }
-                });
-              });
+    $scope.checkout = function () {
+      if (!$rootScope.is_login) {
+        $rootScope.showModalLogin();
+        return false;
+      }
+
+      var quantity = $rootScope.cart.filter(function (product) {
+        return product.chose;
+      }).length;
+
+      if (!$scope.isPaying && quantity) {
+        $scope.isPaying = true;
+        $http({
+          method: "POST",
+          url: API_URL + "/api/order",
+          data: {
+            customer_name: $scope.name,
+            customer_address: $scope.address,
+            customer_phone: $scope.phone,
+            note: $scope.note
+          },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + customerService.getCurrentToken()
+          }
+        }).then(function (res) {
+          if (res.data.status == "success") {
+            $rootScope.cart = $rootScope.cart.filter(function (product) {
+              return !product.chose;
             });
             $scope.isPaying = false;
             $rootScope.recalculateTotalPrice();
-            $rootScope.showSnackbar("Không thể đặt hàng do có sản phẩm có số lượng đặt vượt quá số lượng trong kho hàng");
-          });
+            $location.path("/orderdetails").search({
+              order_id: res.data.order_id
+            });
+          } else {
+            // Get Cart
+            $http({
+              method: "GET",
+              url: API_URL + "/api/cart"
+            }).then(function (res) {
+              $rootScope.cart = res.data;
+              $rootScope.mapCart();
+              $scope.isPaying = false;
+              $rootScope.recalculateTotalPrice();
+              $rootScope.showSnackbar("Không thể đặt hàng do có sản phẩm có số lượng đặt vượt quá số lượng trong kho hàng");
+            });
+          }
+        });
+      }
+
+      if (!quantity) {
+        $rootScope.showSnackbar("Vui lòng chọn sản phẩm cần đặt hàng!");
+      }
+    };
+
+    $scope.chose_all = {
+      value: $rootScope.cart.filter(function (product) {
+        return product.chose;
+      }).length == $rootScope.cart.length
+    };
+
+    $scope.choseAll = function () {
+      $http({
+        method: "PUT",
+        url: API_URL + "/api/cart/chose-all",
+        data: {
+          value: $scope.chose_all.value
         }
+      }).then(function (res) {});
+      $rootScope.cart.forEach(function (product) {
+        product.chose = $scope.chose_all.value;
       });
-    }
+      $rootScope.recalculateTotalPrice();
+    };
 
-    if (!quantity) {
-      $rootScope.showSnackbar("Vui lòng chọn sản phẩm cần đặt hàng!");
-    }
-  };
-
-  $scope.order_state = -1;
-
-  $scope.setOrderState = function (type) {
-    $scope.order_state = type;
-  };
-
-  $scope.searchOrderByState = function (row) {
-    if ($scope.order_state == -1) {
-      return true;
-    } else {
-      return row.order_state_current.orderstate_name == $scope.order_state;
-    }
-  };
-
-  $scope.chose_all = {
-    value: $rootScope.cart.filter(function (product) {
-      return product.chose;
-    }).length == $rootScope.cart.length
-  };
-
-  $scope.choseAll = function () {
-    $http({
-      method: "PUT",
-      url: API_URL + "/api/cart/chose-all",
-      data: {
-        value: $scope.chose_all.value
-      }
-    }).then(function (res) {});
-    $rootScope.cart.forEach(function (product) {
-      product.chose = $scope.chose_all.value;
-    });
-    $rootScope.recalculateTotalPrice();
-  };
-
-  $scope.chose = function (product) {
-    $http({
-      method: "PUT",
-      url: API_URL + "/api/cart/chose",
-      data: {
-        cart_id: product.cart_id,
-        value: product.chose
-      }
-    }).then(function (res) {});
-    $scope.chose_all.value = $rootScope.cart.filter(function (product) {
-      return product.chose;
-    }).length == $rootScope.cart.length;
-    $rootScope.recalculateTotalPrice();
-  };
+    $scope.chose = function (product) {
+      $http({
+        method: "PUT",
+        url: API_URL + "/api/cart/chose",
+        data: {
+          cart_id: product.cart_id,
+          value: product.chose
+        }
+      }).then(function (res) {});
+      $scope.chose_all.value = $rootScope.cart.filter(function (product) {
+        return product.chose;
+      }).length == $rootScope.cart.length;
+      $rootScope.recalculateTotalPrice();
+    };
+  }
 });
 
 /***/ }),

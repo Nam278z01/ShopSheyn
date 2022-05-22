@@ -83513,9 +83513,6 @@ module.exports = angular;
 
 myApp.constant("API_URL", "");
 myApp.filter("jsDate", function () {
-  // return function (x) {
-  //     return x.replace("/Date(", "").replace(")/", "");
-  // };
   return function (x) {
     return new Date(x);
   };
@@ -83527,21 +83524,26 @@ myApp.config(function ($mdThemingProvider) {
   $mdThemingProvider.theme("info-toast");
 });
 myApp.filter("cvOrderState", function () {
-  return function (x) {
-    if (x == 0) {
-      return "Đang xử lý";
-    } else if (x == 1) {
-      return "Đang giao";
-    } else if (x == 2) {
-      return "Đã giao";
-    } else if (x == 3) {
-      return "Đã hủy";
-    } else {
-      return "Hoàn trả";
+  return function (name) {
+    switch (name) {
+      case 0:
+        return "Đang xử lý";
+
+      case 1:
+        return "Đang giao";
+
+      case 2:
+        return "Đã giao";
+
+      case 3:
+        return "Đã hủy";
+
+      default:
+        return "Hoàn trả";
     }
   };
 });
-myApp.factory("customerService", function ($http, localStorageService, API_URL) {
+myApp.factory("adminService", function ($http, localStorageService, API_URL) {
   function checkIfLoggedIn() {
     if (localStorageService.get("authTokenAdmin")) return true;else return false;
   }
@@ -83578,57 +83580,21 @@ myApp.factory("customerService", function ($http, localStorageService, API_URL) 
     getCurrentToken: getCurrentToken
   };
 });
-myApp.controller("LoginManagementController", function ($scope, $rootScope, $http, API_URL, $mdDialog, NgTableParams, Upload, $timeout, customerService, $location) {
+myApp.controller("LoginManagementController", function ($scope, $rootScope, adminService) {
   $rootScope.login = function () {
-    customerService.login($scope.accountname, $scope.password, function (res) {
+    adminService.login($scope.accountname, $scope.password, function (res) {
       if (res.data.status_code == 200) {
-        document.location.href = '/admin';
+        document.location.href = "/admin";
       }
     }, function (err) {});
   };
 
-  if (customerService.checkIfLoggedIn()) {
-    document.location.href = '/admin';
+  if (adminService.checkIfLoggedIn()) {
+    document.location.href = "/admin";
   }
 });
-myApp.run(function ($rootScope, $http, API_URL, $mdToast, customerService, $window, $location) {
-  if (customerService.checkIfLoggedIn()) {
-    $http({
-      method: "GET",
-      url: API_URL + "/api/admin",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + customerService.getCurrentToken()
-      }
-    }).then(function (res) {
-      $rootScope.is_login = true;
-      $rootScope.admin = res.data;
-    });
-  } else {
-    var restrictedPage = $.inArray(document.location.pathname, ['/admin', '/admin/order', '/admin/product']) != -1;
-
-    if (restrictedPage) {
-      document.location.href = '/admin/login';
-    }
-  }
-
-  $rootScope.logout = function () {
-    $http({
-      method: "DELETE",
-      url: API_URL + "/api/logout",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + customerService.getCurrentToken()
-      }
-    }).then(function (res) {
-      if (res.data.status_code == 200) {
-        customerService.logout();
-        $window.location.reload();
-      }
-    });
-  }; // Sidebar active
-
-
+myApp.run(function ($rootScope, $http, API_URL, $mdToast, adminService, $window) {
+  // Sidebar active
   $rootScope.currentIndex = -1;
   $rootScope.currentSubIndex = -1;
 
@@ -83643,6 +83609,43 @@ myApp.run(function ($rootScope, $http, API_URL, $mdToast, customerService, $wind
 
   $rootScope.showSimpleToast = function (toast_name, type) {
     $mdToast.show($mdToast.simple().parent(document.querySelectorAll("#toaster")).position("top right").textContent(toast_name).hideDelay(3000).theme(type + "-toast"));
+  }; //Check login
+
+
+  if (adminService.checkIfLoggedIn()) {
+    $http({
+      method: "GET",
+      url: API_URL + "/api/admin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + adminService.getCurrentToken()
+      }
+    }).then(function (res) {
+      $rootScope.is_login = true;
+      $rootScope.admin = res.data;
+    });
+  } else {
+    var restrictedPage = $.inArray(document.location.pathname, ["/admin", "/admin/order", "/admin/product"]) != -1;
+
+    if (restrictedPage) {
+      document.location.href = "/admin/login";
+    }
+  }
+
+  $rootScope.logout = function () {
+    $http({
+      method: "DELETE",
+      url: API_URL + "/api/logout",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + adminService.getCurrentToken()
+      }
+    }).then(function (res) {
+      if (res.data.status_code == 200) {
+        adminService.logout();
+        $window.location.reload();
+      }
+    });
   };
 });
 
@@ -83654,9 +83657,27 @@ myApp.run(function ($rootScope, $http, API_URL, $mdToast, customerService, $wind
   \**********************************************************************/
 /***/ (() => {
 
-myApp.controller("OrderManagementController", function ($scope, $rootScope, $http, API_URL, $mdDialog, NgTableParams, Upload, customerService, $timeout) {
+myApp.controller("OrderManagementController", function ($scope, $rootScope, $http, API_URL, NgTableParams, adminService) {
   $rootScope.currentIndex = 1;
   $rootScope.currentSubIndex = 2;
+
+  function mapOrders(orders) {
+    orders.forEach(function (order) {
+      order.order_state_current = order.orderstates[order.orderstates.length - 1].orderstate_name;
+    });
+  }
+
+  function mapOrder(order) {
+    order.order_state_current = order.orderstates[order.orderstates.length - 1].orderstate_name;
+  }
+
+  function findOrder(order) {
+    var index = $rootScope.orders.findIndex(function (o) {
+      return o.order_id === order.order_id;
+    });
+    return index;
+  }
+
   $scope.order_states = [{
     id: "",
     title: ""
@@ -83681,18 +83702,14 @@ myApp.controller("OrderManagementController", function ($scope, $rootScope, $htt
     url: API_URL + "/api/order/get-all",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + customerService.getCurrentToken()
+      Authorization: "Bearer " + adminService.getCurrentToken()
     }
   }).then(function (res) {
     $rootScope.orders = res.data;
-    $rootScope.orders.forEach(function (order) {
-      order.order_state_current = order.orderstates[order.orderstates.length - 1].orderstate_name;
-    });
+    mapOrders($rootScope.orders);
     $scope.tableParams = new NgTableParams({
       page: 1,
-      // show first page
-      count: 10 // count per page
-
+      count: 10
     }, {
       filterDelay: 0,
       dataset: $scope.orders
@@ -83705,14 +83722,12 @@ myApp.controller("OrderManagementController", function ($scope, $rootScope, $htt
       url: API_URL + "/api/order/get-order-for-admin/" + order.order_id,
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + customerService.getCurrentToken()
+        Authorization: "Bearer " + adminService.getCurrentToken()
       }
     }).then(function (res) {
-      var index = $rootScope.orders.findIndex(function (o) {
-        return o.order_id === order.order_id;
-      });
+      var index = findOrder(order);
       $rootScope.orders[index] = res.data;
-      $rootScope.orders[index].order_state_current = $rootScope.orders[index].orderstates[$rootScope.orders[index].orderstates.length - 1].orderstate_name;
+      mapOrder($rootScope.orders[index]);
       $scope.tableParams.reload();
       $rootScope.order = JSON.parse(JSON.stringify($rootScope.orders[index]));
       $rootScope.order.order_state_change = $scope.order_states.find(function (os) {
@@ -83731,16 +83746,15 @@ myApp.controller("OrderManagementController", function ($scope, $rootScope, $htt
       },
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + customerService.getCurrentToken()
+        Authorization: "Bearer " + adminService.getCurrentToken()
       }
     }).then(function (res) {
       if (res.data) {
-        var index = $rootScope.orders.findIndex(function (o) {
-          return o.order_id === $rootScope.order.order_id;
-        });
+        $rootScope.order.orderstates.push(res.data);
+        mapOrder($rootScope.order);
+        var index = findOrder($rootScope.order);
         $rootScope.orders[index].orderstates.push(res.data);
-        $rootScope.orders[index].order_state_current = res.data.orderstate_name;
-        $scope.showModalDetails($rootScope.orders[index]);
+        mapOrder($rootScope.orders[index]);
         $scope.tableParams.reload();
         $rootScope.showSimpleToast("Cập nhập trạng thái đơn hàng thành công!", "success");
       } else {
@@ -83783,15 +83797,23 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-myApp.controller("ProductManagementController", function ($scope, $rootScope, $http, API_URL, $mdDialog, NgTableParams, Upload, $timeout, customerService) {
+myApp.controller("ProductManagementController", function ($scope, $rootScope, $http, API_URL, NgTableParams, Upload, $timeout, adminService) {
   $rootScope.currentIndex = 1;
   $rootScope.currentSubIndex = 1;
+
+  function findProduct(product) {
+    var index = $scope.products.findIndex(function (p) {
+      return p.product_id == product.product_id;
+    });
+    return index;
+  }
+
   $http({
     method: "GET",
     url: API_URL + "/api/product",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer " + customerService.getCurrentToken()
+      Authorization: "Bearer " + adminService.getCurrentToken()
     }
   }).then(function (res) {
     $scope.products = res.data;
@@ -83859,6 +83881,23 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     }
   };
 
+  var files_for_delete = [];
+
+  $scope.removeColor = function (index) {
+    if ($scope.product.colors.length > 1) {
+      if ($scope.form_name != "THÊM SẢN PHẨM") {
+        var colors_of_product = $scope.product.colors[index];
+        colors_of_product.product_image1 && files_for_delete.push(colors_of_product.product_image1);
+        colors_of_product.product_image2 && files_for_delete.push(colors_of_product.product_image2);
+        colors_of_product.product_image3 && files_for_delete.push(colors_of_product.product_image3);
+        colors_of_product.product_image4 && files_for_delete.push(colors_of_product.product_image4);
+        colors_of_product.product_image5 && files_for_delete.push(colors_of_product.product_image5);
+      }
+
+      $scope.product.colors.splice(index, 1);
+    }
+  };
+
   $scope.addColor = function () {
     $scope.product.colors.push({
       color_name: "",
@@ -83866,22 +83905,6 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
       files: _toConsumableArray(Array(5)),
       files_for_delete: []
     });
-  };
-
-  var files_for_delete = [];
-
-  $scope.removeColor = function (index) {
-    if ($scope.product.colors.length > 1) {
-      if ($scope.form_name != "THÊM SẢN PHẨM") {
-        $scope.product.colors[index].product_image1 && files_for_delete.push($scope.product.colors[index].product_image1);
-        $scope.product.colors[index].product_image2 && files_for_delete.push($scope.product.colors[index].product_image2);
-        $scope.product.colors[index].product_image3 && files_for_delete.push($scope.product.colors[index].product_image3);
-        $scope.product.colors[index].product_image4 && files_for_delete.push($scope.product.colors[index].product_image4);
-        $scope.product.colors[index].product_image5 && files_for_delete.push($scope.product.colors[index].product_image5);
-      }
-
-      $scope.product.colors.splice(index, 1);
-    }
   };
 
   $scope.addSize = function () {
@@ -83897,9 +83920,9 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
     });
   };
 
-  $scope.changeSizeName = function ($index, size) {
+  $scope.changeSizeName = function (index, size) {
     $scope.product.colors.forEach(function (color) {
-      color.sizes[$index].size_name = size.size_name;
+      color.sizes[index].size_name = size.size_name;
     });
   };
 
@@ -83912,6 +83935,31 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
       color.sizes.splice(index, 1);
     });
   };
+
+  function initializeForUpdate(product) {
+    var index = findProduct(product);
+    $scope.products[index] = product;
+    $scope.tableParams.reload();
+    $scope.product = JSON.parse(JSON.stringify($scope.products[index])); // Select category & subcategory
+
+    $scope.category_picked = $scope.categories.find(function (c) {
+      return c.category_id == $scope.product.subcategory.category_id;
+    });
+    $scope.category_picked.subcategory = $scope.category_picked.subcategories.find(function (sc) {
+      return sc.subcategory_id == $scope.product.subcategory.subcategory_id;
+    }); // Size
+
+    $scope.product.sizes = JSON.parse(JSON.stringify($scope.product.colors[0].sizes));
+    $scope.product.sizes.forEach(function (size) {
+      size.quantity = 0;
+    }); // Color
+
+    $scope.product.colors.forEach(function (color) {
+      color.files = _toConsumableArray(Array(5));
+      color.files_for_delete = [];
+    });
+    files_for_delete = [];
+  }
 
   $scope.showModalEditAndCreate = function (form_name, product) {
     $scope.progress = 0;
@@ -83940,30 +83988,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
         method: "GET",
         url: API_URL + "/api/product/get-detail/" + product.product_id
       }).then(function (res) {
-        var index = $scope.products.findIndex(function (p) {
-          return p.product_id == product.product_id;
-        });
-        $scope.products[index] = res.data;
-        $scope.tableParams.reload();
-        $scope.product = JSON.parse(JSON.stringify($scope.products[index])); // Select category & subcategory
-
-        $scope.category_picked = $scope.categories.find(function (c) {
-          return c.category_id == $scope.product.subcategory.category_id;
-        });
-        $scope.category_picked.subcategory = $scope.category_picked.subcategories.find(function (sc) {
-          return sc.subcategory_id == $scope.product.subcategory.subcategory_id;
-        }); // Size
-
-        $scope.product.sizes = JSON.parse(JSON.stringify($scope.product.colors[0].sizes));
-        $scope.product.sizes.forEach(function (size) {
-          size.quantity = 0;
-        }); // Color
-
-        $scope.product.colors.forEach(function (color) {
-          color.files = _toConsumableArray(Array(5));
-          color.files_for_delete = [];
-        });
-        files_for_delete = [];
+        initializeForUpdate(res.data);
       });
     }
   };
@@ -83971,8 +83996,8 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
   $scope.addOrEditProduct = function () {
     if (!$scope.progress) {
       // Get file to upload
-      var files = $scope.product.colors.reduce(function (colors, colorCurrent) {
-        return [].concat(_toConsumableArray(colors), _toConsumableArray(colorCurrent.files));
+      var files = $scope.product.colors.reduce(function (files, colorCurrent) {
+        return [].concat(_toConsumableArray(files), _toConsumableArray(colorCurrent.files));
       }, []).filter(function (file) {
         return file != undefined;
       });
@@ -83985,19 +84010,19 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
           },
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + customerService.getCurrentToken()
+            Authorization: "Bearer " + adminService.getCurrentToken()
           }
         }).then(function (response) {
           $timeout(function () {
-            $scope.result = response.data; //Enter src img
+            var path_of_files = response.data; //Enter src img
 
             $scope.product.colors.forEach(function (color) {
               color.files.forEach(function (file, index) {
                 if (file != undefined) {
-                  color["product_image".concat(index + 1)] = $scope.result.shift();
+                  color["product_image".concat(index + 1)] = path_of_files.shift();
                 }
               });
-            }); //Remove sizes, files
+            }); //Remove sizes, files, files_for_delete
 
             $scope.product.subcategory_id = $scope.category_picked.subcategory.subcategory_id;
 
@@ -84022,7 +84047,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
                 "Content-Type": "application/json",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: "Bearer " + customerService.getCurrentToken()
+                  Authorization: "Bearer " + adminService.getCurrentToken()
                 }
               }).then(function (res) {
                 $scope.progress = 100;
@@ -84036,20 +84061,19 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
               });
             } else {
               // Edit Product
-              var paths = [];
-              $scope.product.colors.forEach(function (color) {
-                paths = [].concat(_toConsumableArray(paths), _toConsumableArray(color.files_for_delete));
-              });
+              var paths_for_delete = $scope.product.colors.reduce(function (paths_for_delete, colorCurrent) {
+                return [].concat(_toConsumableArray(paths_for_delete), _toConsumableArray(colorCurrent.files_for_delete));
+              }, []);
               $http({
                 method: "POST",
                 url: API_URL + "/api/upload/delete",
                 data: {
-                  paths: [].concat(_toConsumableArray(paths), _toConsumableArray(files_for_delete))
+                  paths: [].concat(_toConsumableArray(paths_for_delete), _toConsumableArray(files_for_delete))
                 },
                 "Content-Type": "application/json",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: "Bearer " + customerService.getCurrentToken()
+                  Authorization: "Bearer " + adminService.getCurrentToken()
                 }
               }).then(function (res) {
                 return $http({
@@ -84059,17 +84083,15 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
                   "Content-Type": "application/json",
                   headers: {
                     "Content-Type": "application/json",
-                    Authorization: "Bearer " + customerService.getCurrentToken()
+                    Authorization: "Bearer " + adminService.getCurrentToken()
                   }
                 });
               }).then(function (res) {
                 $scope.progress = 100;
-                var index = $scope.products.findIndex(function (p) {
-                  return p.product_id == product_new.product_id;
-                });
+                var index = findProduct(product_new);
                 $scope.products[index] = res.data;
                 $scope.tableParams.reload();
-                $scope.showModalEditAndCreate("SỬA THÔNG TIN SẢN PHẨM", res.data);
+                initializeForUpdate($scope.products[index]);
                 $rootScope.showSimpleToast("Sửa thông tin sản phẩm thành công!", "success");
                 $timeout(function () {
                   $scope.progress = 0;
@@ -84077,11 +84099,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
               });
             }
           });
-        }, function (response) {
-          if (response.status > 0) {
-            $scope.errorMsg = response.status + ": " + response.data;
-          }
-        }, function (evt) {
+        }, function (response) {}, function (evt) {
           $scope.progress = Math.min(100, parseInt(100.0 * evt.loaded / evt.total) * 90 / 100);
         });
       }
@@ -84113,7 +84131,7 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
       "Content-Type": "application/json",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + customerService.getCurrentToken()
+        Authorization: "Bearer " + adminService.getCurrentToken()
       }
     }).then(function (res) {
       return $http({
@@ -84121,16 +84139,14 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
         url: API_URL + "/api/product/" + $scope.product_for_delete.product_id,
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer " + customerService.getCurrentToken()
+          Authorization: "Bearer " + adminService.getCurrentToken()
         }
       });
     }).then(function (res) {
-      $rootScope.showSimpleToast("Xóa sản phẩm thành công!", "success");
-      var index = $scope.products.findIndex(function (p) {
-        return p.product_id == $scope.product_for_delete.product_id;
-      });
+      var index = findProduct($scope.product_for_delete);
       $scope.products.splice(index, 1);
       $scope.tableParams.reload();
+      $rootScope.showSimpleToast("Xóa sản phẩm thành công!", "success");
     });
   };
 });

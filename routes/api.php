@@ -20,7 +20,7 @@ use App\Http\Controllers\AuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/size/get-quantity/{id}', [SizeController::class, 'getQuantity']);
+Route::get('/product/get-quantity/{id}', [ProductController::class, 'getQuantity']);
 Route::post('/login/{type}', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/signup-for-admin', [AuthController::class, 'signupForAdmin']);

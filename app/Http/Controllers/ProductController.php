@@ -116,6 +116,10 @@ class ProductController extends Controller
             ->get();
     }
 
+    public function getQuantity($id) {
+        return Size::findOrFail($id);
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

@@ -1,18 +1,29 @@
 myApp.controller(
     "OrderManagementController",
-    function (
-        $scope,
-        $rootScope,
-        $http,
-        API_URL,
-        $mdDialog,
-        NgTableParams,
-        Upload,
-        customerService,
-        $timeout
-    ) {
+    function ($scope, $rootScope, $http, API_URL, NgTableParams, adminService) {
         $rootScope.currentIndex = 1;
         $rootScope.currentSubIndex = 2;
+
+        function mapOrders(orders) {
+            orders.forEach((order) => {
+                order.order_state_current =
+                    order.orderstates[
+                        order.orderstates.length - 1
+                    ].orderstate_name;
+            });
+        }
+
+        function mapOrder(order) {
+            order.order_state_current =
+                order.orderstates[order.orderstates.length - 1].orderstate_name;
+        }
+
+        function findOrder(order) {
+            let index = $rootScope.orders.findIndex(
+                (o) => o.order_id === order.order_id
+            );
+            return index;
+        }
 
         $scope.order_states = [
             { id: "", title: "" },
@@ -28,21 +39,16 @@ myApp.controller(
             url: API_URL + "/api/order/get-all",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: "Bearer " + customerService.getCurrentToken(),
+                Authorization: "Bearer " + adminService.getCurrentToken(),
             },
         }).then((res) => {
             $rootScope.orders = res.data;
-            $rootScope.orders.forEach((order) => {
-                order.order_state_current =
-                    order.orderstates[
-                        order.orderstates.length - 1
-                    ].orderstate_name;
-            });
+            mapOrders($rootScope.orders);
 
             $scope.tableParams = new NgTableParams(
                 {
-                    page: 1, // show first page
-                    count: 10, // count per page
+                    page: 1,
+                    count: 10,
                 },
                 {
                     filterDelay: 0,
@@ -60,23 +66,17 @@ myApp.controller(
                     order.order_id,
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization:
-                        "Bearer " + customerService.getCurrentToken(),
+                    Authorization: "Bearer " + adminService.getCurrentToken(),
                 },
             }).then((res) => {
-                let index = $rootScope.orders.findIndex(
-                    (o) => o.order_id === order.order_id
-                );
-
+                let index = findOrder(order);
                 $rootScope.orders[index] = res.data;
-                $rootScope.orders[index].order_state_current =
-                    $rootScope.orders[index].orderstates[
-                        $rootScope.orders[index].orderstates.length - 1
-                    ].orderstate_name;
-
+                mapOrder($rootScope.orders[index]);
                 $scope.tableParams.reload();
 
-                $rootScope.order = JSON.parse(JSON.stringify($rootScope.orders[index]));
+                $rootScope.order = JSON.parse(
+                    JSON.stringify($rootScope.orders[index])
+                );
                 $rootScope.order.order_state_change = $scope.order_states.find(
                     (os) => os.id === $rootScope.order.order_state_current
                 );
@@ -93,19 +93,16 @@ myApp.controller(
                 },
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization:
-                        "Bearer " + customerService.getCurrentToken(),
+                    Authorization: "Bearer " + adminService.getCurrentToken(),
                 },
             }).then((res) => {
                 if (res.data) {
-                    let index = $rootScope.orders.findIndex(
-                        (o) => o.order_id === $rootScope.order.order_id
-                    );
-                    $rootScope.orders[index].orderstates.push(res.data);
-                    $rootScope.orders[index].order_state_current =
-                        res.data.orderstate_name;
+                    $rootScope.order.orderstates.push(res.data);
+                    mapOrder($rootScope.order);
 
-                    $scope.showModalDetails($rootScope.orders[index]);
+                    let index = findOrder($rootScope.order);
+                    $rootScope.orders[index].orderstates.push(res.data);
+                    mapOrder($rootScope.orders[index]);
 
                     $scope.tableParams.reload();
 
