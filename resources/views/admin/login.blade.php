@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <link rel="shortcut icon" href="/image/product/icon.png" />
-        <title>Shop Sheyn</title>
+        <title>Adidas</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta
             content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -20,7 +20,7 @@
     <body ng-app="myApp" ng-controller="LoginManagementController">
         <div class="login-box">
             <div class="login-logo">
-                <a href="/admin"><b>Shop</b>Sheyn</a>
+                <a href="/admin"><b></b>Adidas</a>
             </div>
             <!-- /.login-logo -->
             <div class="login-box-body">
