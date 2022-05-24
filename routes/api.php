@@ -32,7 +32,7 @@ Route::middleware(['auth:sanctum', 'ability:customer,admin'])->group(function ()
 Route::get('/product/get-quantity/{id}', [ProductController::class, 'getQuantity']);
 Route::get('/product/search', [ProductController::class, 'search']);
 Route::get('/product/get-detail/{id}', [ProductController::class, 'getProduct']);
-Route::get('/product/get-by-subcategory/{id}', [ProductController::class, 'getProductBySubcategory']);
+Route::get('/product/get-by-subcategory/{id}', [ProductController::class, 'getProductsBySubcategory']);
 
 Route::get('/category/get-all', [CategoryController::class, 'getCategories']);
 
