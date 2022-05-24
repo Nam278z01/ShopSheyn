@@ -2,7 +2,8 @@ module.exports = {
     content: [
         "./resources/views/customer/includes/*.blade.php",
         "./resources/views/customer/*.blade.php",
-        "./public/html/*.html",
+        "./public/html/customer/*.html",
+        "./public/html/admin/*.html",
         "./resources/js/customer/controller/app.js",
     ],
     theme: {

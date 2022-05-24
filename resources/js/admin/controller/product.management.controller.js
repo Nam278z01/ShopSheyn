@@ -22,7 +22,7 @@ myApp.controller(
 
         $http({
             method: "GET",
-            url: API_URL + "/api/product",
+            url: API_URL + "/api/admin/product",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + adminService.getCurrentToken(),
@@ -44,7 +44,7 @@ myApp.controller(
 
         $http({
             method: "GET",
-            url: API_URL + "/api/category",
+            url: API_URL + "/api/category/get-all",
         }).then((res) => {
             $scope.categories = res.data;
         });
@@ -239,7 +239,7 @@ myApp.controller(
                     $scope.form_name != "THÊM SẢN PHẨM"
                 ) {
                     Upload.upload({
-                        url: API_URL + "/api/upload",
+                        url: API_URL + "/api/admin/file",
                         data: {
                             files: files,
                         },
@@ -280,7 +280,7 @@ myApp.controller(
                                 if ($scope.form_name == "THÊM SẢN PHẨM") {
                                     $http({
                                         method: "POST",
-                                        url: API_URL + "/api/product",
+                                        url: API_URL + "/api/admin/product",
                                         data: product_new,
                                         "Content-Type": "application/json",
                                         headers: {
@@ -320,8 +320,8 @@ myApp.controller(
                                         []);
 
                                     $http({
-                                        method: "POST",
-                                        url: API_URL + "/api/upload/delete",
+                                        method: "DELETE",
+                                        url: API_URL + "/api/admin/file",
                                         data: {
                                             paths: [
                                                 ...paths_for_delete,
@@ -341,7 +341,7 @@ myApp.controller(
                                                 method: "PUT",
                                                 url:
                                                     API_URL +
-                                                    "/api/product/" +
+                                                    "/api/admin/product/" +
                                                     product_new.product_id,
                                                 data: product_new,
                                                 "Content-Type":
@@ -405,8 +405,8 @@ myApp.controller(
                 color.product_image5 && paths.push(color.product_image5);
             });
             $http({
-                method: "POST",
-                url: API_URL + "/api/upload/delete",
+                method: "DELETE",
+                url: API_URL + "/api/admin/file",
                 data: { paths: paths },
                 "Content-Type": "application/json",
                 headers: {
@@ -419,7 +419,7 @@ myApp.controller(
                         method: "DELETE",
                         url:
                             API_URL +
-                            "/api/product/" +
+                            "/api/admin/product/" +
                             $scope.product_for_delete.product_id,
                         headers: {
                             "Content-Type": "application/json",

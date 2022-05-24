@@ -56,10 +56,9 @@ myApp.controller(
 
             $scope.updateOrderState = function (orderstate_name) {
                 $http({
-                    method: "POST",
-                    url: API_URL + "/api/order/update-order-state-for-customer",
+                    method: "PUT",
+                    url: API_URL + "/api/order/" + $routeParams.order_id,
                     data: {
-                        order_id: $routeParams.order_id,
                         orderstate_name: orderstate_name
                     },
                     headers: {

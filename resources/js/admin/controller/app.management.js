@@ -114,6 +114,10 @@ myApp.run(function (
         return index == $rootScope.currentSubIndex;
     };
 
+    $rootScope.$on("$routeChangeStart", function (evt, absNewUrl, absOldUrl) {
+        $window.scrollTo(0, 0);
+    });
+
     // Toast
     $rootScope.showSimpleToast = function (toast_name, type) {
         $mdToast.show(
@@ -146,6 +150,7 @@ myApp.run(function (
                 "/admin",
                 "/admin/order",
                 "/admin/product",
+                "/admin/category",
             ]) != -1;
         if (restrictedPage) {
             document.location.href = "/admin/login";
@@ -163,8 +168,43 @@ myApp.run(function (
         }).then((res) => {
             if (res.data.status_code == 200) {
                 adminService.logout();
-                $window.location.reload();
+                document.location.href = "/admin/login";
             }
         });
     };
+
+    $rootScope.validateNumber = function (e) {
+        const pattern = /^[0-9]$/;
+        if (!pattern.test(e.key)) {
+            e.preventDefault();
+        }
+    };
+});
+
+myApp.config(function ($routeProvider, $locationProvider) {
+    $routeProvider
+        .when("/admin", {
+            templateUrl: "/html/admin/dashboard.html",
+        })
+        .when("/admin/login", {
+        })
+        .when("/admin/product", {
+            templateUrl: "/html/admin/product-management.html",
+            controller: "ProductManagementController",
+        })
+        .when("/admin/order", {
+            templateUrl: "/html/admin/order-management.html",
+            controller: "OrderManagementController",
+        })
+        .when("/admin/category", {
+            templateUrl: "/html/admin/category-management.html",
+            controller: "OrderManagementController",
+        })
+        .otherwise({
+            redirectTo: "/admin",
+        });
+    $locationProvider.html5Mode({
+        enabled: true,
+        requireBase: false,
+    });
 });

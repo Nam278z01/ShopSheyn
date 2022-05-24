@@ -36,7 +36,7 @@ myApp.controller(
 
         $http({
             method: "GET",
-            url: API_URL + "/api/order/get-all",
+            url: API_URL + "/api/admin/order",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer " + adminService.getCurrentToken(),
@@ -62,7 +62,7 @@ myApp.controller(
                 method: "GET",
                 url:
                     API_URL +
-                    "/api/order/get-order-for-admin/" +
+                    "/api/admin/order/" +
                     order.order_id,
                 headers: {
                     "Content-Type": "application/json",
@@ -85,10 +85,9 @@ myApp.controller(
 
         $scope.updateOrderState = function () {
             $http({
-                method: "POST",
-                url: API_URL + "/api/order/update-order-state",
+                method: "PUT",
+                url: API_URL + "/api/admin/order/" + $rootScope.order.order_id,
                 data: {
-                    order_id: $rootScope.order.order_id,
                     orderstate_name: $rootScope.order.order_state_change.id,
                 },
                 headers: {

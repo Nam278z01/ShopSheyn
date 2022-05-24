@@ -37,7 +37,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li ng-class="{ active: isActiveSubNav(0) }">
-                        <a href="admin/category"
+                        <a href="/admin/category"
                             ><i class="fa fa-circle-o"></i>Danh mục</a
                         >
                     </li>

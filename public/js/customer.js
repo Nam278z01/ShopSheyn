@@ -40340,7 +40340,7 @@ myApp.run(function ($rootScope, $http, $location, $window, API_URL, customerServ
 
   $http({
     method: "GET",
-    url: API_URL + "/api/category"
+    url: API_URL + "/api/category/get-all"
   }).then(function (res) {
     $rootScope.categories = res.data;
   }); // Show Cart
@@ -40582,21 +40582,21 @@ myApp.directive("slickSlider2", function ($timeout) {
 });
 myApp.config(function ($routeProvider, $locationProvider) {
   $routeProvider.when("/", {
-    templateUrl: "html/home.html"
+    templateUrl: "/html/customer/home.html"
   }).when("/product", {
-    templateUrl: "html/product.html",
+    templateUrl: "/html/customer/product.html",
     controller: "ProductController"
   }).when("/cart", {
-    templateUrl: "html/cart.html",
+    templateUrl: "/html/customer/cart.html",
     controller: "OrderController"
   }).when("/details", {
-    templateUrl: "html/details.html",
+    templateUrl: "/html/customer/details.html",
     controller: "ProductDetailsController"
   }).when("/orders", {
-    templateUrl: "html/orders.html",
+    templateUrl: "/html/customer/orders.html",
     controller: "OrderController"
   }).when("/orderdetails", {
-    templateUrl: "html/orderdetails.html",
+    templateUrl: "/html/customer/orderdetails.html",
     controller: "OrderController"
   }).otherwise({
     redirectTo: "/"
@@ -40657,10 +40657,9 @@ myApp.controller("OrderController", function ($scope, $rootScope, $http, $locati
 
     $scope.updateOrderState = function (orderstate_name) {
       $http({
-        method: "POST",
-        url: API_URL + "/api/order/update-order-state-for-customer",
+        method: "PUT",
+        url: API_URL + "/api/order/" + $routeParams.order_id,
         data: {
-          order_id: $routeParams.order_id,
           orderstate_name: orderstate_name
         },
         headers: {

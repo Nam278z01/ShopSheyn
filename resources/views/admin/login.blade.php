@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="background-color: white">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -33,7 +33,7 @@
                             placeholder="Tên tài khoản"
                         />
                         <span
-                            class="glyphicon glyphicon-envelope form-control-feedback"
+                            class="glyphicon glyphicon-user form-control-feedback"
                         ></span>
                     </div>
                     <div class="form-group has-feedback">

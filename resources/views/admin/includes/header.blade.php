@@ -45,6 +45,7 @@
                         <!-- User image -->
                         <li class="user-header">
                             <img
+                                style="margin: auto;"
                                 ng-src="/image/img/@{{
                                     admin.image
                                 }}"

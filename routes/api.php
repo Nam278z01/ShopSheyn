@@ -2,12 +2,13 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SizeController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\UploadController;
+use App\Http\Controllers\Admin\ProductManagementController;
+use App\Http\Controllers\Admin\OrderManagementController;
+use App\Http\Controllers\Admin\FileController;
+use App\Http\Controllers\Customer\ProductController;
+use App\Http\Controllers\Customer\CategoryController;
+use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\AuthController;
 
 /*
@@ -20,34 +21,41 @@ use App\Http\Controllers\AuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/product/get-quantity/{id}', [ProductController::class, 'getQuantity']);
 Route::post('/login/{type}', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/signup-for-admin', [AuthController::class, 'signupForAdmin']);
-Route::get('/product/search', [ProductController::class, 'search']);
-Route::get('/product/get-detail/{id}', [ProductController::class, 'getProduct']);
-Route::get('/product/get-by-subcategory/{id}', [ProductController::class, 'getProductBySubcategory']);
-Route::put('/cart/chose-all', [CartController::class, 'choseAll']);
-Route::put('/cart/chose', [CartController::class, 'chose']);
-
 Route::middleware(['auth:sanctum', 'ability:customer,admin'])->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
 });
 
+
+Route::get('/product/get-quantity/{id}', [ProductController::class, 'getQuantity']);
+Route::get('/product/search', [ProductController::class, 'search']);
+Route::get('/product/get-detail/{id}', [ProductController::class, 'getProduct']);
+Route::get('/product/get-by-subcategory/{id}', [ProductController::class, 'getProductBySubcategory']);
+
+Route::get('/category/get-all', [CategoryController::class, 'getCategories']);
+
+Route::put('/cart/chose-all', [CartController::class, 'choseAll']);
+Route::put('/cart/chose', [CartController::class, 'chose']);
+Route::resources([
+    'cart' => CartController::class,
+]);
+
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
-    Route::get('/admin', function (Request $request) {
-        return $request->user();
+    Route::prefix('admin')->group(function () {
+        Route::get('/', function (Request $request) {
+            return $request->user();
+        });
+
+        Route::post('/file', [FileController::class, 'addFiles']);
+        Route::delete('/file', [FileController::class, 'deleteFiles']);
+
+        Route::resources([
+            'product' => ProductManagementController::class,
+            'order' => OrderManagementController::class,
+        ]);
     });
-
-    Route::post('/order/update-order-state', [OrderController::class, 'updateOrderState']);
-    Route::get('/order/get-order-for-admin/{id}', [OrderController::class, 'showForAdmin']);
-
-    Route::get('/order/get-all', [OrderController::class, 'getAllOrder']);
-    Route::post('/upload/delete', [UploadController::class, 'deleteFiles']);
-    Route::resources([
-        'upload' => UploadController::class,
-        'product' => ProductController::class,
-    ]);
 });
 
 Route::middleware(['auth:sanctum', 'ability:customer'])->group(function () {
@@ -57,10 +65,4 @@ Route::middleware(['auth:sanctum', 'ability:customer'])->group(function () {
     Route::resources([
         'order' => OrderController::class,
     ]);
-    Route::post('/order/update-order-state-for-customer', [OrderController::class, 'updateOrderStateForCustomer']);
 });
-
-Route::resources([
-    'category' => CategoryController::class,
-    'cart' => CartController::class,
-]);

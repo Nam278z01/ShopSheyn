@@ -48,10 +48,14 @@ Route::prefix('admin')->group(function () {
     });
 
     Route::get('/product', function () {
-        return view('admin.product');
+        return view('admin.index');
+    });
+
+    Route::get('/category', function () {
+        return view('admin.index');
     });
 
     Route::get('/order', function () {
-        return view('admin.order');
+        return view('admin.index');
     });
 });

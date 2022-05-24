@@ -4,6 +4,7 @@ require("bootstrap");
 require("jquery-slimscroll");
 require("fastclick");
 require("angular");
+require("angular-route");
 require("angular-sanitize");
 require("angular-animate");
 require("angular-aria");
@@ -19,6 +20,7 @@ require("./js/demo");
 window.myApp = angular.module("myApp", [
     "ngSanitize",
     "ngTable",
+    "ngRoute",
     "ui.select",
     'ngAnimate',
     "ngMaterial",

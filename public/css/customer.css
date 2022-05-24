@@ -197,7 +197,7 @@
     z-index: 9999;
     left: 16px;
     bottom: -60px;
-    font-size: 1.0rem;
+    font-size: 1rem;
     opacity: 0;
 }
 
@@ -207,8 +207,8 @@
     transition: bottom linear 0.2s, opacity linear 0.2s;
 }
 
- /* Loading */
- .loading {
+/* Loading */
+.loading {
     position: fixed;
     display: flex;
     z-index: 1000;
@@ -247,6 +247,14 @@
     to {
         opacity: 0;
     }
+}
+
+img {
+    image-rendering: -moz-crisp-edges; /* Firefox */
+    image-rendering: -o-crisp-edges; /* Opera */
+    image-rendering: -webkit-optimize-contrast; /* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor; /* IE (non-standard property) */
 }
 
 .left-option {
@@ -1166,6 +1174,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .flex {
   display: flex;
 }
+.table {
+  display: table;
+}
 .hidden {
   display: none;
 }
@@ -1420,6 +1431,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-1\/4 {
   width: 25%;
+}
+.w-\[500px\] {
+  width: 500px;
 }
 .min-w-\[180px\] {
   min-width: 180px;
@@ -1985,6 +1999,15 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .text-\[15px\] {
   font-size: 15px;
+}
+.text-\[12px\] {
+  font-size: 12px;
+}
+.text-\[24px\] {
+  font-size: 24px;
+}
+.text-\[14px\] {
+  font-size: 14px;
 }
 .font-bold {
   font-weight: 700;
