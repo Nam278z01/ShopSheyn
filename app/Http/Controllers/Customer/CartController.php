@@ -18,29 +18,19 @@ class CartController extends Controller
     public function index()
     {
         //
-        if(Cookie::has('cart')) {
+        if (Cookie::has('cart')) {
             $cart = json_decode(Cookie::get('cart'));
-            $product_ids = array_column($cart, 'product_id');
 
-            $products = Product::with(['subcategory', 'colors', 'colors.sizes'])->whereIn("product_id", $product_ids)->get();
-
-            $products_in_cart = [];
-
-            foreach ($cart as $c) {
-                foreach ($products as $p) {
-                    if($p->product_id == $c->product_id){
-                        $pro_new = json_decode(json_encode($p));
-                        $pro_new->size_id = $c->size_id;
-                        $pro_new->quantity = $c->quantity;
-                        $pro_new->cart_id = $c->cart_id;
-                        $pro_new->chose = $c->chose;
-                        array_push($products_in_cart, $pro_new);
-                        break;
-                    }
-                }
+            for ($i = 0; $i < count($cart); $i++) {
+                $product = Product::with(['subcategory', 'colors', 'colors.sizes'])->findOrFail($cart[$i]->product_id);
+                $product->size_id = $cart[$i]->size_id;
+                $product->quantity = $cart[$i]->quantity;
+                $product->cart_id = $cart[$i]->cart_id;
+                $product->chose = $cart[$i]->chose;
+                $cart[$i] = $product;
             }
 
-            return $products_in_cart;
+            return $cart;
         } else {
             return [];
         }
@@ -81,7 +71,7 @@ class CartController extends Controller
             $isExists = false;
             foreach ($cart as $p) {
                 if ($p->size_id == $product->size_id) {
-                    if($p->quantity + $product->quantity > $size->quantity) {
+                    if ($p->quantity + $product->quantity > $size->quantity) {
                         return response()->json(['status' => 'greater', 'quantity_in_cart' => $p->quantity, 'quantity_in_stock' => $size->quantity]);
                     }
                     $p->quantity += $product->quantity;
@@ -90,7 +80,7 @@ class CartController extends Controller
                 }
             }
             if (!$isExists) {
-                if($product->quantity > $size->quantity) {
+                if ($product->quantity > $size->quantity) {
                     return response()->json(['status' => 'greater', 'quantity_in_cart' => 0, 'quantity_in_stock' => $size->quantity]);
                 }
                 array_unshift($cart, $product);
@@ -138,9 +128,9 @@ class CartController extends Controller
         $cart = json_decode(request()->cookie('cart'));
         $size = Size::findOrFail($request->size_id);
 
-        foreach($cart as $p){
-            if($p->cart_id == $id){
-                if($size->quantity < $request->quantity) {
+        foreach ($cart as $p) {
+            if ($p->cart_id == $id) {
+                if ($size->quantity < $request->quantity) {
                     return response()->json(['status' => 'greater', 'quantity_in_cart' => $p->quantity, 'quantity_in_stock' => $size->quantity]);
                 }
 
@@ -155,10 +145,11 @@ class CartController extends Controller
         return response()->json(['status' => 'success', 'quantity_in_stock' => $size->quantity, 'cart' => $cart])->cookie($cookie);
     }
 
-    public function choseAll(Request $request) {
+    public function choseAll(Request $request)
+    {
         $cart = json_decode(request()->cookie('cart'));
 
-        foreach($cart as $p){
+        foreach ($cart as $p) {
             $p->chose = $request->value;
         }
         $ONE_MONTH = 60 * 24 * 30;
@@ -166,11 +157,12 @@ class CartController extends Controller
         return response()->json(['status' => 'success', 'cart' => $cart])->cookie($cookie);
     }
 
-    public function chose(Request $request) {
+    public function chose(Request $request)
+    {
         $cart = json_decode(request()->cookie('cart'));
 
-        foreach($cart as $p){
-            if($p->cart_id == $request->cart_id) {
+        foreach ($cart as $p) {
+            if ($p->cart_id == $request->cart_id) {
                 $p->chose = $request->value;
                 break;
             }
@@ -192,7 +184,7 @@ class CartController extends Controller
         $cart = json_decode(request()->cookie('cart'));
         $cart_new = array();
         foreach ($cart as $p) {
-            if($p->cart_id != $id) {
+            if ($p->cart_id != $id) {
                 $cart_new[] = $p;
             }
         }
