@@ -40924,7 +40924,7 @@ myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http
     $scope.isLoading = false;
     return $http({
       method: "GET",
-      url: API_URL + "/api/product/get-by-subcategory/" + $scope.product.subcategory_id
+      url: API_URL + "/api/product/get-by-subcategory/" + $scope.product.subcategory_id + "/" + $scope.product.product_id
     });
   }).then(function (res) {
     $scope.products = res.data; //Khởi tạo màu
