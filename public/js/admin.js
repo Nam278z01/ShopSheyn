@@ -85414,6 +85414,8 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
                 $timeout(function () {
                   $scope.progress = 0;
                 }, 500);
+              }, function (err) {
+                $rootScope.showSimpleToast("Không thể sửa sản phẩm!", "warning");
               });
             }
           });
@@ -85465,6 +85467,8 @@ myApp.controller("ProductManagementController", function ($scope, $rootScope, $h
       $scope.products.splice(index, 1);
       $scope.tableParams.reload();
       $rootScope.showSimpleToast("Xóa sản phẩm thành công!", "success");
+    }, function (err) {
+      $rootScope.showSimpleToast("Không thể xóa sản phẩm!", "warning");
     });
   };
 });

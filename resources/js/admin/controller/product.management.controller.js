@@ -371,6 +371,11 @@ myApp.controller(
                                             $timeout(function () {
                                                 $scope.progress = 0;
                                             }, 500);
+                                        }, (err) => {
+                                            $rootScope.showSimpleToast(
+                                                "Không thể sửa sản phẩm!",
+                                                "warning"
+                                            );
                                         });
                                 }
                             });
@@ -436,6 +441,11 @@ myApp.controller(
                     $rootScope.showSimpleToast(
                         "Xóa sản phẩm thành công!",
                         "success"
+                    );
+                }, (err) => {
+                    $rootScope.showSimpleToast(
+                        "Không thể xóa sản phẩm!",
+                        "warning"
                     );
                 });
         };

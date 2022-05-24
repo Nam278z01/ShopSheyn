@@ -21,8 +21,8 @@
                         <div
                             class="text-[#888] cursor-pointer flex items-center italic"
                         >
-                            <i class="bx bx-edit-alt text-lg"></i>
-                            <span class="ml-[5px] font-semibold text-sm"
+                            <i class="bx bx-edit-alt text-sm"></i>
+                            <span class="ml-[5px] font-semibold text-xs"
                                 >Sửa hồ sơ</span
                             >
                         </div>
@@ -31,19 +31,19 @@
                 <div class="my-[30px]">
                     <a
                         href="#"
-                        class="flex items-center mb-[15px] hover:text-[#fa6338]"
+                        class="flex items-center mb-[12px] hover:text-[#fa6338]"
                     >
                         <i class="bx bx-user text-xl"></i>
-                        <span class="text-[13px] font-semibold ml-[10px]"
+                        <span class="text-[13px] font-semibold ml-[8px]"
                             >Tài Khoản Của Tôi</span
                         >
                     </a>
                     <a
                         href="/orders"
-                        class="flex items-center mb-[15px] text-[#fa6338]"
+                        class="flex items-center mb-[12px] text-[#fa6338]"
                     >
                         <i class="bx bx-food-menu text-xl"></i>
-                        <span class="text-[13px] font-semibold ml-[10px]"
+                        <span class="text-[13px] font-semibold ml-[8px]"
                             >Đơn Hàng Của Tôi</span
                         >
                     </a>
@@ -60,42 +60,42 @@
                 <div
                     ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == -1, 'border-[#00000017]': order_state != -1}"
                     ng-click="setOrderState(-1)"
-                    class="cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="uppercase text-xs italic font-bold cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Tất cả
                 </div>
                 <div
                     ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 0, 'border-[#00000017]': order_state != 0}"
                     ng-click="setOrderState(0)"
-                    class="cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="uppercase text-xs italic font-bold cursor-pointer border-b-[2px] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Đang xử lý
                 </div>
                 <div
                     ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 1, 'border-[#00000017]': order_state != 1}"
                     ng-click="setOrderState(1)"
-                    class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="uppercase text-xs italic font-bold cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Đang giao
                 </div>
                 <div
                     ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 2, 'border-[#00000017]': order_state != 2}"
                     ng-click="setOrderState(2)"
-                    class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="uppercase text-xs italic font-bold cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Đã giao
                 </div>
                 <div
                     ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 3, 'border-[#00000017]': order_state != 3}"
                     ng-click="setOrderState(3)"
-                    class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="uppercase text-xs italic font-bold cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Đã hủy
                 </div>
                 <div
                     ng-class="{'border-[#ee4d2d] text-[#ee4d2d]': order_state == 4, 'border-[#00000017]': order_state != 4}"
                     ng-click="setOrderState(4)"
-                    class="cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
+                    class="uppercase text-xs italic font-bold cursor-pointer border-b-[2px] border-[#00000017] flex flex-1 justify-center items-center py-[16px] hover:text-[#ee4d2d]"
                 >
                     Hoàn trả
                 </div>
