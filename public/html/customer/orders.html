@@ -141,7 +141,7 @@
                                 'bg-[#dd4b39]': o.order_state_current.orderstate_name == '3',
                                 'bg-[#f39c12]': o.order_state_current.orderstate_name == '4',
                             }"
-                            >Đơn hàng {{ o.orderstates[o.orderstates.length -
+                            >{{ o.orderstates[o.orderstates.length -
                             1].orderstate_name | cvOrderState }}</span
                         >
                     </div>

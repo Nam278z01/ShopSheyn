@@ -1,0 +1,137 @@
+<section>
+    <section class="content-header">
+        <ol class="breadcrumb" style="position: relative; float: unset">
+            <li>
+                <a href="#"><i class="fa fa-dashboard"></i>Dashboard</a>
+            </li>
+        </ol>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-white">
+                    <div class="inner" style="color: black !important">
+                        <h3>{{ quantity_order_new[0].quantity }}</h3>
+
+                        <p>Đơn hàng mới hôm nay</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div
+                    class="small-box"
+                    style="background-color: #777; color: white"
+                >
+                    <div class="inner">
+                        <h3>{{quantity_the_others[0].quantity}}</h3>
+
+                        <p>Đang xử lý</p>
+                    </div>
+                    <div class="icon">
+                        <i class="bx bx-food-menu"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3>{{quantity_the_others[1].quantity}}</h3>
+
+                        <p>Đang giao</p>
+                    </div>
+                    <div class="icon">
+                        <i class="bx bx-car"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-light-blue">
+                    <div class="inner">
+                        <h3>{{quantity_the_others[2].quantity}}</h3>
+
+                        <p>Đã giao</p>
+                    </div>
+                    <div class="icon">
+                        <i class="bx bx-download"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>{{quantity_the_others[3].quantity}}</h3>
+
+                        <p>Đã hủy</p>
+                    </div>
+                    <div class="icon">
+                        <i class="bx bx-error-alt"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3>{{quantity_the_others[4].quantity}}</h3>
+
+                        <p>Hoàn trả</p>
+                    </div>
+                    <div class="icon">
+                        <i class="bx bx-undo"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+
+        <section
+        layout="row"
+        layout-sm="column"
+        layout-align="end center"
+        layout-wrap
+        >
+            <md-input-container flex="20">
+                <label>Tháng</label>
+                <md-select
+                    ng-model="month"
+                    ng-change="changeMonth()"
+                >
+                    <md-option
+                        ng-repeat="m in months"
+                        ng-value="m"
+                    >
+                        {{ m.title }}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+
+        </section>
+
+        <div class="row">
+            <section class="col-lg-12 connectedSortable">
+                <div class="box box-solid">
+                    <div class="box-body">
+                        <div
+                            zingchart
+                            id="chart-1"
+                            zc-json="myJson"
+                            zc-width="100%"
+                            zc-height="500px"
+                        ></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</section>

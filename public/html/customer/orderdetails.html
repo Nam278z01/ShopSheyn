@@ -69,7 +69,7 @@
                                 'bg-[#dd4b39]': order.orderstates[order.orderstates.length - 1].orderstate_name == '3',
                                 'bg-[#f39c12]': order.orderstates[order.orderstates.length - 1].orderstate_name == '4',
                             }"
-                            >Đơn hàng {{ order.orderstates[order.orderstates.length -
+                            >{{ order.orderstates[order.orderstates.length -
                             1].orderstate_name | cvOrderState }}</span
                         >
                     </div>
@@ -92,7 +92,7 @@
                                 }"
                                     class="bx text-2xl font-bold"></i>
                             </div>
-                            <div class="text-[rgba(0,0,0,.8)] text-[13px] mt-[20px] mb-1">Đơn hàng {{os.orderstate_name | cvOrderState}}</div>
+                            <div class="text-[rgba(0,0,0,.8)] text-[13px] mt-[20px] mb-1">{{os.orderstate_name | cvOrderState}}</div>
                             <div class="text-[rgba(0,0,0,.26)] text-xs">{{os.orderstate_date | jsDate | date: "HH:mm dd-MM-yyyy"}}</div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@
                                             {{ os.orderstate_date | jsDate | date: "HH:mm dd-MM-yyyy"}}
                                         </div>
                                         <div ng-class="{'text-[#26aa99]': $index == 0,'text-[rgba(0,0,0,.54)]': $index != 0}">
-                                            Đơn hàng {{ os.orderstate_name | cvOrderState}}
+                                            {{ os.orderstate_name | cvOrderState}}
                                         </div>
                                     </div>
                                 </div>

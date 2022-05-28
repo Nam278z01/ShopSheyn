@@ -151,6 +151,7 @@ myApp.run(function (
                 "/admin/order",
                 "/admin/product",
                 "/admin/category",
+                "/admin/print",
             ]) != -1;
         if (restrictedPage) {
             document.location.href = "/admin/login";
@@ -185,8 +186,11 @@ myApp.config(function ($routeProvider, $locationProvider) {
     $routeProvider
         .when("/admin", {
             templateUrl: "/html/admin/dashboard.html",
+            controller: "DashBoardController",
         })
         .when("/admin/login", {
+        })
+        .when("/admin/print", {
         })
         .when("/admin/product", {
             templateUrl: "/html/admin/product-management.html",

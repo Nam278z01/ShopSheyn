@@ -36,11 +36,11 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li ng-class="{ active: isActiveSubNav(0) }">
+                    {{-- <li ng-class="{ active: isActiveSubNav(0) }">
                         <a href="/admin/category"
                             ><i class="fa fa-circle-o"></i>Danh mục</a
                         >
-                    </li>
+                    </li> --}}
                     <li ng-class="{ active: isActiveSubNav(1) }">
                         <a
                             href="/admin/product"
@@ -54,7 +54,7 @@
                     </li>
                 </ul>
             </li>
-            <li
+            {{-- <li
                 class="treeview"
                 ng-class="{ active: isActiveNav(2) }"
             >
@@ -78,7 +78,7 @@
                         >
                     </li>
                 </ul>
-            </li>
+            </li> --}}
         </ul>
     </section>
     <!-- /.sidebar -->

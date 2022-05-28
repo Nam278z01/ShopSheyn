@@ -15,6 +15,8 @@ require("angular-local-storage");
 require("ng-table/bundles/ng-table.min");
 require("ui-select");
 require('@gruposinternet/angular-ckeditor')
+require('zingchart')
+require('zingchart-angularjs')
 require("./js/adminlte.min");
 require("./js/demo");
 window.myApp = angular.module("myApp", [
@@ -27,8 +29,11 @@ window.myApp = angular.module("myApp", [
     "ngMessages",
     "ngFileUpload",
     'ckeditor',
-    'LocalStorageModule'
+    'LocalStorageModule',
+    'zingchart-angularjs'
 ]);
 require("./controller/app.management");
+require("./controller/dashboard.controller");
 require("./controller/product.management.controller");
 require("./controller/order.management.controller");
+require("./controller/print.controller");

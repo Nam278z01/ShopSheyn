@@ -4,6 +4,11 @@ myApp.controller(
         $rootScope.currentIndex = 1;
         $rootScope.currentSubIndex = 2;
 
+        $scope.printOrder = function (row) {
+            sessionStorage.setItem('order_id', row.order_id);
+            window.open('/admin/print')
+        }
+
         function mapOrders(orders) {
             orders.forEach((order) => {
                 order.order_state_current =
@@ -27,11 +32,11 @@ myApp.controller(
 
         $scope.order_states = [
             { id: "", title: "" },
-            { id: 0, title: "Đơn hàng Đang xử lý" },
-            { id: 1, title: "Đơn hàng Đang giao" },
-            { id: 2, title: "Đơn hàng Đã giao" },
-            { id: 3, title: "Đơn hàng Đã hủy" },
-            { id: 4, title: "Đơn hàng Hoàn trả" },
+            { id: 0, title: "Đang xử lý" },
+            { id: 1, title: "Đang giao" },
+            { id: 2, title: "Đã giao" },
+            { id: 3, title: "Đã hủy" },
+            { id: 4, title: "Hoàn trả" },
         ];
 
         $http({

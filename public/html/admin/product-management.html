@@ -40,7 +40,7 @@
                         }}
                     </td>
                     <td
-                        title="'Danh mục nhỏ'"
+                        title="'Danh mục'"
                         filter="{'subcategory.subcategory_name': 'text'}"
                         sortable="'subcategory.subcategory_name'"
                     >
@@ -68,14 +68,6 @@
                         >), {{ row.colors[0].sizes.length }} Size
                     </td>
                     <td
-                        title="'Giảm giá (%)'"
-                        filter="{'product_discount': 'text'}"
-                        sortable="'product_discount'"
-                        align="right"
-                    >
-                        {{ row.product_discount }}
-                    </td>
-                    <td
                         title="'Ngày tạo'"
                         filter="{'created_time': 'text'}"
                         sortable="'created_time'"
@@ -83,7 +75,7 @@
                         {{
                             row.created_time
                                 | jsDate
-                                | date: "yyyy-MM-dd HH:mm:ss"
+                                | date: "dd/MM/yyyy"
                         }}
                     </td>
                     <td title="'Thao tác'" align="right">

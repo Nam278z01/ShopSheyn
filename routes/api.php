@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProductManagementController;
 use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\FileController;
+use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\Customer\ProductController;
 use App\Http\Controllers\Customer\CategoryController;
 use App\Http\Controllers\Customer\CartController;
@@ -66,3 +67,7 @@ Route::middleware(['auth:sanctum', 'ability:customer'])->group(function () {
         'order' => OrderController::class,
     ]);
 });
+
+
+Route::get('/statistic/order-state', [StatisticController::class, 'orderStateStatistics']);
+Route::get('/statistic/revenue/{year}/{month}', [StatisticController::class, 'revenueStatistics']);

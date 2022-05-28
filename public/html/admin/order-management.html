@@ -30,7 +30,7 @@
                         sortable="'order_id'"
                         align="center"
                     >
-                        {{ row.order_id }}
+                        <span style="color: #3c8dbc"> {{ row.order_id }}</a>
                     </td>
                     <td
                         title="'Tên khách hàng'"
@@ -62,7 +62,7 @@
                         {{
                             row.order_date
                                 | jsDate
-                                | date: "yyyy-MM-dd HH:mm:ss"
+                                | date: "dd/MM/yyyy HH:mm:ss"
                         }}
                     </td>
                     <td
@@ -88,7 +88,7 @@
                                 'bg-red': row.order_state_current == '3',
                                 'bg-yellow': row.order_state_current == '4',
                             }"
-                            >Đơn hàng {{
+                            >{{
                                 row.order_state_current | cvOrderState
                             }}</span
                         >
@@ -100,6 +100,12 @@
                             layout-align="end center"
                             layout-wrap
                         >
+                            <md-button
+                                class="md-icon-button md-raised md-primary"
+                                ng-click="printOrder(row)"
+                            >
+                                <md-icon md-font-icon="ion-printer"></md-icon>
+                            </md-button>
                             <md-button
                                 ng-click="showModalDetails(row)"
                                 class="md-icon-button md-raised"
@@ -149,7 +155,7 @@
                                                 'bg-[#dd4b39]': order.order_state_current == '3',
                                                 'bg-[#f39c12]': order.order_state_current == '4',
                                             }"
-                                            >Đơn hàng {{ order.order_state_current | cvOrderState }}</span
+                                            >{{ order.order_state_current | cvOrderState }}</span
                                         >
                                     </div>
                                     <section
@@ -166,7 +172,7 @@
                                                 <md-option
                                                     ng-repeat="os in order_states.slice(1)"
                                                     ng-value="os"
-                                                    ng-disabled="(order.order_state_current == 0 && os.id > 1) ||
+                                                    ng-disabled="(order.order_state_current == 0 && (os.id > 1 && os.id != 3)) ||
                                                                  (order.order_state_current == 1 && (os.id < 1 || os.id > 3)) ||
                                                                  (order.order_state_current == 2 && (os.id < 2 || os.id == 3 )) ||
                                                                  (order.order_state_current == 3 && (os.id < 3 || os.id > 3 )) ||
@@ -199,7 +205,7 @@
                                                 }"
                                                     class="bx text-[24px] font-bold"></i>
                                             </div>
-                                            <div class="text-[rgba(0,0,0,.8)] text-[13px] mt-[20px] mb-1">Đơn hàng {{os.orderstate_name | cvOrderState}}</div>
+                                            <div class="text-[rgba(0,0,0,.8)] text-[13px] mt-[20px] mb-1">{{os.orderstate_name | cvOrderState}}</div>
                                             <div class="text-[rgba(0,0,0,.26)] text-[12px]">{{os.orderstate_date | jsDate | date: "HH:mm dd-MM-yyyy"}}</div>
                                         </div>
                                     </div>
@@ -227,7 +233,7 @@
                                                             {{ os.orderstate_date | jsDate | date: "HH:mm dd-MM-yyyy"}}
                                                         </div>
                                                         <div ng-class="{'text-[#26aa99]': $index == 0,'text-[rgba(0,0,0,.54)]': $index != 0}">
-                                                            Đơn hàng {{ os.orderstate_name | cvOrderState}}
+                                                            {{ os.orderstate_name | cvOrderState}}
                                                         </div>
                                                     </div>
                                                 </div>

@@ -58,4 +58,8 @@ Route::prefix('admin')->group(function () {
     Route::get('/order', function () {
         return view('admin.index');
     });
+
+    Route::get('/print', function () {
+        return view('admin.print');
+    });
 });
