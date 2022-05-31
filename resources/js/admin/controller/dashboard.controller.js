@@ -172,7 +172,7 @@ myApp.controller(
                         },
                         {
                             type: "line",
-                            text: "Đã xử lý",
+                            text: "Đang xử lý",
                             values: quantity_of_order_processing_by_day,
                             lineColor: "#777",
                             marker: {
@@ -183,7 +183,7 @@ myApp.controller(
                         },
                         {
                             type: "line",
-                            text: "Đã giao",
+                            text: "Đang giao",
                             values: quantity_of_order_delivering_by_day,
                             lineColor: "#00a65a",
                             marker: {
