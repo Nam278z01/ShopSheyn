@@ -12,19 +12,22 @@ class StatisticController extends Controller
     function orderStateStatistics()
     {
         $quantity_order_new = DB::select(
-            "SELECT COUNT(*) as quantity
-                                        FROM orderstate
-                                        WHERE orderstate_name = 0 AND DATE(orderstate_date) = CURDATE()"
+            "SELECT
+                COUNT(*) as quantity
+            FROM orderstate
+            WHERE orderstate_name = 0 AND DATE(orderstate_date) = CURDATE()"
         );
 
         $quantity_the_others = DB::select(
-            "SELECT od.orderstate_name, COUNT(od.order_id) AS quantity
-                            FROM (
-                                SELECT o.order_id, MAX(o.orderstate_name) AS orderstate_name
-                                FROM orderstate AS o
-                                GROUP BY o.order_id ) AS od
-                            GROUP BY od.orderstate_name
-                            ORDER BY od.orderstate_name"
+            "SELECT
+                od.orderstate_name,
+                COUNT(od.order_id) AS quantity
+            FROM (
+                SELECT o.order_id, MAX(o.orderstate_name) AS orderstate_name
+                FROM orderstate AS o
+                GROUP BY o.order_id ) AS od
+            GROUP BY od.orderstate_name
+            ORDER BY od.orderstate_name"
         );
 
         return ["quantity_order_new" => $quantity_order_new, "quantity_the_others" => $quantity_the_others];
@@ -60,39 +63,25 @@ class StatisticController extends Controller
 
         $days = DB::select("SELECT * FROM AAA ORDER BY date_field");
 
-        $quantity_of_order_delivered_by_day = DB::select(
-            "SELECT AAA.date_field, IFNULL(BBB.quantity, 0) AS quantity
+        $order_state_count = DB::select(
+            "SELECT
+                AAA.date_field,
+                IFNULL(BBB.processing, 0) AS processing,
+                IFNULL(BBB.delivering, 0) AS delivering,
+                IFNULL(BBB.delivered, 0) AS delivered,
+                IFNULL(BBB.canceled, 0) AS canceled,
+                IFNULL(BBB.refund, 0) AS refund
             FROM AAA LEFT JOIN
             (
-                SELECT COUNT(os.orderstate_id) AS quantity, DATE(os.orderstate_date) AS _date
+                SELECT
+                    COUNT(CASE WHEN os.orderstate_name = 0 then 1 ELSE NULL END) AS processing,
+                    COUNT(CASE WHEN os.orderstate_name = 1 then 1 ELSE NULL END) AS delivering,
+                    COUNT(CASE WHEN os.orderstate_name = 2 then 1 ELSE NULL END) AS delivered,
+                    COUNT(CASE WHEN os.orderstate_name = 3 then 1 ELSE NULL END) AS canceled,
+                    COUNT(CASE WHEN os.orderstate_name = 4 then 1 ELSE NULL END) AS refund,
+                    DATE(os.orderstate_date) AS _date
                 FROM orderstate os
-                WHERE os.orderstate_name = 2 AND YEAR(os.orderstate_date) = $year AND MONTH(os.orderstate_date) = $month
-                GROUP BY _date
-                ORDER BY _date
-            ) AS BBB ON AAA.date_field = BBB._date
-            ORDER BY AAA.date_field"
-        );
-
-        $quantity_of_order_canceled_by_day = DB::select(
-            "SELECT AAA.date_field, IFNULL(BBB.quantity, 0) AS quantity
-            FROM AAA LEFT JOIN
-            (
-                SELECT COUNT(os.orderstate_id) AS quantity, DATE(os.orderstate_date) AS _date
-                FROM orderstate os
-                WHERE os.orderstate_name = 3 AND YEAR(os.orderstate_date) = $year AND MONTH(os.orderstate_date) = $month
-                GROUP BY _date
-                ORDER BY _date
-            ) AS BBB ON AAA.date_field = BBB._date
-            ORDER BY AAA.date_field"
-        );
-
-        $quantity_of_order_refund_by_day = DB::select(
-            "SELECT AAA.date_field, IFNULL(BBB.quantity, 0) AS quantity
-            FROM AAA LEFT JOIN
-            (
-                SELECT COUNT(os.orderstate_id) AS quantity, DATE(os.orderstate_date) AS _date
-                FROM orderstate os
-                WHERE os.orderstate_name = 4 AND YEAR(os.orderstate_date) = $year AND MONTH(os.orderstate_date) = $month
+                WHERE YEAR(os.orderstate_date) = YEAR(CURDATE()) AND MONTH(os.orderstate_date) = MONTH(CURDATE())
                 GROUP BY _date
                 ORDER BY _date
             ) AS BBB ON AAA.date_field = BBB._date
@@ -100,12 +89,18 @@ class StatisticController extends Controller
         );
 
         $total_by_day = DB::select(
-            "SELECT AAA.date_field, IFNULL(BBB.total, 0) AS total
+            "SELECT
+                AAA.date_field,
+                IFNULL(BBB.total, 0) AS total
             FROM AAA LEFT JOIN
                 (
-                    SELECT SUM(o.total) AS total, DATE(os.orderstate_date) AS _date
+                    SELECT
+                        SUM(o.total) AS total,
+                        DATE(os.orderstate_date) AS _date
                     FROM orders o
-                        INNER JOIN (SELECT os.order_id, MAX(os.orderstate_name) AS orderstate_name
+                        INNER JOIN (SELECT
+                                        os.order_id,
+                                        MAX(os.orderstate_name) AS orderstate_name
                                     FROM orderstate AS os
                                     GROUP BY os.order_id
                                     HAVING orderstate_name = 2) AS osn ON o.order_id = osn.order_id
@@ -124,9 +119,7 @@ class StatisticController extends Controller
         return [
             "days" => $days,
             "total_by_day" => $total_by_day,
-            "quantity_of_order_delivered_by_day" => $quantity_of_order_delivered_by_day,
-            "quantity_of_order_canceled_by_day" => $quantity_of_order_canceled_by_day,
-            "quantity_of_order_refund_by_day" => $quantity_of_order_refund_by_day,
+            "order_state_count" => $order_state_count,
         ];
     }
 }
