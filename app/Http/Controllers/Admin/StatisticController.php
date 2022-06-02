@@ -81,7 +81,7 @@ class StatisticController extends Controller
                     COUNT(CASE WHEN os.orderstate_name = 4 then 1 ELSE NULL END) AS refund,
                     DATE(os.orderstate_date) AS _date
                 FROM orderstate os
-                WHERE YEAR(os.orderstate_date) = YEAR(CURDATE()) AND MONTH(os.orderstate_date) = MONTH(CURDATE())
+                WHERE YEAR(os.orderstate_date) = YEAR(CURDATE()) AND MONTH(os.orderstate_date) = $month
                 GROUP BY _date
                 ORDER BY _date
             ) AS BBB ON AAA.date_field = BBB._date
