@@ -308,12 +308,10 @@
                                     />
                                     <div
                                         ng-click="removeProductFromCart(product.cart_id)"
-                                        class="absolute bottom-0 h-[26px] hidden justify-center items-center w-full bg-[#00000080] group-scope-hover:flex cursor-pointer"
+                                        class="absolute bottom-0 h-[26px] hidden justify-center items-center w-full bg-[rgba(0,0,0,0.3)] group-scope-hover:flex cursor-pointer"
                                     >
                                         <button>
-                                            <i
-                                                class="bx bx-trash text-[16px] text-white"
-                                            ></i>
+                                            <i class='bx bxs-trash-alt text-[16px] text-white'></i>
                                         </button>
                                     </div>
                                     <div
@@ -332,13 +330,13 @@
                                             ng-change="changeColorInCart(product, '@{{product}}')"
                                             ng-model="product.picked.color"
                                             ng-options="color.color_name for color in product.colors"
-                                            class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1"
+                                            class="mx-[10px] border border-solid text-[#222] font-bold rounded-[18px] border-gray-300 focus:border-black focus:outline-none text-xs px-3 py-1"
                                         ></select>
                                         <select
                                             ng-model="product.picked.size"
                                             ng-change="changeSizeInCart(product, '@{{product}}')"
                                             ng-options="size.size_name for size in product.picked.color.sizes"
-                                            class="mx-[10px] border border-solid border-transparent text-[#222] font-bold bg-stone-200 rounded-[18px] focus:border-black focus:outline-none text-xs px-3 py-1"
+                                            class="mx-[10px] border border-solid text-[#222] font-bold rounded-[18px] border-gray-300 focus:border-black focus:outline-none text-xs px-3 py-1"
                                         ></select>
                                     </div>
                                     <div

@@ -182,6 +182,13 @@ myApp.run(function (
         }
     };
 
+    $rootScope.validateNumber2 = function (e) {
+        const pattern = /^[0-9]$/;
+        if (!pattern.test(e.key)) {
+            e.preventDefault();
+        }
+    };
+
     $rootScope.validateQuantity = function (product) {
         if (product.picked.size) {
             $rootScope
