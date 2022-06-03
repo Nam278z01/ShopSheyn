@@ -56,6 +56,9 @@ Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
             'product' => ProductManagementController::class,
             'order' => OrderManagementController::class,
         ]);
+
+        Route::get('/statistic/order-state', [StatisticController::class, 'orderStateStatistics']);
+        Route::get('/statistic/revenue/{year}/{month}', [StatisticController::class, 'revenueStatistics']);
     });
 });
 
@@ -67,7 +70,3 @@ Route::middleware(['auth:sanctum', 'ability:customer'])->group(function () {
         'order' => OrderController::class,
     ]);
 });
-
-
-Route::get('/statistic/order-state', [StatisticController::class, 'orderStateStatistics']);
-Route::get('/statistic/revenue/{year}/{month}', [StatisticController::class, 'revenueStatistics']);

@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `color` (
   CONSTRAINT `color_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=236 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.color: ~67 rows (approximately)
+-- Dumping data for table shop.color: ~128 rows (approximately)
 INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`, `product_image2`, `product_image3`, `product_image4`, `product_image5`, `product_id`) VALUES
 	(1, 'Đen', 142000, '1610954054037523ce2e1b5541c69040ccb4102400_thumbnail_900x.webp', '1610954057e9d333c568dd4f28a5fd56343acb912e_thumbnail_900x.webp', '16109540614aabaa892deb01c5d59b17e73326a2a8_thumbnail_900x.webp', '1610954064b4d703949275742134916533ca2c4253_thumbnail_900x.webp', '16109540670d4cab359190a6ff9e445efeb15b2a6b_thumbnail_900x.webp', 1),
 	(2, 'Xanh trời', 279000, '16454131255afcc643a69b66c26689dda9181d1c54_thumbnail_900x.webp', '1645413133d534d4842ab0c89cbb2edd272669590e_thumbnail_900x.webp', '1645413131f0602c3612f8dabe2c0356f3e366ffcb_thumbnail_900x.webp', NULL, NULL, 2),
@@ -249,9 +249,9 @@ CREATE TABLE IF NOT EXISTS `orderdetails` (
   KEY `size_id` (`size_id`),
   CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderdetails: ~31 rows (approximately)
+-- Dumping data for table shop.orderdetails: ~40 rows (approximately)
 INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quantity`, `price`, `size_id`, `order_id`) VALUES
 	(1, 0, 1, 135000, 112, 1),
 	(2, 0, 2, 420000, 193, 3),
@@ -287,7 +287,15 @@ INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quant
 	(56, 0, 1, 459000, 465, 62),
 	(57, 0, 1, 459000, 467, 62),
 	(58, 0, 1, 481000, 469, 62),
-	(59, 0, 1, 290000, 474, 62);
+	(59, 0, 1, 290000, 474, 62),
+	(60, 0, 3, 308000, 356, 63),
+	(61, 0, 1, 271000, 377, 63),
+	(62, 0, 1, 265000, 386, 63),
+	(63, 0, 1, 250000, 398, 63),
+	(64, 0, 8, 259000, 407, 63),
+	(65, 0, 1, 301000, 350, 64),
+	(66, 0, 1, 265000, 387, 64),
+	(67, 0, 1, 265000, 388, 64);
 
 -- Dumping structure for table shop.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -303,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   PRIMARY KEY (`order_id`),
   KEY `customer_id` (`customer_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.orders: ~21 rows (approximately)
 INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_address`, `customer_phone`, `note`, `delivery_cost`, `total`, `customer_id`) VALUES
@@ -329,7 +337,9 @@ INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_addre
 	(58, '2022-05-21 22:33:54', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1350000, 1),
 	(59, '2022-05-21 22:38:38', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 135000, 1),
 	(61, '2022-05-23 00:36:01', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 690000, 1),
-	(62, '2022-05-24 13:50:57', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1689000, 1);
+	(62, '2022-05-24 13:50:57', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1689000, 1),
+	(63, '2022-05-26 20:19:30', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 3782000, 1),
+	(64, '2022-05-27 20:33:28', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 831000, 1);
 
 -- Dumping structure for table shop.orderstate
 CREATE TABLE IF NOT EXISTS `orderstate` (
@@ -340,7 +350,7 @@ CREATE TABLE IF NOT EXISTS `orderstate` (
   PRIMARY KEY (`orderstate_id`),
   KEY `order_id` (`order_id`),
   CONSTRAINT `orderstate_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.orderstate: ~40 rows (approximately)
 INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`, `order_id`) VALUES
@@ -392,7 +402,14 @@ INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`,
 	(90, 0, '2022-05-23 00:36:01', 61),
 	(91, 3, '2022-05-24 13:50:23', 61),
 	(92, 0, '2022-05-24 13:50:57', 62),
-	(93, 1, '2022-05-24 14:01:09', 62);
+	(93, 1, '2022-05-24 14:01:09', 62),
+	(94, 2, '2022-05-25 21:30:48', 62),
+	(95, 0, '2022-05-26 20:19:30', 63),
+	(96, 1, '2022-05-26 20:20:46', 63),
+	(97, 0, '2022-05-27 20:33:28', 64),
+	(98, 3, '2022-05-28 19:07:24', 64),
+	(99, 2, '2022-05-28 23:27:09', 59),
+	(100, 2, '2022-05-28 23:27:54', 63);
 
 -- Dumping structure for table shop.personal_access_tokens
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
@@ -408,20 +425,20 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.personal_access_tokens: ~4 rows (approximately)
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `created_at`, `updated_at`) VALUES
 	(58, 'App\\Models\\Admin', 1, 'authTokenAdmin', '929ef2996d09231b2a7258c4a24a2fcfcbf30c83811cb56a201b7bf0f55ce25c', '["admin"]', '2022-05-14 06:01:52', '2022-05-13 09:27:35', '2022-05-14 06:01:52'),
 	(71, 'App\\Models\\Customer', 3, 'authTokenCustomer', '7b5a26f790d9f50a38ecb532ea0d4d0a60f4a7d7d84a2890f3e6df30ae2af94f', '["customer"]', '2022-05-21 08:38:43', '2022-05-21 08:32:01', '2022-05-21 08:38:43'),
-	(73, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'c1d0454a426d57bf11d33e8a20f3b338e2ccc3f6efd822c499eb25a5f0e5b9cd', '["customer"]', '2022-05-24 02:20:02', '2022-05-22 01:36:05', '2022-05-24 02:20:02'),
-	(80, 'App\\Models\\Admin', 1, 'authTokenAdmin', 'f7d4e9e96ccb5da3f8da21dd761688647a413ab16fba222045c33090444708ee', '["admin"]', '2022-05-24 02:21:02', '2022-05-23 23:02:00', '2022-05-24 02:21:02');
+	(81, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'd81b946ce5fb472c24f4971461ea5038404e30e924aaebd30719e61b65d14357', '["customer"]', '2022-06-02 09:38:32', '2022-05-25 07:29:02', '2022-06-02 09:38:32'),
+	(83, 'App\\Models\\Admin', 1, 'authTokenAdmin', 'c8a8a884c2a8681cc6057dc191631518b9d6dd38ba5adb59b9bd91c3b9597e5d', '["admin"]', '2022-06-02 09:38:46', '2022-05-27 04:00:20', '2022-06-02 09:38:46');
 
 -- Dumping structure for table shop.product
 CREATE TABLE IF NOT EXISTS `product` (
   `product_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã sản phẩm',
   `product_name` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên sản phẩm',
-  `product_description` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Mô tả',
+  `product_description` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT 'Mô tả',
   `product_discount` tinyint NOT NULL DEFAULT '0' COMMENT 'Giảm giá (%)',
   `subcategory_id` int NOT NULL COMMENT 'Mã danh mục con',
   `created_time` datetime DEFAULT NULL COMMENT 'Thời gian tạo',
@@ -437,7 +454,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `product_ibfk_3` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.product: ~48 rows (approximately)
+-- Dumping data for table shop.product: ~100 rows (approximately)
 INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `product_discount`, `subcategory_id`, `created_time`, `updated_time`, `admin_updated_id`, `admin_created_id`) VALUES
 	(1, 'Áo sơ mi Nút màu trơn Thanh lịch', NULL, 40, 7, '2022-04-16 00:00:00', NULL, NULL, 1),
 	(2, 'Áo sơ mi nữ Nút phía trước Sọc Giải trí', NULL, 0, 7, '2022-04-17 00:00:00', NULL, NULL, 1),
@@ -486,7 +503,7 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `pro
 	(47, 'Quần nữ Thắt lưng Túi Quần paper-bag màu trơn Boho', NULL, 50, 26, '2022-05-04 14:44:50', '2022-05-07 16:24:46', 1, 1),
 	(77, 'Quần nữ Nút Dây kéo màu trơn Giải trí', NULL, 0, 26, '2022-05-24 17:36:43', '2022-05-23 16:37:01', 1, 1),
 	(78, 'Quần nữ Túi Dây kéo màu trơn Giải trí', NULL, 0, 26, '2022-05-23 16:38:09', '2022-05-23 16:49:07', 1, 1),
-	(79, 'Quần nữ Nút Xù Dây kéo màu trơn Giải trí', NULL, 0, 26, '2022-05-24 17:43:51', '2022-05-23 16:44:25', 1, 1),
+	(79, 'Quần nữ Nút Xù Dây kéo màu trơn Giải trí', '<table class="sg-table-base j-cm-table" style="box-sizing:border-box; border-collapse:collapse; border-spacing:0px; width:488.462px; color:#222222; font-family:Arial, Helvetica, sans-serif; font-size:12px; font-style:normal; font-variant-ligatures:normal; font-variant-caps:normal; font-weight:400; letter-spacing:normal; orphans:2; text-align:start; text-transform:none; white-space:normal; widows:2; word-spacing:0px; -webkit-text-stroke-width:0px; text-decoration-thickness:initial; text-decoration-style:initial; text-decoration-color:initial">\n	<tbody>\n		<tr>\n			<td style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; white-space:nowrap; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5"><span style="box-sizing:border-box"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s"><span style="color:#222222"><span style="table-layout:fixed"><span style="font-weight:700">Kích thước</span></span></span></span></span></td>\n			<td style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5"><span style="box-sizing:border-box"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">Chiều dài</span></span></td>\n			<td style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5"><span style="box-sizing:border-box"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">Kích thước vòng eo</span></span></td>\n			<td style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5"><span style="box-sizing:border-box"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">Kích thước mông</span></span></td>\n			<td style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5"><span style="box-sizing:border-box"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">Đùi</span></span></td>\n		</tr>\n		<tr>\n			<td aria-label="Kích thước:XS" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; white-space:nowrap; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s"><span style="color:#222222"><span style="table-layout:fixed"><span style="font-weight:700">XS</span></span></span></span></span></span></td>\n			<td aria-label="Chiều dài :93" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">93</span></span></span></td>\n			<td aria-label="Kích thước vòng eo :65" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">65</span></span></span></td>\n			<td aria-label="Kích thước mông :107" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">107</span></span></span></td>\n			<td aria-label="Đùi :67.7" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">67.7</span></span></span></td>\n		</tr>\n		<tr>\n			<td aria-label="Kích thước:S" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; white-space:nowrap; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s"><span style="color:#222222"><span style="table-layout:fixed"><span style="font-weight:700">S</span></span></span></span></span></span></td>\n			<td aria-label="Chiều dài :94" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">94</span></span></span></td>\n			<td aria-label="Kích thước vòng eo :69" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">69</span></span></span></td>\n			<td aria-label="Kích thước mông :111" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">111</span></span></span></td>\n			<td aria-label="Đùi :70" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">70</span></span></span></td>\n		</tr>\n		<tr>\n			<td aria-label="Kích thước:M" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; white-space:nowrap; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s"><span style="color:#222222"><span style="table-layout:fixed"><span style="font-weight:700">M</span></span></span></span></span></span></td>\n			<td aria-label="Chiều dài :95" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">95</span></span></span></td>\n			<td aria-label="Kích thước vòng eo :73" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">73</span></span></span></td>\n			<td aria-label="Kích thước mông :115" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">115</span></span></span></td>\n			<td aria-label="Đùi :72.3" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">72.3</span></span></span></td>\n		</tr>\n		<tr>\n			<td aria-label="Kích thước:L" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; white-space:nowrap; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s"><span style="color:#222222"><span style="table-layout:fixed"><span style="font-weight:700">L</span></span></span></span></span></span></td>\n			<td aria-label="Chiều dài :96.5" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">96.5</span></span></span></td>\n			<td aria-label="Kích thước vòng eo :79" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">79</span></span></span></td>\n			<td aria-label="Kích thước mông :121" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">121</span></span></span></td>\n			<td aria-label="Đùi :75.6" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">75.6</span></span></span></td>\n		</tr>\n		<tr>\n			<td aria-label="Kích thước:XL" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; white-space:nowrap; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s"><span style="color:#222222"><span style="table-layout:fixed"><span style="font-weight:700">XL</span></span></span></span></span></span></td>\n			<td aria-label="Chiều dài :98" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">98</span></span></span></td>\n			<td aria-label="Kích thước vòng eo :85" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">85</span></span></span></td>\n			<td aria-label="Kích thước mông :127" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">127</span></span></span></td>\n			<td aria-label="Đùi :78.9" style="border-bottom:1px solid #e5e5e5; padding:0px 4px; min-width:85px; height:38px; border-top:1px solid #e5e5e5; border-right:1px solid #e5e5e5; border-left:1px solid #e5e5e5" tabindex="0"><span style="box-sizing:border-box"><span style="outline:0px"><span style="transition:background-color 0.2s ease 0s, color 0.2s ease 0s">78.9</span></span></span></td>\n		</tr>\n	</tbody>\n</table>', 0, 26, '2022-05-24 17:43:51', '2022-05-25 15:05:24', 1, 1),
 	(80, 'Quần nữ Nút Túi Dây kéo Khối Màu Giải trí', NULL, 0, 26, '2022-05-23 16:50:09', '2022-05-23 16:50:09', NULL, 1),
 	(81, 'Quần nữ Dây kéo Thắt nơ trước màu trơn Thanh lịch', NULL, 30, 26, '2022-05-23 16:53:31', '2022-05-23 16:53:31', NULL, 1),
 	(82, 'Quần nữ Lá thư Giải trí', NULL, 0, 26, '2022-05-24 02:38:45', '2022-05-24 02:38:45', NULL, 1),
@@ -551,7 +568,7 @@ CREATE TABLE IF NOT EXISTS `size` (
   CONSTRAINT `size_ibfk_1` FOREIGN KEY (`color_id`) REFERENCES `color` (`color_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=623 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.size: ~238 rows (approximately)
+-- Dumping data for table shop.size: ~437 rows (approximately)
 INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(1, 'XS', 10, 1),
 	(2, 'S', 23, 1),
@@ -758,7 +775,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(353, 'XL', 56, 159),
 	(354, 'XS', 44, 160),
 	(355, 'S', 534, 160),
-	(356, 'M', 34, 160),
+	(356, 'M', 31, 160),
 	(357, 'L', 653, 160),
 	(358, 'XL', 56, 160),
 	(359, 'XS', 4, 161),
@@ -779,7 +796,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(374, 'S', 132, 164),
 	(375, 'X', 2, 164),
 	(376, 'XL', 34, 164),
-	(377, 'S', 232, 165),
+	(377, 'S', 231, 165),
 	(378, 'M', 324, 165),
 	(379, 'L', 234, 165),
 	(380, 'XL', 12, 165),
@@ -788,7 +805,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(383, 'L', 547, 166),
 	(384, 'XL', 657, 166),
 	(385, 'S', 34, 167),
-	(386, 'M', 234, 167),
+	(386, 'M', 233, 167),
 	(387, 'L', 45, 167),
 	(388, 'XL', 233, 167),
 	(389, 'S', 123, 168),
@@ -800,7 +817,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(395, 'S', 32, 170),
 	(396, 'X', 45, 170),
 	(397, 'XL', 23, 170),
-	(398, 'S', 213, 171),
+	(398, 'S', 212, 171),
 	(399, 'M', 32, 171),
 	(400, 'L', 4, 171),
 	(401, 'XL', 2, 171),
@@ -809,7 +826,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(404, 'L', 234, 172),
 	(405, 'XL', 21, 172),
 	(406, 'S', 54, 173),
-	(407, 'M', 546, 173),
+	(407, 'M', 538, 173),
 	(408, 'L', 5, 173),
 	(409, 'XL', 56, 173),
 	(410, 'S', 320, 174),
