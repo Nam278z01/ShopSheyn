@@ -6,7 +6,11 @@ myApp.controller(
 
         $http({
             method: "GET",
-            url: API_URL + "/api/statistic/order-state",
+            url: API_URL + "/api/admin/statistic/order-state",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + adminService.getCurrentToken(),
+            },
         }).then((res) => {
             $scope.quantity_order_new = res.data.quantity_order_new;
             $scope.quantity_the_others = res.data.quantity_the_others;
@@ -68,7 +72,11 @@ myApp.controller(
         function chart(month) {
             $http({
                 method: "GET",
-                url: API_URL + "/api/statistic/revenue/2022/" + month,
+                url: API_URL + "/api/admin/statistic/revenue/2022/" + month,
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + adminService.getCurrentToken(),
+                },
             }).then((res) => {
                 let days = res.data.days.reduce(
                     (results, current) => [

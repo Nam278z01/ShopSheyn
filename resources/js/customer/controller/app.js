@@ -496,7 +496,7 @@ myApp.directive("slickSlider", function ($timeout) {
                     autoplay: true,
                     autoplaySpeed: 1000,
                 });
-            }, 1000);
+            }, 1500);
         });
     }
 
@@ -529,7 +529,7 @@ myApp.directive("slickSlider2", function ($timeout) {
                     // autoplay: false,
                     // autoplaySpeed: 1000,
                 });
-            }, 1000);
+            }, 2000);
         });
     }
 
