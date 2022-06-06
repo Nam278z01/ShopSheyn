@@ -249,9 +249,9 @@ CREATE TABLE IF NOT EXISTS `orderdetails` (
   KEY `size_id` (`size_id`),
   CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderdetails: ~40 rows (approximately)
+-- Dumping data for table shop.orderdetails: ~42 rows (approximately)
 INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quantity`, `price`, `size_id`, `order_id`) VALUES
 	(1, 0, 1, 135000, 112, 1),
 	(2, 0, 2, 420000, 193, 3),
@@ -295,7 +295,9 @@ INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quant
 	(64, 0, 8, 259000, 407, 63),
 	(65, 0, 1, 301000, 350, 64),
 	(66, 0, 1, 265000, 387, 64),
-	(67, 0, 1, 265000, 388, 64);
+	(67, 0, 1, 265000, 388, 64),
+	(68, 0, 3, 271000, 377, 65),
+	(69, 0, 2, 1688000, 488, 65);
 
 -- Dumping structure for table shop.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -311,9 +313,9 @@ CREATE TABLE IF NOT EXISTS `orders` (
   PRIMARY KEY (`order_id`),
   KEY `customer_id` (`customer_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orders: ~21 rows (approximately)
+-- Dumping data for table shop.orders: ~22 rows (approximately)
 INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_address`, `customer_phone`, `note`, `delivery_cost`, `total`, `customer_id`) VALUES
 	(1, '2022-05-09 20:36:00', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 135000, 1),
 	(3, '2022-05-09 23:06:14', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1026500, 1),
@@ -339,7 +341,8 @@ INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_addre
 	(61, '2022-05-23 00:36:01', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 690000, 1),
 	(62, '2022-05-24 13:50:57', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1689000, 1),
 	(63, '2022-05-26 20:19:30', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 3782000, 1),
-	(64, '2022-05-27 20:33:28', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 831000, 1);
+	(64, '2022-05-27 20:33:28', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 831000, 1),
+	(65, '2022-06-06 20:22:26', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 4189000, 1);
 
 -- Dumping structure for table shop.orderstate
 CREATE TABLE IF NOT EXISTS `orderstate` (
@@ -350,9 +353,9 @@ CREATE TABLE IF NOT EXISTS `orderstate` (
   PRIMARY KEY (`orderstate_id`),
   KEY `order_id` (`order_id`),
   CONSTRAINT `orderstate_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderstate: ~40 rows (approximately)
+-- Dumping data for table shop.orderstate: ~43 rows (approximately)
 INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`, `order_id`) VALUES
 	(1, 0, '2022-05-09 20:37:33', 1),
 	(2, 1, '2022-05-09 20:49:49', 1),
@@ -409,7 +412,10 @@ INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`,
 	(97, 0, '2022-05-27 20:33:28', 64),
 	(98, 3, '2022-05-28 19:07:24', 64),
 	(99, 2, '2022-05-28 23:27:09', 59),
-	(100, 2, '2022-05-28 23:27:54', 63);
+	(100, 2, '2022-05-28 23:27:54', 63),
+	(101, 0, '2022-06-06 20:22:26', 65),
+	(102, 3, '2022-06-06 20:23:27', 65),
+	(103, 4, '2022-06-06 20:23:36', 63);
 
 -- Dumping structure for table shop.personal_access_tokens
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
@@ -431,8 +437,8 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `created_at`, `updated_at`) VALUES
 	(58, 'App\\Models\\Admin', 1, 'authTokenAdmin', '929ef2996d09231b2a7258c4a24a2fcfcbf30c83811cb56a201b7bf0f55ce25c', '["admin"]', '2022-05-14 06:01:52', '2022-05-13 09:27:35', '2022-05-14 06:01:52'),
 	(71, 'App\\Models\\Customer', 3, 'authTokenCustomer', '7b5a26f790d9f50a38ecb532ea0d4d0a60f4a7d7d84a2890f3e6df30ae2af94f', '["customer"]', '2022-05-21 08:38:43', '2022-05-21 08:32:01', '2022-05-21 08:38:43'),
-	(81, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'd81b946ce5fb472c24f4971461ea5038404e30e924aaebd30719e61b65d14357', '["customer"]', '2022-06-02 09:38:32', '2022-05-25 07:29:02', '2022-06-02 09:38:32'),
-	(83, 'App\\Models\\Admin', 1, 'authTokenAdmin', 'c8a8a884c2a8681cc6057dc191631518b9d6dd38ba5adb59b9bd91c3b9597e5d', '["admin"]', '2022-06-02 09:38:46', '2022-05-27 04:00:20', '2022-06-02 09:38:46');
+	(81, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'd81b946ce5fb472c24f4971461ea5038404e30e924aaebd30719e61b65d14357', '["customer"]', '2022-06-06 07:38:34', '2022-05-25 07:29:02', '2022-06-06 07:38:34'),
+	(83, 'App\\Models\\Admin', 1, 'authTokenAdmin', 'c8a8a884c2a8681cc6057dc191631518b9d6dd38ba5adb59b9bd91c3b9597e5d', '["admin"]', '2022-06-06 07:14:57', '2022-05-27 04:00:20', '2022-06-06 07:14:57');
 
 -- Dumping structure for table shop.product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -775,7 +781,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(353, 'XL', 56, 159),
 	(354, 'XS', 44, 160),
 	(355, 'S', 534, 160),
-	(356, 'M', 31, 160),
+	(356, 'M', 34, 160),
 	(357, 'L', 653, 160),
 	(358, 'XL', 56, 160),
 	(359, 'XS', 4, 161),
@@ -796,8 +802,8 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(374, 'S', 132, 164),
 	(375, 'X', 2, 164),
 	(376, 'XL', 34, 164),
-	(377, 'S', 231, 165),
-	(378, 'M', 324, 165),
+	(377, 'S', 232, 165),
+	(378, 'M', 320, 165),
 	(379, 'L', 234, 165),
 	(380, 'XL', 12, 165),
 	(381, 'S', 435, 166),
@@ -805,7 +811,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(383, 'L', 547, 166),
 	(384, 'XL', 657, 166),
 	(385, 'S', 34, 167),
-	(386, 'M', 233, 167),
+	(386, 'M', 234, 167),
 	(387, 'L', 45, 167),
 	(388, 'XL', 233, 167),
 	(389, 'S', 123, 168),
@@ -817,7 +823,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(395, 'S', 32, 170),
 	(396, 'X', 45, 170),
 	(397, 'XL', 23, 170),
-	(398, 'S', 212, 171),
+	(398, 'S', 213, 171),
 	(399, 'M', 32, 171),
 	(400, 'L', 4, 171),
 	(401, 'XL', 2, 171),
@@ -826,7 +832,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(404, 'L', 234, 172),
 	(405, 'XL', 21, 172),
 	(406, 'S', 54, 173),
-	(407, 'M', 538, 173),
+	(407, 'M', 546, 173),
 	(408, 'L', 5, 173),
 	(409, 'XL', 56, 173),
 	(410, 'S', 320, 174),
@@ -1105,13 +1111,22 @@ INSERT INTO `subcategory` (`subcategory_id`, `subcategory_name`, `category_id`) 
 
 -- Dumping structure for procedure shop.getProductsSearch
 DELIMITER //
-CREATE PROCEDURE `getProductsSearch`(IN `page_index` INT, IN `page_size` INT, IN `category_id` INT, IN `list_subcategory_id` VARCHAR(4000) CHARACTER SET UTF8MB4, IN `text_search` VARCHAR(200) CHARACTER SET UTF8MB4, IN `min_price1` INT, IN `max_price1` INT, IN `sort` INT, OUT `OUT_TOTAL_ROW` INT)
+CREATE PROCEDURE `getProductsSearch`(
+	IN `page_index` INT,
+	IN `page_size` INT,
+	IN `category_id` INT,
+	IN `list_subcategory_id` VARCHAR(4000) CHARACTER SET UTF8MB4,
+	IN `text_search` VARCHAR(200) CHARACTER SET UTF8MB4,
+	IN `min_price1` INT,
+	IN `max_price1` INT,
+	IN `sort` INT,
+	OUT `OUT_TOTAL_ROW` INT
+)
 BEGIN
     CREATE TEMPORARY TABLE Result1
     AS (
         SELECT p.product_id,
             p.product_name,
-            p.product_description,
             p.product_discount,
             p.created_time,
             MIN(cl.product_price - cl.product_price * p.product_discount / 100) as min_price,
@@ -1157,7 +1172,6 @@ BEGIN
                     AS (
                         SELECT r.product_id,
                                 r.product_name,
-                                r.product_description,
                                 r.product_discount,
                                 r.min_price,
                                 r.max_price,
@@ -1177,7 +1191,6 @@ BEGIN
         JSON_OBJECT(
         'product_id', p.product_id,
         'product_name', p.product_name,
-        'product_description', p.product_description,
         'product_discount', p.product_discount,
         'min_price', p.min_price,
         'max_price', p.max_price,
