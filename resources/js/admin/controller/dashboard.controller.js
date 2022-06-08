@@ -67,7 +67,7 @@ myApp.controller(
             }
         ];
 
-        $scope.month = $scope.months[new Date().getMonth()];
+        $scope.month = $scope.months[new Date().getMonth()].id;
 
         function chart(month) {
             $http({
@@ -238,10 +238,10 @@ myApp.controller(
             });
         }
 
-        chart($scope.month.id);
+        chart($scope.month);
 
         $scope.changeMonth = function () {
-            chart($scope.month.id);
+            chart($scope.month);
         }
     }
 );
