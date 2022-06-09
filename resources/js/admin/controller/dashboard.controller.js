@@ -86,15 +86,11 @@ myApp.controller(
                     []
                 );
 
-                let quantity_of_order_processing_by_day = []
-                let quantity_of_order_delivering_by_day = []
                 let quantity_of_order_delivered_by_day = []
                 let quantity_of_order_canceled_by_day = []
                 let quantity_of_order_refund_by_day = []
 
                 res.data.order_state_count.forEach(item => {
-                    quantity_of_order_processing_by_day.push(item.processing)
-                    quantity_of_order_delivering_by_day.push(item.delivering)
                     quantity_of_order_delivered_by_day.push(item.delivered)
                     quantity_of_order_canceled_by_day.push(item.canceled)
                     quantity_of_order_refund_by_day.push(item.refund)
@@ -174,31 +170,9 @@ myApp.controller(
                             type: "bar",
                             text: "Doanh thu (VNĐ)",
                             values: total_by_day,
-                            backgroundColor: "#035397",
+                            backgroundColor: "#00a65a",
                             scales: "scale-x, scale-y-2",
                             "thousands-separator": ",",
-                        },
-                        {
-                            type: "line",
-                            text: "Đang xử lý",
-                            values: quantity_of_order_processing_by_day,
-                            lineColor: "#777",
-                            marker: {
-                                type: "square",
-                                backgroundColor: "#777",
-                            },
-                            scales: "scale-x, scale-y",
-                        },
-                        {
-                            type: "line",
-                            text: "Đang giao",
-                            values: quantity_of_order_delivering_by_day,
-                            lineColor: "#00a65a",
-                            marker: {
-                                type: "square",
-                                backgroundColor: "#00a65a",
-                            },
-                            scales: "scale-x, scale-y",
                         },
                         {
                             type: "line",

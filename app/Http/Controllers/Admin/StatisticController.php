@@ -66,16 +66,12 @@ class StatisticController extends Controller
         $order_state_count = DB::select(
             "SELECT
                 AAA.date_field,
-                IFNULL(BBB.processing, 0) AS processing,
-                IFNULL(BBB.delivering, 0) AS delivering,
                 IFNULL(BBB.delivered, 0) AS delivered,
                 IFNULL(BBB.canceled, 0) AS canceled,
                 IFNULL(BBB.refund, 0) AS refund
             FROM AAA LEFT JOIN
             (
                 SELECT
-                    COUNT(CASE WHEN os.orderstate_name = 0 then 1 ELSE NULL END) AS processing,
-                    COUNT(CASE WHEN os.orderstate_name = 1 then 1 ELSE NULL END) AS delivering,
                     COUNT(CASE WHEN os.orderstate_name = 2 then 1 ELSE NULL END) AS delivered,
                     COUNT(CASE WHEN os.orderstate_name = 3 then 1 ELSE NULL END) AS canceled,
                     COUNT(CASE WHEN os.orderstate_name = 4 then 1 ELSE NULL END) AS refund,
