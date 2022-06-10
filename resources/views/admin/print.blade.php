@@ -87,7 +87,7 @@
                                         @{{od.price * od.product_quantity |
                                         number:0}}₫
                                     </span>
-    
+
                                     <!-- Discount -->
                                     <span
                                         ng-if="od.product_discount != 0"
@@ -145,6 +145,14 @@
                                 </div>
                                 <div class="w-[240px] text-[rgba(0,0,0,.8)] py-[13px] text-sm border-l border-dotted border-[rgba(0,0,0,.09)]">
                                     Thanh toán khi nhận hàng
+                                </div>
+                            </div>
+                            <div class="border-b border-dotted border-[rgba(0,0,0,.09)] flex items-center justify-end w-full text-right">
+                                <div class="flex-1 py-[13px] px-[10px] text-xs text-[rgba(0,0,0,.54)]">
+                                    Thuế VAT
+                                </div>
+                                <div class="w-[240px] text-[rgba(0,0,0,.8)] py-[13px] text-sm border-l border-dotted border-[rgba(0,0,0,.09)]">
+                                    Giá sản phẩm đã bao gồm VAT
                                 </div>
                             </div>
                         </div>
