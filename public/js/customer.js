@@ -40556,7 +40556,7 @@ myApp.directive("slickSlider", function ($timeout) {
           autoplay: true,
           autoplaySpeed: 1000
         });
-      }, 1500);
+      }, 7000);
     });
   }
 
@@ -40580,7 +40580,7 @@ myApp.directive("slickSlider2", function ($timeout) {
           // autoplaySpeed: 1000,
 
         });
-      }, 2000);
+      }, 9000);
     });
   }
 

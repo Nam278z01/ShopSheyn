@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `color` (
   PRIMARY KEY (`color_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `color_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=236 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=239 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.color: ~128 rows (approximately)
 INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`, `product_image2`, `product_image3`, `product_image4`, `product_image5`, `product_id`) VALUES
@@ -249,9 +249,9 @@ CREATE TABLE IF NOT EXISTS `orderdetails` (
   KEY `size_id` (`size_id`),
   CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderdetails: ~42 rows (approximately)
+-- Dumping data for table shop.orderdetails: ~40 rows (approximately)
 INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quantity`, `price`, `size_id`, `order_id`) VALUES
 	(1, 0, 1, 135000, 112, 1),
 	(2, 0, 2, 420000, 193, 3),
@@ -297,7 +297,9 @@ INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quant
 	(66, 0, 1, 265000, 387, 64),
 	(67, 0, 1, 265000, 388, 64),
 	(68, 0, 3, 271000, 377, 65),
-	(69, 0, 2, 1688000, 488, 65);
+	(69, 0, 2, 1688000, 488, 65),
+	(70, 0, 2, 265000, 388, 66),
+	(71, 0, 1, 271000, 378, 67);
 
 -- Dumping structure for table shop.orders
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -313,9 +315,9 @@ CREATE TABLE IF NOT EXISTS `orders` (
   PRIMARY KEY (`order_id`),
   KEY `customer_id` (`customer_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orders: ~22 rows (approximately)
+-- Dumping data for table shop.orders: ~21 rows (approximately)
 INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_address`, `customer_phone`, `note`, `delivery_cost`, `total`, `customer_id`) VALUES
 	(1, '2022-05-09 20:36:00', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 135000, 1),
 	(3, '2022-05-09 23:06:14', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1026500, 1),
@@ -342,7 +344,9 @@ INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_addre
 	(62, '2022-05-24 13:50:57', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1689000, 1),
 	(63, '2022-05-26 20:19:30', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 3782000, 1),
 	(64, '2022-05-27 20:33:28', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 831000, 1),
-	(65, '2022-06-06 20:22:26', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 4189000, 1);
+	(65, '2022-06-06 20:22:26', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 4189000, 1),
+	(66, '2022-06-06 23:48:59', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 530000, 1),
+	(67, '2022-06-09 20:01:35', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 271000, 1);
 
 -- Dumping structure for table shop.orderstate
 CREATE TABLE IF NOT EXISTS `orderstate` (
@@ -353,9 +357,9 @@ CREATE TABLE IF NOT EXISTS `orderstate` (
   PRIMARY KEY (`orderstate_id`),
   KEY `order_id` (`order_id`),
   CONSTRAINT `orderstate_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderstate: ~43 rows (approximately)
+-- Dumping data for table shop.orderstate: ~40 rows (approximately)
 INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`, `order_id`) VALUES
 	(1, 0, '2022-05-09 20:37:33', 1),
 	(2, 1, '2022-05-09 20:49:49', 1),
@@ -415,7 +419,14 @@ INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`,
 	(100, 2, '2022-05-28 23:27:54', 63),
 	(101, 0, '2022-06-06 20:22:26', 65),
 	(102, 3, '2022-06-06 20:23:27', 65),
-	(103, 4, '2022-06-06 20:23:36', 63);
+	(103, 4, '2022-06-06 20:23:36', 63),
+	(104, 0, '2022-06-06 23:48:59', 66),
+	(105, 1, '2022-06-09 20:01:07', 66),
+	(106, 0, '2022-06-09 20:01:35', 67),
+	(107, 4, '2022-06-09 22:36:18', 62),
+	(108, 1, '2022-06-10 10:22:46', 67),
+	(109, 2, '2022-06-10 10:22:49', 67),
+	(110, 4, '2022-06-10 10:22:55', 67);
 
 -- Dumping structure for table shop.personal_access_tokens
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
@@ -431,14 +442,24 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.personal_access_tokens: ~4 rows (approximately)
+-- Dumping data for table shop.personal_access_tokens: ~13 rows (approximately)
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `created_at`, `updated_at`) VALUES
 	(58, 'App\\Models\\Admin', 1, 'authTokenAdmin', '929ef2996d09231b2a7258c4a24a2fcfcbf30c83811cb56a201b7bf0f55ce25c', '["admin"]', '2022-05-14 06:01:52', '2022-05-13 09:27:35', '2022-05-14 06:01:52'),
 	(71, 'App\\Models\\Customer', 3, 'authTokenCustomer', '7b5a26f790d9f50a38ecb532ea0d4d0a60f4a7d7d84a2890f3e6df30ae2af94f', '["customer"]', '2022-05-21 08:38:43', '2022-05-21 08:32:01', '2022-05-21 08:38:43'),
-	(81, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'd81b946ce5fb472c24f4971461ea5038404e30e924aaebd30719e61b65d14357', '["customer"]', '2022-06-06 07:38:34', '2022-05-25 07:29:02', '2022-06-06 07:38:34'),
-	(83, 'App\\Models\\Admin', 1, 'authTokenAdmin', 'c8a8a884c2a8681cc6057dc191631518b9d6dd38ba5adb59b9bd91c3b9597e5d', '["admin"]', '2022-06-06 07:14:57', '2022-05-27 04:00:20', '2022-06-06 07:14:57');
+	(81, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'd81b946ce5fb472c24f4971461ea5038404e30e924aaebd30719e61b65d14357', '["customer"]', '2022-06-08 07:46:13', '2022-05-25 07:29:02', '2022-06-08 07:46:13'),
+	(83, 'App\\Models\\Admin', 1, 'authTokenAdmin', 'c8a8a884c2a8681cc6057dc191631518b9d6dd38ba5adb59b9bd91c3b9597e5d', '["admin"]', '2022-06-08 09:38:41', '2022-05-27 04:00:20', '2022-06-08 09:38:41'),
+	(84, 'App\\Models\\Admin', 1, 'authTokenAdmin', '285ff8bae66d85eee7ef5062d1d311749733b4aa223fa18b7c5746c03466dafe', '["admin"]', '2022-06-09 08:59:20', '2022-06-09 05:47:05', '2022-06-09 08:59:20'),
+	(85, 'App\\Models\\Customer', 1, 'authTokenCustomer', '18418c2eab571acf2d4a15027590097968e7af4b566f08f757e695b69b44febd', '["customer"]', '2022-07-09 03:00:03', '2022-06-09 05:47:17', '2022-07-09 03:00:03'),
+	(86, 'App\\Models\\Admin', 1, 'authTokenAdmin', '1e95ba9d62ecaa32764fd4c705fb370f3790aec17eda16f498e6dbe8c622f891', '["admin"]', '2022-06-09 05:52:41', '2022-06-09 05:52:34', '2022-06-09 05:52:41'),
+	(87, 'App\\Models\\Admin', 1, 'authTokenAdmin', '3406fa815454ad23766840f38c47f6f16c700ee816e07a5423efb670719df462', '["admin"]', '2022-06-09 06:01:38', '2022-06-09 05:53:57', '2022-06-09 06:01:38'),
+	(88, 'App\\Models\\Customer', 1, 'authTokenCustomer', '5a3f980b6ed4d2f926bd4225672be1073b19d0b4610e9615accabf90274b29d6', '["customer"]', '2022-06-09 06:08:45', '2022-06-09 06:01:26', '2022-06-09 06:08:45'),
+	(89, 'App\\Models\\Admin', 1, 'authTokenAdmin', 'd87c01b2dcff4245c2115cb57cf4dde6652deeb49cae319666cb7d3a97d753b1', '["admin"]', '2022-06-09 08:54:37', '2022-06-09 06:37:21', '2022-06-09 08:54:37'),
+	(90, 'App\\Models\\Customer', 1, 'authTokenCustomer', '4d98194173e730c12bf1161053f0ee399406b2c30eddc634ffd9ebb26de8c05a', '["customer"]', '2022-06-09 07:29:47', '2022-06-09 07:04:29', '2022-06-09 07:29:47'),
+	(91, 'App\\Models\\Admin', 1, 'authTokenAdmin', '44d1c7ec800b93d44f268216c1273a2ce101da5fa54fd934b50518c694b3678f', '["admin"]', '2022-06-09 08:58:35', '2022-06-09 08:55:55', '2022-06-09 08:58:35'),
+	(92, 'App\\Models\\Customer', 1, 'authTokenCustomer', '1bae78f537134d38423cfe2021671ead3aa00a10488b3c68640264c63ed242e6', '["customer"]', '2022-06-09 20:27:43', '2022-06-09 18:20:57', '2022-06-09 20:27:43'),
+	(94, 'App\\Models\\Admin', 1, 'authTokenAdmin', '5155d4e8e7b66a68f82530f0446daf0c00b0380e712c761094ed0e7e3abcd976', '["admin"]', '2022-06-09 20:24:01', '2022-06-09 20:23:57', '2022-06-09 20:24:01');
 
 -- Dumping structure for table shop.product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -458,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `product` (
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`admin_updated_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `product_ibfk_2` FOREIGN KEY (`admin_created_id`) REFERENCES `admin` (`admin_id`),
   CONSTRAINT `product_ibfk_3` FOREIGN KEY (`subcategory_id`) REFERENCES `subcategory` (`subcategory_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=134 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.product: ~100 rows (approximately)
 INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `product_discount`, `subcategory_id`, `created_time`, `updated_time`, `admin_updated_id`, `admin_created_id`) VALUES
@@ -542,7 +563,7 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `pro
 	(110, 'Áo khoác nữ mùa đông Nút Tương phản lông thú giả Dây kéo Túi Nút phía trước màu trơn Giải trí', NULL, 0, 36, '2022-05-24 17:19:14', '2022-05-24 08:19:14', NULL, 1),
 	(111, 'Áo khoác nữ mùa đông Thắt lưng Túi Dày màu trơn Giải trí', NULL, 0, 36, '2022-05-24 08:20:49', '2022-05-24 08:20:49', NULL, 1),
 	(112, 'Áo khoác nữ mùa đông Dây kéo Đắp vá Túi màu trơn Giải trí', NULL, 0, 36, '2022-05-24 08:22:14', '2022-05-24 08:22:14', NULL, 1),
-	(113, 'Áo khoác nữ mùa đông Dây kéo Túi Nút phía trước màu trơn Giải trí', NULL, 0, 36, '2022-05-24 17:25:28', '2022-05-24 08:25:28', NULL, 1),
+	(113, 'Áo khoác nữ mùa đông Dây kéo Túi Nút phía trước màu trơn Giải trí', NULL, 10, 36, '2022-05-24 17:25:28', '2022-06-10 02:22:51', 1, 1),
 	(114, 'Áo khoác mùa đông Thắt lưng Túi Nút phía trước màu trơn Giải trí', NULL, 0, 36, '2022-05-24 08:48:50', '2022-05-24 08:48:50', NULL, 1),
 	(115, 'Áo khoác mùa đông Thắt lưng Nút Khối Màu Giải trí', NULL, 0, 36, '2022-05-24 08:50:02', '2022-05-24 08:50:02', NULL, 1),
 	(116, 'Áo khoác nữ mùa đông Nút phía trước màu trơn Giải trí', NULL, 0, 36, '2022-05-24 08:51:03', '2022-05-24 08:51:03', NULL, 1),
@@ -572,7 +593,7 @@ CREATE TABLE IF NOT EXISTS `size` (
   PRIMARY KEY (`size_id`),
   KEY `color_id` (`color_id`),
   CONSTRAINT `size_ibfk_1` FOREIGN KEY (`color_id`) REFERENCES `color` (`color_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=623 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=634 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dumping data for table shop.size: ~437 rows (approximately)
 INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
@@ -810,10 +831,10 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(382, 'M', 65, 166),
 	(383, 'L', 547, 166),
 	(384, 'XL', 657, 166),
-	(385, 'S', 34, 167),
+	(385, 'S', 0, 167),
 	(386, 'M', 234, 167),
 	(387, 'L', 45, 167),
-	(388, 'XL', 233, 167),
+	(388, 'XL', 230, 167),
 	(389, 'S', 123, 168),
 	(390, 'L', 12, 168),
 	(391, 'XL', 342, 168),
@@ -890,16 +911,16 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(462, 'S', 34, 190),
 	(463, 'X', 32, 190),
 	(464, 'XL', 223, 190),
-	(465, 'S', 323, 191),
+	(465, 'S', 324, 191),
 	(466, 'XS', 32, 191),
-	(467, 'L', 44, 191),
+	(467, 'L', 45, 191),
 	(468, 'XL', 76, 191),
-	(469, 'S', 44, 192),
+	(469, 'S', 45, 192),
 	(470, 'L', 32, 192),
 	(471, 'XL', 45, 192),
 	(472, 'S', 23, 193),
 	(473, 'XS', 45, 193),
-	(474, 'L', 452, 193),
+	(474, 'L', 453, 193),
 	(475, 'XL', 32, 193),
 	(477, 'S', 34, 195),
 	(478, 'M', 234, 195),
