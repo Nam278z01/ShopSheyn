@@ -1,6 +1,7 @@
 # Tài khoản: nam278z01@gmail.com
 # Mật khẩu: 1234567890
-
+# Trang người dùng: https://shop-laravel-278.herokuapp.com/product
+# Trang admin: https://shop-laravel-278.herokuapp.com/admin (Tài khoản: nam278z01. Mật khẩu: 1234567890)
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
