@@ -1,8 +1,8 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               8.0.28 - MySQL Community Server - GPL
+-- Server version:               8.0.30 - MySQL Community Server - GPL
 -- Server OS:                    Win64
--- HeidiSQL Version:             12.0.0.6468
+-- HeidiSQL Version:             12.1.0.6537
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `admin_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã admin',
   `admin_accountname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Tên tài khoản',
   `admin_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Mật khẩu',
-  `admin_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên admin',
+  `admin_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Tên admin',
   `admin_role` tinyint DEFAULT '1' COMMENT 'Vai trò',
   `admin_state` tinyint NOT NULL DEFAULT '1' COMMENT 'Trạng thái',
   `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -34,14 +34,14 @@ CREATE TABLE IF NOT EXISTS `admin` (
   PRIMARY KEY (`admin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.admin: ~1 rows (approximately)
+-- Dumping data for table shop.admin: ~0 rows (approximately)
 INSERT INTO `admin` (`admin_id`, `admin_accountname`, `admin_password`, `admin_name`, `admin_role`, `admin_state`, `image`, `updated_at`, `created_at`, `remember_token`) VALUES
 	(1, 'nam278z01', '$2y$10$jgxWzVb5DY70QlNFVij4GOzgnIjDGn.PpAvlczBbRmT4IyeRuWJEK', 'Nguyễn Nam', 1, 1, 'avatar04.png', NULL, NULL, '');
 
 -- Dumping structure for table shop.category
 CREATE TABLE IF NOT EXISTS `category` (
   `category_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã danh mục',
-  `category_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên danh mục',
+  `category_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Tên danh mục',
   PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -62,20 +62,20 @@ INSERT INTO `category` (`category_id`, `category_name`) VALUES
 -- Dumping structure for table shop.color
 CREATE TABLE IF NOT EXISTS `color` (
   `color_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã màu sản phẩm',
-  `color_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên màu sản phẩm',
+  `color_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Tên màu sản phẩm',
   `product_price` double NOT NULL COMMENT 'Giá sản phẩm',
-  `product_image1` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Ảnh 1',
-  `product_image2` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Ảnh 2',
-  `product_image3` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Ảnh 3',
-  `product_image4` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Ảnh 4',
-  `product_image5` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Ảnh 5',
+  `product_image1` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Ảnh 1',
+  `product_image2` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'Ảnh 2',
+  `product_image3` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'Ảnh 3',
+  `product_image4` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'Ảnh 4',
+  `product_image5` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'Ảnh 5',
   `product_id` int NOT NULL COMMENT 'Mã sản phẩm',
   PRIMARY KEY (`color_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `color_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=239 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.color: ~128 rows (approximately)
+-- Dumping data for table shop.color: ~134 rows (approximately)
 INSERT INTO `color` (`color_id`, `color_name`, `product_price`, `product_image1`, `product_image2`, `product_image3`, `product_image4`, `product_image5`, `product_id`) VALUES
 	(1, 'Đen', 142000, '1610954054037523ce2e1b5541c69040ccb4102400_thumbnail_900x.webp', '1610954057e9d333c568dd4f28a5fd56343acb912e_thumbnail_900x.webp', '16109540614aabaa892deb01c5d59b17e73326a2a8_thumbnail_900x.webp', '1610954064b4d703949275742134916533ca2c4253_thumbnail_900x.webp', '16109540670d4cab359190a6ff9e445efeb15b2a6b_thumbnail_900x.webp', 1),
 	(2, 'Xanh trời', 279000, '16454131255afcc643a69b66c26689dda9181d1c54_thumbnail_900x.webp', '1645413133d534d4842ab0c89cbb2edd272669590e_thumbnail_900x.webp', '1645413131f0602c3612f8dabe2c0356f3e366ffcb_thumbnail_900x.webp', NULL, NULL, 2),
@@ -217,12 +217,12 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `customer_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã admin',
   `customer_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Email',
   `customer_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Mật khẩu',
-  `customer_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Vai trò',
+  `customer_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Vai trò',
   `gender` tinyint(1) DEFAULT NULL COMMENT 'Giới tinh',
   `birthdate` datetime DEFAULT NULL COMMENT 'Ngày sinh',
   `customer_phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Số điện thoại',
-  `customer_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Địa chỉ',
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `customer_address` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'Địa chỉ',
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -251,7 +251,7 @@ CREATE TABLE IF NOT EXISTS `orderdetails` (
   CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`size_id`) REFERENCES `size` (`size_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderdetails: ~40 rows (approximately)
+-- Dumping data for table shop.orderdetails: ~47 rows (approximately)
 INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quantity`, `price`, `size_id`, `order_id`) VALUES
 	(1, 0, 1, 135000, 112, 1),
 	(2, 0, 2, 420000, 193, 3),
@@ -305,10 +305,10 @@ INSERT INTO `orderdetails` (`orderdetail_id`, `product_discount`, `product_quant
 CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã đơn hàng',
   `order_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Ngày đặt hàng',
-  `customer_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên khách hàng',
-  `customer_address` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Địa chỉ',
+  `customer_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Tên khách hàng',
+  `customer_address` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Địa chỉ',
   `customer_phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Số điện thoại',
-  `note` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'Ghi chú',
+  `note` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL COMMENT 'Ghi chú',
   `delivery_cost` double NOT NULL DEFAULT '0' COMMENT 'Phí vận chuyển',
   `total` double NOT NULL COMMENT 'Thành tiền',
   `customer_id` int NOT NULL COMMENT 'Mã khách hàng',
@@ -317,7 +317,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orders: ~21 rows (approximately)
+-- Dumping data for table shop.orders: ~28 rows (approximately)
 INSERT INTO `orders` (`order_id`, `order_date`, `customer_name`, `customer_address`, `customer_phone`, `note`, `delivery_cost`, `total`, `customer_id`) VALUES
 	(1, '2022-05-09 20:36:00', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 135000, 1),
 	(3, '2022-05-09 23:06:14', 'Nguyễn Nam', 'Đại Từ - Đại Đồng - Văn Lâm - Hưng Yên', '0328731170', NULL, 0, 1026500, 1),
@@ -359,7 +359,7 @@ CREATE TABLE IF NOT EXISTS `orderstate` (
   CONSTRAINT `orderstate_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.orderstate: ~40 rows (approximately)
+-- Dumping data for table shop.orderstate: ~66 rows (approximately)
 INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`, `order_id`) VALUES
 	(1, 0, '2022-05-09 20:37:33', 1),
 	(2, 1, '2022-05-09 20:49:49', 1),
@@ -431,20 +431,20 @@ INSERT INTO `orderstate` (`orderstate_id`, `orderstate_name`, `orderstate_date`,
 -- Dumping structure for table shop.personal_access_tokens
 CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `tokenable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tokenable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `tokenable_id` bigint unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `abilities` text COLLATE utf8mb4_unicode_ci,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abilities` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `last_used_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.personal_access_tokens: ~13 rows (approximately)
+-- Dumping data for table shop.personal_access_tokens: ~14 rows (approximately)
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `created_at`, `updated_at`) VALUES
 	(58, 'App\\Models\\Admin', 1, 'authTokenAdmin', '929ef2996d09231b2a7258c4a24a2fcfcbf30c83811cb56a201b7bf0f55ce25c', '["admin"]', '2022-05-14 06:01:52', '2022-05-13 09:27:35', '2022-05-14 06:01:52'),
 	(71, 'App\\Models\\Customer', 3, 'authTokenCustomer', '7b5a26f790d9f50a38ecb532ea0d4d0a60f4a7d7d84a2890f3e6df30ae2af94f', '["customer"]', '2022-05-21 08:38:43', '2022-05-21 08:32:01', '2022-05-21 08:38:43'),
@@ -459,13 +459,17 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 	(90, 'App\\Models\\Customer', 1, 'authTokenCustomer', '4d98194173e730c12bf1161053f0ee399406b2c30eddc634ffd9ebb26de8c05a', '["customer"]', '2022-06-09 07:29:47', '2022-06-09 07:04:29', '2022-06-09 07:29:47'),
 	(91, 'App\\Models\\Admin', 1, 'authTokenAdmin', '44d1c7ec800b93d44f268216c1273a2ce101da5fa54fd934b50518c694b3678f', '["admin"]', '2022-06-09 08:58:35', '2022-06-09 08:55:55', '2022-06-09 08:58:35'),
 	(92, 'App\\Models\\Customer', 1, 'authTokenCustomer', '1bae78f537134d38423cfe2021671ead3aa00a10488b3c68640264c63ed242e6', '["customer"]', '2022-06-09 20:27:43', '2022-06-09 18:20:57', '2022-06-09 20:27:43'),
-	(94, 'App\\Models\\Admin', 1, 'authTokenAdmin', '5155d4e8e7b66a68f82530f0446daf0c00b0380e712c761094ed0e7e3abcd976', '["admin"]', '2022-06-09 20:24:01', '2022-06-09 20:23:57', '2022-06-09 20:24:01');
+	(94, 'App\\Models\\Admin', 1, 'authTokenAdmin', '5155d4e8e7b66a68f82530f0446daf0c00b0380e712c761094ed0e7e3abcd976', '["admin"]', '2022-06-09 20:24:01', '2022-06-09 20:23:57', '2022-06-09 20:24:01'),
+	(96, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'b5d3f9e4eb908d00ad1e0eaf057b368774882804c22894d204bf386043726513', '["customer"]', NULL, '2022-11-15 08:51:27', '2022-11-15 08:51:27'),
+	(97, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'ba036e5643aa7d01fde8acdb31b5deec58791397810a64ed942e8409e0a8c507', '["customer"]', NULL, '2022-11-22 02:17:05', '2022-11-22 02:17:05'),
+	(99, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'f4a95389436118019528d807f22950e54d859c8ef82d493d8c1b52d4f5ab2089', '["customer"]', '2022-11-22 11:13:31', '2022-11-22 09:31:26', '2022-11-22 11:13:31'),
+	(100, 'App\\Models\\Customer', 1, 'authTokenCustomer', 'a6c5bb2523cadee115990003be94fc4a5d67e78208e87f93f92d59dfa153a277', '["customer"]', '2022-11-22 11:10:14', '2022-11-22 09:58:07', '2022-11-22 11:10:14');
 
 -- Dumping structure for table shop.product
 CREATE TABLE IF NOT EXISTS `product` (
   `product_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã sản phẩm',
-  `product_name` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên sản phẩm',
-  `product_description` text CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT 'Mô tả',
+  `product_name` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Tên sản phẩm',
+  `product_description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci COMMENT 'Mô tả',
   `product_discount` tinyint NOT NULL DEFAULT '0' COMMENT 'Giảm giá (%)',
   `subcategory_id` int NOT NULL COMMENT 'Mã danh mục con',
   `created_time` datetime DEFAULT NULL COMMENT 'Thời gian tạo',
@@ -587,7 +591,7 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_description`, `pro
 -- Dumping structure for table shop.size
 CREATE TABLE IF NOT EXISTS `size` (
   `size_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã kích cỡ',
-  `size_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên kích cỡ',
+  `size_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Tên kích cỡ',
   `quantity` int NOT NULL COMMENT 'Số lượng tồn kho',
   `color_id` int NOT NULL COMMENT 'Mã màu sản phẩm',
   PRIMARY KEY (`size_id`),
@@ -595,7 +599,7 @@ CREATE TABLE IF NOT EXISTS `size` (
   CONSTRAINT `size_ibfk_1` FOREIGN KEY (`color_id`) REFERENCES `color` (`color_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=634 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table shop.size: ~437 rows (approximately)
+-- Dumping data for table shop.size: ~471 rows (approximately)
 INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 	(1, 'XS', 10, 1),
 	(2, 'S', 23, 1),
@@ -1072,7 +1076,7 @@ INSERT INTO `size` (`size_id`, `size_name`, `quantity`, `color_id`) VALUES
 -- Dumping structure for table shop.subcategory
 CREATE TABLE IF NOT EXISTS `subcategory` (
   `subcategory_id` int NOT NULL AUTO_INCREMENT COMMENT 'Mã danh mục con',
-  `subcategory_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Tên danh mục con',
+  `subcategory_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT 'Tên danh mục con',
   `category_id` int NOT NULL COMMENT 'Mã danh mục',
   PRIMARY KEY (`subcategory_id`),
   KEY `category_id` (`category_id`),
@@ -1174,8 +1178,8 @@ BEGIN
     INTO OUT_TOTAL_ROW
     FROM Result1;
 
-    SET @page1 = (page_index - 1) * page_size;
-    SET @page_size1 = (page_index * page_size);
+    SET @page1 = (page_index - 1) * page_size + 1;
+    SET @page_size1 = page_size;
     IF(sort = '1') THEN
         SET @sort_query = 'ORDER BY r.created_time DESC ';
     ELSEIF(sort = '2') THEN
@@ -1199,13 +1203,13 @@ BEGIN
                                 r.quantity_sold
                         FROM Result1 AS r ',
                         @sort_query,'
-                        LIMIT ?, ?
+                        LIMIT ? OFFSET ?
                     )
             ')
         );
 
     PREPARE myquery FROM @queryString;
-    EXECUTE myquery USING @page1, @page_size1;
+    EXECUTE myquery USING @page_size1, @page1;
     DROP TEMPORARY TABLE Result1;
 
     SELECT JSON_ARRAYAGG(

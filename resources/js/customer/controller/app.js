@@ -307,6 +307,7 @@ myApp.run(function (
                 });
             });
         });
+        console.log('cart', $rootScope.cart)
     }
 
     // Get Cart

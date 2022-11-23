@@ -17,7 +17,7 @@ myApp.controller(
                 $scope.product.picked = {};
                 $scope.product.picked.quantity = 1;
                 $scope.changeColor($scope.product, $scope.product.colors[0]);
-
+                console.log($scope.product)
                 $scope.isLoading = false;
 
                 return $http({

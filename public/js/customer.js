@@ -40388,6 +40388,7 @@ myApp.run(function ($rootScope, $http, $location, $window, API_URL, customerServ
         });
       });
     });
+    console.log('cart', $rootScope.cart);
   }; // Get Cart
 
 
@@ -40929,6 +40930,7 @@ myApp.controller("ProductDetailsController", function ($scope, $rootScope, $http
     $scope.product.picked = {};
     $scope.product.picked.quantity = 1;
     $scope.changeColor($scope.product, $scope.product.colors[0]);
+    console.log($scope.product);
     $scope.isLoading = false;
     return $http({
       method: "GET",
