@@ -42,10 +42,110 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function store2(Request $request)
+    {
+        //
+
+        try {
+            $content = json_decode($request->getContent());
+
+            $info_pay = $content->customer;
+
+            $customer = $request->user();
+            $cart = $content->cart;
+
+            $cart_to_order = [];
+            $cart_remain = [];
+            foreach ($cart as $c) {
+               if($c->chose) {
+                    $cart_to_order[] = $c;
+               } else {
+                    $cart_remain[] = $c;
+               }
+            }
+
+            // Failed if the order quantity is greater than the quantity in stock
+            foreach ($cart_to_order as $c) {
+                $size = Size::findOrFail($c->size_id);
+                if($size->quantity < $c->quantity) {
+                    return response()->json([
+                        'status' => "failed",
+                    ]);
+                }
+            }
+
+            $size_ids = array_column($cart_to_order, 'size_id');
+
+            // Get discount of product
+            $products = Size::with(['color', 'color.product'])->whereIn("size_id", $size_ids)->get();
+            foreach ($cart_to_order as $c) {
+                foreach ($products as $p) {
+                    if ($p->size_id == $c->size_id) {
+                        $p->quantity = $c->quantity;
+                        break;
+                    }
+                }
+            }
+
+            // Calculate total
+            $total_price = 0;
+            foreach ($products as $p) {
+                $total_price += ($p->color->product_price - $p->color->product_price * $p->color->product->product_discount / 100) * $p->quantity;
+            }
+
+            // Save order
+            $order = new Order();
+            $order->customer_name = $info_pay->customer_name;
+            $order->customer_address = $info_pay->customer_address;
+            $order->customer_phone = $info_pay->customer_phone;
+            $order->note = $info_pay->note;
+            $order->delivery_cost = 0;
+            $order->total = $total_price;
+            $order->customer_id = $customer->customer_id;
+            $order->save();
+
+            $orderstate = new OrderState();
+            $orderstate->order_id = $order->order_id;
+            $orderstate->save();
+
+            foreach ($products as $p) {
+                $orderdetail = new OrderDetail();
+                $orderdetail->product_discount = $p->color->product->product_discount;
+                $orderdetail->product_quantity = $p->quantity;
+                $orderdetail->price = $p->color->product_price;
+                $orderdetail->size_id = $p->size_id;
+                $orderdetail->order_id = $order->order_id;
+                $orderdetail->save();
+
+                //Update quantity of size
+                $size_update = Size::findOrFail($p->size_id);
+                $size_update->quantity -= $p->quantity;
+                $size_update->save();
+            }
+
+            $ONE_MONTH = 60 * 24 * 30;
+            return response()->json([
+                'order_id' => $order->order_id,
+                'status' => "success",
+                'message' => 'Order successfully',
+            ])->withCookie(cookie('cart', json_encode($cart_remain),$ONE_MONTH));
+
+        } catch (\Exception $error) {
+            return response()->json([
+                'status' => "failed",
+                'message' => 'Error when Order',
+                'error' => $error,
+            ]);
+        }
+    }
+
+
     public function store(Request $request)
     {
         //
         try {
+
+
             $customer = $request->user();
             $cart = json_decode(Cookie::get('cart'));
 
@@ -133,7 +233,6 @@ class OrderController extends Controller
             ]);
         }
     }
-
     /**
      * Display the specified resource.
      *

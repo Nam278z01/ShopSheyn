@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\Customer\ProductController;
 use App\Http\Controllers\Customer\CategoryController;
 use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Customer\Cart2Controller;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\AuthController;
 
@@ -43,6 +44,13 @@ Route::resources([
     'cart' => CartController::class,
 ]);
 
+Route::post('/cart2/get-all', [Cart2Controller::class, 'index2']);
+Route::put('/cart2/chose-all', [Cart2Controller::class, 'choseAll']);
+Route::put('/cart2/chose', [Cart2Controller::class, 'chose']);
+Route::resources([
+    'cart2' => Cart2Controller::class,
+]);
+
 Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/', function (Request $request) {
@@ -66,6 +74,7 @@ Route::middleware(['auth:sanctum', 'ability:customer'])->group(function () {
     Route::get('/customer', function (Request $request) {
         return $request->user();
     });
+    Route::post('/order2', [OrderController::class, 'store2']);
     Route::resources([
         'order' => OrderController::class,
     ]);
