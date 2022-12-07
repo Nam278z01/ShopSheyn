@@ -320,8 +320,8 @@ myApp.controller(
                                         []);
 
                                     $http({
-                                        method: "DELETE",
-                                        url: API_URL + "/api/admin/file",
+                                        method: "POST",
+                                        url: API_URL + "/api/admin/file/delete",
                                         data: {
                                             paths: [
                                                 ...paths_for_delete,
