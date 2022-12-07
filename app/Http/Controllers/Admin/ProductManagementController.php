@@ -234,4 +234,12 @@ class ProductManagementController extends Controller
         $product->delete();
         return response()->json("success");
     }
+
+    public function deleteMulti(Request $request) {
+        $content = json_decode($request->getContent());
+        $ids = $content->ids;
+        $products = Product::whereIn('product_id', $ids);
+        $products->delete();
+        return response()->json("success");
+    }
 }

@@ -1178,7 +1178,7 @@ BEGIN
     INTO OUT_TOTAL_ROW
     FROM Result1;
 
-    SET @page1 = (page_index - 1) * page_size + 1;
+    SET @page1 = (page_index - 1) * page_size;
     SET @page_size1 = page_size;
     IF(sort = '1') THEN
         SET @sort_query = 'ORDER BY r.created_time DESC ';

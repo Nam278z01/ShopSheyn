@@ -60,6 +60,8 @@ Route::middleware(['auth:sanctum', 'ability:admin'])->group(function () {
         Route::post('/file', [FileController::class, 'addFiles']);
         Route::delete('/file', [FileController::class, 'deleteFiles']);
 
+        Route::post('/product/deleteMulti', [ProductManagementController::class, 'deleteMulti']);
+
         Route::resources([
             'product' => ProductManagementController::class,
             'order' => OrderManagementController::class,
